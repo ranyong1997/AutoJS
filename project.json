@@ -1,0 +1,10 @@
+{
+    "name": "demo",
+    "main": "main.js",
+    "ignore": [
+        "build"
+    ],
+    "packageName": "com.demo.ranyong",
+    "versionName": "1.0.1",
+    "versionCode": 1
+}
