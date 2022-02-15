@@ -678,173 +678,11 @@ commonFunc.swipeDownRandomSpeed = function () {
 }
 
 
-/**
- * 更改系统语言
- */
-commonFunc.switchLanguage = function (language, country) {
-    return this.newThread(() => {
-        try {
-            country = country != null ? country : ""
-            let is_add = false
-            app.launch("com.android.settings")
-            sleep(1000)
-            while (true) {
-                if (desc("Search settings").findOne(3000) || text("Language preferences").findOne(1)) {
-                    log("系统语言: English")
-                    back()
-                    sleep(1000)
-                    return true
-                }
-                else if (text("语言偏好设置").findOne(1)) {
-                    if (is_add) {
-                        if (this.clickIfWidgetClickable(desc("更多选项").findOne(3000))) {
-                            sleep(1000)
-                            if (this.clickIfWidgetExists(idContains("title").text("移除").findOne(3000))) {
-                                sleep(2000)
-                                let language_list = idContains("checkbox").find()
-                                for (let idx_language = 0; idx_language < language_list.length; idx_language++) {
-                                    let btn = language_list[idx_language]
-                                    if (!new RegExp(language + ".*" + country + ".*").test(btn.text())) {
-                                        this.clickIfWidgetClickable(btn)
-                                        sleep(1000)
-                                    }
-                                }
-                                this.clickIfWidgetClickable(desc("移除").clickable().findOne(3000))
-                                sleep(1000)
-                                this.clickIfWidgetClickable(text("确定").clickable().findOne(3000))
-                                sleep(1000)
-                            }
-                        }
-                    } else {
-                        let added_list = id("com.android.settings:id/label").find()
-                        for (let index = 0; index < added_list.length; index++) {
-                            let btn = added_list[index]
-                            log(btn.text())
-                            if (new RegExp(language + ".*" + country + ".*").test(btn.text())) {
-                                is_add = true
-                                log(is_add)
-                                break
-                            }
-                            sleep(1000)
-                        }
-                        if (!is_add && this.clickIfWidgetClickable(idContains("add_language").findOne(3000))) {
-                            if (this.clickIfWidgetClickable(idContains("locale_search_menu").findOne(3000))) {
-                                sleep(2000)
-                                setText("English")
-                                sleep(2000)
-                                if (this.clickIfWidgetClickable(idContains("locale").text(language).clickable().findOne(3000))) {
-                                    if (text("语言偏好设置").findOne(3000)) {
-                                        is_add = true
-                                    }
-                                    else if (country && text(language).clickable(false).findOne(1)) {
-                                        for (let index = 0; index < 10; index++) {
-                                            if (this.clickIfWidgetClickable(idContains("locale").text(country).findOne(3000))) {
-                                                if (text("语言偏好设置").findOne(3000)) {
-                                                    is_add = true
-                                                }
-                                                break
-                                            }
-                                            this.swipeUpSlowly()
-                                        }
-                                    }
-                                    else {
-                                        back()
-                                    }
-                                }
-                            }
-                        } else {
-                            back()
-                        }
-                    }
-                }
-                else if (desc("在设置中搜索").findOne(1)) {
-                    if (this.clickIfWidgetExists(idContains("title").text("系统").findOne(1))) {
-                        if (this.clickIfWidgetExists(idContains("title").text("语言和输入法").findOne(3000))) {
-                            if (this.clickIfWidgetExists(idContains("title").text("语言").findOne(3000))) {
-                            }
-                        }
-                        else {
-                            back()
-                        }
-                    } else {
-                        this.swipeUpSlowly()
-                    }
-                }
-                else if (!packageName("com.android.settings").findOne(1)) {
-                    app.launch("com.android.settings")
-                    sleep(3000)
-                }
-                else {
-                    back()
-                }
-                sleep(1000)
-            }
-        } catch (error) { commonFunc.debugWidget(classNameStartsWith("android").findOne(1000)); throw "系统语言设置异常" + commonFunc.objectToString(error) }
-    }, false, 1000 * 60)
-}
-
 // 转为字符串
 commonFunc.objectToString = function (obj) {
     return typeof (obj) == "object" ? JSON.stringify(obj) : obj
 }
 
-
-/**
- * 获取任务执行结果
- */
-commonFunc.taskResultGet = function () {
-    try {
-        let filepath = "/storage/emulated/obb/logs/" + commonFunc.taskid + ".log"
-        return files.exists(filepath) ? files.read(filepath) : ""
-    } catch (error) { log("taskResultGet Error: " + error) }
-    return ""
-}
-
-
-/**
- * 设置任务执行结果
- * @param {*} result 任务结果内容
- * @param {String} mode 写入模式, a:追加写入; w:覆盖写入
- */
-commonFunc.taskResultSet = function (result, mode) {
-    try {
-        let filepath = "/storage/emulated/obb/logs/" + commonFunc.taskid + ".log"
-        if (result) {
-            new RegExp(/a/i).test(mode) ? files.append(filepath, commonFunc.objectToString(result) + "\n") : files.write(filepath, commonFunc.objectToString(result) + "\n")
-            return true
-        }
-    } catch (error) { log("taskResultSet Error: " + error) }
-    return false
-}
-
-
-/**
- * 记录任务执行成功的时间戳
- */
-commonFunc.taskSuccessTimeSet = function () {
-    try {
-        let filepath = "/storage/emulated/obb/logs/task_" + commonFunc.taskid + "/folder_" + commonFunc.folderId + ".log"
-        files.createWithDirs(filepath);
-        files.write(filepath, new Date().getTime())
-        return true
-    } catch (error) { log("taskSuccessTimeSet: " + error) }
-    return false
-}
-
-
-/**
- * 获取上次任务执行成功的时间戳
- */
-commonFunc.taskSuccessTimeGet = function () {
-    try {
-        let filepath = "/storage/emulated/obb/logs/task_" + commonFunc.taskid + "/folder_" + commonFunc.folderId + ".log"
-        return files.exists(filepath) ? parseInt(files.read(filepath)) : 0
-    } catch (error) { log("taskSuccessTimeGet: " + error) }
-    return 0
-}
-commonFunc.objectToString = function (obj) {
-    return typeof (obj) == "object" ? JSON.stringify(obj) : obj
-}
 
 
 //脚本休眠时间控制(3.1秒)
@@ -1715,52 +1553,6 @@ commonFunc.randomNums = function (n, min, max) {
 
 
 /**
- * 备份app信息
- * @param {*} targetPackageName 包名
- * @returns 
- */
-commonFunc.backupUpApp = function (targetPackageName) {
-    toastLog("备份:", targetPackageName);
-    for (let i = 1; i < 6; i++) {
-        try {
-            var backupResult = JSON.parse(SLChanges.backupApp(targetPackageName));
-            log("尝试第" + i + "次备份")
-            if (backupResult.code < 200) {
-                throw "备份Tiktok失败: " + backupResult.msg
-            }
-            toastLog("备份Tiktok成功");
-            return true
-        } catch (error) {
-            throw "备份Tiktok异常: " + commonFunc.objectToString(error)
-        }
-    }
-}
-
-
-/**
- * 备份app信息
- * @param {*} targetPackageName 包名
- * @param {*} desc 描述
- * @returns 
- */
-commonFunc.backupUpAppInfo = function (targetPackageName, desc) {
-    toastLog("备份Tiktok");
-    for (let i = 1; i < 6; i++) {
-        try {
-            var backupResult = JSON.parse(SLChanges.changeBackupDesc(targetPackageName, desc, 0));
-            log("尝试第" + i + "次备份")
-            if (backupResult.code < 200) {
-                throw "备份Tiktok失败: " + backupResult.msg
-            }
-            toastLog("备份Tiktok成功");
-            return true
-        } catch (error) {
-            throw "备份Tiktok异常: " + commonFunc.objectToString(error)
-        }
-    }
-}
-
-/**
  * 悬浮窗日志 有bug 不会追加写入
  * @param {*} message 日志信息
  */
@@ -1826,6 +1618,55 @@ commonFunc.showLog = function (text, mode) {
     return false
 }
 
+
+commonFunc.StopAll = function () {
+    var window = floaty.window(
+        <frame>
+            <button id="action" text="点击停止脚本" w="120" h="40" bg="#F0EB4336" />
+        </frame>
+    );
+    setInterval(() => { }, 1000);
+    var execution = null;
+    //记录按键被按下时的触摸坐标
+    var x = 0,
+        y = 0;
+    //记录按键被按下时的悬浮窗位置
+    var windowX, windowY;
+    //记录按键被按下的时间以便判断长按等动作
+    var downTime;
+    window.action.setOnTouchListener(function (view, event) {
+        switch (event.getAction()) {
+            case event.ACTION_DOWN:
+                x = event.getRawX();
+                y = event.getRawY();
+                windowX = window.getX();
+                windowY = window.getY();
+                downTime = new Date().getTime();
+                return true;
+            case event.ACTION_MOVE:
+                //移动手指时调整悬浮窗位置
+                window.setPosition(windowX + (event.getRawX() - x),
+                    windowY + (event.getRawY() - y));
+                //如果按下的时间超过1.5秒判断为长按，退出脚本
+                if (new Date().getTime() - downTime > 1500) {
+                    toast("长按可以移动位置哦～");
+                }
+                return true;
+            case event.ACTION_UP:
+                //手指弹起时如果偏移很小则判断为点击
+                if (Math.abs(event.getRawY() - y) < 5 && Math.abs(event.getRawX() - x) < 5) {
+                    onClick();
+                }
+                return true;
+        }
+        return true;
+    });
+    function onClick() {
+        toast("用户点击了停止按钮");
+        exit();
+    }
+}
+
 /**
  * 解除autojs pro 运行限制
  */
@@ -1842,4 +1683,5 @@ commonFunc.limit = function () {
         }
     }));
 }
+
 module.exports = commonFunc;
