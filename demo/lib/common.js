@@ -1597,7 +1597,7 @@ commonFunc.showLog = function (text, mode) {
             commonFunc.statusBox = floaty.rawWindow(
                 <card bg="#80000000">
                     <vertical align="center">
-                        <img src="https://www.baidu.com/img/PC_880906d2a4ad95f5fafb2e540c5cdad7.png" h="50" margin="0 10 0 5" />
+                        <img src="https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png" h="50" margin="0 10 0 5" />
                         <text text="─ 当前脚本运行日志 ─" textSize="15" color="#FFFFFF" textStyle="bold" gravity="center" margin="0 0 0 5" />
                         <text id="text" text="" textSize="15" color="#FFFFFF" marginLeft="10" gravity="left" />
                     </vertical>
@@ -1618,7 +1618,9 @@ commonFunc.showLog = function (text, mode) {
     return false
 }
 
-
+/**
+ * 停止所有脚本
+ */
 commonFunc.StopAll = function () {
     var window = floaty.window(
         <frame>
@@ -1626,7 +1628,6 @@ commonFunc.StopAll = function () {
         </frame>
     );
     setInterval(() => { }, 1000);
-    var execution = null;
     //记录按键被按下时的触摸坐标
     var x = 0,
         y = 0;
