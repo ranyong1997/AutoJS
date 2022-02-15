@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-14 17:30:00
+ * @LastEditTime: 2022-02-15 19:28:00
  * @description: 
  * @param: 
  * @return: 
@@ -31,4 +31,4 @@ function init() {
     }
 }
 init()
-require("./demo/script/demo.js");
+require("./Demo/script/demo.js");
