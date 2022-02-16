@@ -481,37 +481,37 @@ commonFunc.randomStrWithTemplates = function (_temp_list, len) {
 }
 
 
-/**
- * @param {*} text 显示内容
- * @param {String} mode 显示模式 w:覆盖; a:追加;
- * @param {Number} x 显示坐标 x 
- * @param {Number} y 显示坐标 y
- * @returns {Boolean} boolean
- */
-commonFunc.showLog = function (text, mode, x, y) {
-    try {
-        let log_text = commonFunc.objectToString(text)
-        mode != null && log(log_text)
-        x = x ? x : 0
-        y = y ? y : 60
-        if (!commonFunc.statusBox) {
-            commonFunc.statusBox = floaty.rawWindow(
-                <frame gravity="center" bg="#660000FF">
-                    <text id="text" color="#ffffff"></text>
-                </frame>
-            );
-            commonFunc.statusBox.setSize(-1, -200);
-            commonFunc.statusBox.setTouchable(false);
-        }
-        ui.run(function () {
-            try { log_text = (mode == "a" || mode == "A") ? (commonFunc.statusBox.text.getText() + "\n" + log_text) : log_text } catch (error) { }
-            commonFunc.statusBox.text.setText(log_text)
-        });
-        commonFunc.statusBox.setPosition(x, y);
-        return true
-    } catch (error) { log(error) }
-    return false
-}
+// /**
+//  * @param {*} text 显示内容
+//  * @param {String} mode 显示模式 w:覆盖; a:追加;
+//  * @param {Number} x 显示坐标 x 
+//  * @param {Number} y 显示坐标 y
+//  * @returns {Boolean} boolean
+//  */
+// commonFunc.showLog = function (text, mode, x, y) {
+//     try {
+//         let log_text = commonFunc.objectToString(text)
+//         mode != null && log(log_text)
+//         x = x ? x : 0
+//         y = y ? y : 60
+//         if (!commonFunc.statusBox) {
+//             commonFunc.statusBox = floaty.rawWindow(
+//                 <frame gravity="center" bg="#660000FF">
+//                     <text id="text" color="#ffffff"></text>
+//                 </frame>
+//             );
+//             commonFunc.statusBox.setSize(-1, -200);
+//             commonFunc.statusBox.setTouchable(false);
+//         }
+//         ui.run(function () {
+//             try { log_text = (mode == "a" || mode == "A") ? (commonFunc.statusBox.text.getText() + "\n" + log_text) : log_text } catch (error) { }
+//             commonFunc.statusBox.text.setText(log_text)
+//         });
+//         commonFunc.statusBox.setPosition(x, y);
+//         return true
+//     } catch (error) { log(error) }
+//     return false
+// }
 
 
 /**
@@ -1588,10 +1588,11 @@ commonFunc.logs = function (message, mode) {
  * @param {String} mode 显示模式 w:覆盖; a:追加;
  * @returns {Boolean} boolean
  */
-commonFunc.showLog = function (text, mode) {
+commonFunc.showLog = function (text, info, mode) {
     try {
         let log_text = commonFunc.objectToString(text)
-        mode != null && log(log_text)
+        let info_text = commonFunc.objectToString(info)
+        mode != null && log(log_text) && log(info_text)
         mode = "a"
         if (!commonFunc.statusBox) {
             commonFunc.statusBox = floaty.rawWindow(
@@ -1600,6 +1601,7 @@ commonFunc.showLog = function (text, mode) {
                         <img src="https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png" h="50" margin="0 10 0 5" />
                         <text text="─ 当前脚本运行日志 ─" textSize="15" color="#FFFFFF" textStyle="bold" gravity="center" margin="0 0 0 5" />
                         <text id="text" text="" textSize="15" color="#FFFFFF" marginLeft="10" gravity="left" />
+                        {/* <text id="info" text="" textSize="15" color="#41de5b" marginLeft="10" gravity="left" /> */}
                     </vertical>
                 </card>
             );
@@ -1607,6 +1609,7 @@ commonFunc.showLog = function (text, mode) {
         ui.run(() => {
             var myDate = new Date();
             commonFunc.statusBox.text.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + "【" + log_text + "】" + "\n" + commonFunc.statusBox.text.getText());
+            // commonFunc.statusBox.info.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + "【" + info_text + "】" + "\n" + commonFunc.statusBox.info.getText());
             return true;
         });
         commonFunc.statusBox.setSize(device.width, 400);
@@ -1624,7 +1627,7 @@ commonFunc.showLog = function (text, mode) {
 commonFunc.StopAll = function () {
     var window = floaty.window(
         <frame>
-            <button id="action" text="点击停止脚本" w="120" h="40" bg="#F0EB4336" />
+            <button id="action" text="点击停止" w="80" h="40" bg="#F0EB4336" />
         </frame>
     );
     setInterval(() => { }, 1000);
@@ -1635,7 +1638,7 @@ commonFunc.StopAll = function () {
     var windowX, windowY;
     //记录按键被按下的时间以便判断长按等动作
     var downTime;
-    window.action.setOnTouchListener(function (view, event) {
+    window.action.setOnTouchListener(function (getAction,event) {
         switch (event.getAction()) {
             case event.ACTION_DOWN:
                 x = event.getRawX();
@@ -1663,10 +1666,28 @@ commonFunc.StopAll = function () {
         return true;
     });
     function onClick() {
-        toast("用户点击了停止按钮");
+        toastLog("用户点击了停止按钮");
         exit();
     }
 }
+/**
+ * 音量下键退出
+ */
+commonFunc.volume_Stop = function () {
+    toastLog("音量下键退出");
+    // 子线程监听脚本
+    threads.start(function () {
+        events.setKeyInterceptionEnabled("volume_up", true);
+        //启用按键监听
+        events.observeKey();
+        //监听音量上键按下
+        events.onKeyDown("volume_up", function (event) {
+            log("脚本退出!")
+            exit();
+        });
+    });
+}
+
 
 /**
  * 解除autojs pro 运行限制

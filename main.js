@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-15 20:08:39
+ * @LastEditTime: 2022-02-16 18:13:34
  * @description: 
  * @param: 
  * @return: 
@@ -24,7 +24,7 @@ function init() {
         log("日志初始化异常:" + JSON.stringify(error))
     }
     try {
-        log("初始化 main文件  版本号:1.2.4  作者:ranyong")
+        log("初始化 main 文件  版本号:1.2.4  作者:ranyong")
         home()
         sleep(1000)
     } catch (error) {
@@ -38,12 +38,15 @@ function init() {
         throw error
     }
     try {
-        toastLog("当前设备宽度：" + device.width + "\n" + "当前设备高度：" + device.height + "\n" + "唤醒屏幕:On", device.wakeUp())
+        log("当前设备分辨率：" + device.width + "x" + device.height)
+        log("唤醒屏幕:On", device.wakeUp())
+        commonFun.volume_Stop()
         commonFun.StopAll()
         commonFun.limit()
     } catch (error) {
         throw error
     }
+
 }
 init()
 require("./Demo/script/demo.js");
