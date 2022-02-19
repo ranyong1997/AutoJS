@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 17:06:40
+ * @LastEditTime: 2022-02-19 22:22:42
  */
 "ui";
 // 导包
@@ -28,42 +28,44 @@ function getStorageData(name, key) {
     if (storage.contains(key)) {
         return storage.get(key, "")
     }
+    log("name--->",name,"key--->",key)
 }
 
 // 检测无障碍权限是否开启
 function enableAbs() {
-    importClass(android.content.Context)
-    importClass(android.provider.Settings)
-    var packageName = context.getPackageName()
-    var absPermittedByshell = false
+    importClass(android.content.Context);
+    importClass(android.provider.Settings);
+    var packageName = context.getPackageName();
+    var absPermittedByshell = false;
     try {
-        var enagledServices = Settings.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES)
-        log('当前已经开启的辅助服务：' + enagledServices)
+        var enabledServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+        log('当前已启用的辅助服务\n', enabledServices);
         if (enabledServices.indexOf(packageName) >= 0 && auto.service != null) {
-            log('已经开启了辅助服务')
+            log("已经开启无障碍服务，无需重复开启");
         } else {
-            var Services = enabledServices + ':' + packageName + "/com.stardust.autojs.core.accessibility.AccessibilityService"
-            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, Services)
-            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, '1')
-            log("开启辅助服务成功")
+            var Services = enabledServices + ":" + packageName + "/com.stardust.autojs.core.accessibility.AccessibilityService";
+            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES, Services);
+            Settings.Secure.putString(context.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, '1');
+            log("成功开启无障碍服务");
         }
         return true
     } catch (error) {
-        if (absPermittedByshell == false && shell("pm grant " + packageName + " android.permission.WRITE_SECURE_SETTINGS").code == 0) {
-            log("已经成功使用Shell开启无障碍服务功能")
-            absPermittedByshell = true
+        if (absPermittedByshell == false && shell("pm grant " + packageName + " android.permission.WRITE_SECURE_SETTINGS", true).code == 0) {
+            log("已成功使用shell开启无障碍服务授权");
+            absPermittedByshell = true;
             return this.enableAbs()
         } else {
             if (absPermittedByshell == true) {
-                log("shell无法开启无障碍服务功能，但无法真正开启，请手动开启")
-                return false
+                log("shell开启授权成功，但仍然无法顺利开启无障碍服务，请手动开启！");
+                return false;
             } else {
-                log("使用shell开启授权失败")
-                return false
+                log("使用shell开启授权失败");
             }
         }
+        log("使用Shell开启无障碍失败，错误:" + error);
     }
 }
+
 
 // 获取长宽高
 function clacAspectRatio(fromWidth, fromHeight, toWidthOrHeight, isWidth) {
@@ -144,10 +146,10 @@ function setNightMode() {
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png";
     context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png"; // 设置首页顶部LOGO 勿动
-    context_TopPics = getStorageData("DayUiPicture", "TopPics");
-    context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
-    context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
-    context_BottomPics_Copyright = getStorageData("DayUiPicture", "BottomPicsCopyright");
+    context_TopPics = getStorageData("NightUiPicture", "TopPics");
+    context_TopPics_Copyright = getStorageData("NightUiPicture", "TopPicsCopyright");
+    context_BottomPics = getStorageData("NightUiPicture", "BottomPics");
+    context_BottomPics_Copyright = getStorageData("NightUiPicture", "BottomPicsCopyright");
     if (context_TopPics == undefined) {
         context_TopPics = "http://www.google.com"
     }
@@ -194,7 +196,7 @@ if (WhatNowColor() != context_DayOrNight && getStorageData("DayNightSetting", "A
         context_DayOrNight = 1
         setDayMode()
     } else {
-        context_DayOrNight = 0
+        // context_DayOrNight = 0
         setDayMode()
     }
 }
@@ -204,14 +206,13 @@ function md5(string) {
     return java.math.BigInteger(1, java.security.MessageDigest.getInstance("MD5")
         .digest(java.lang.String(string).getBytes())).toString(4 * 4);
 }
-
 ui.emitter.on("back_pressed", e => {
     try {
         clearInterval(contextJdtX)
-    } catch (error) { throw error }
-    if (context_NowUi != "SigUp" && context_NowUi != "mainUi") {
+    } catch (e) { }
+    if (context_NowUi != "SignUp" && context_NowUi != "mainUi") {
         mainUi()
-        error.consumed = true
+        e.consumed = true
     } else if (getStorageData("uiProtectSetting", "UiProtext") != undefined) {
         let view = ui.inflate(
             <vertical bg="{{context_framebg}}">
@@ -258,12 +259,11 @@ ui.emitter.on("resume", function () {
     }
     try {
         ui.autoService.checked = auto.service != null
-    } catch (error) {
-        // throw error
-    }
+    } catch (e) { }
 })
-if (getStorageData("Sign", "SignKey") != undefined && md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
-    mainUi()
+if (getStorageData("SignUp", "SignKey") != undefined &&
+    md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
+    mainUi();
 } else {
     if (context_DayOrNight == 1) {
         setDayMode()
@@ -400,7 +400,6 @@ function mainUi() {
                     <linear orientation="horizontal" gravity="center" margin="5 15 5 15" >
                         <img src="{{context_SunMoon}}" id="changeColor" w="30" h="30" tint="{{context_textColor}}" layout_weight="20" gravity="center" foreground="?attr/selectableItemBackground" clickable="true" />
                         <text id="Privacy_Security" text="隐私与安全" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
-                        <text id="JoinQQGroup" text="加入QQ群" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
                         <text id="TalktoDeveloper" text="反馈问题" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
                         <text id="AboutApp" text="关于软件" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
                     </linear>
@@ -431,7 +430,6 @@ function mainUi() {
         })
         let DHK = dialogs.build({
             customView: view,
-            title: "新的操作方式",
             wrapInScrollView: false,
             cancelable: false,
             autoDismiss: true
@@ -559,6 +557,7 @@ function mainUi() {
         }
     });
     function RunScript(ScriptUrl, ScriptName, AppPackageName) {
+        log(ScriptUrl)
         if (app.getAppName(AppPackageName) != null && auto.service != null) {
             threads.start(function () {
                 let view = ui.inflate(
@@ -684,7 +683,7 @@ function mainUi() {
                     <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
                 </vertical>, null, false)
             views.tip.setText("请开启无障碍权限")
-            views.tips.setText("很抱歉，脚本运行必须使用“无障碍服务”，请在您的设备上自行授予“Orange Js橘衫の脚本”软件“无障碍权限”，之后可再次尝试运行脚本");
+            views.tips.setText("很抱歉，脚本运行必须使用“无障碍服务”，请在您的设备上自行授予“Ranyong Js 冉勇の脚本”软件“无障碍权限”，之后可再次尝试运行脚本");
             dialogs.build({
                 customView: views,
                 wrapInScrollView: false,
@@ -721,24 +720,18 @@ function mainUi() {
         function RefreshMainUI() {
             app.startActivity({
                 action: "android.intent.action.VIEW",
-                packageName: "com.orange.orangejs",
+                packageName: "com.ranyong.ranyongjs", // 打包包名
                 className: "com.stardust.auojs.inrt.SplashActivity"
             })
         }
     })
     ui.ScriptOne.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%BE%AE%E4%BF%A1%E5%8F%91%E6%B6%88%E6%81%AF_%E5%BE%AE%E4%BF%A1%E8%84%9A%E6%9C%AC.js";
+        let Url = "https://gitee.com/ran_yong/auto.js/raw/master/%E5%AE%8C%E5%96%84%E8%84%9A%E6%9C%AC/%E5%8D%B3%E5%BD%95%E5%B7%A5%E4%BD%9C/%E5%8D%B3%E5%BD%95%E6%A8%A1%E6%9D%BF%E6%89%AB%E6%8F%8F.js";
         let str = 'RunScript("' + Url + '","自动微信发消息","com.tencent.mm")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     })
     ui.R_JD.click(() => {
-        /*if (ui.sp_Jd1.getSelectedItemPosition() == 2) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E4%B8%9C%E4%B8%9C%E5%86%9C%E5%9C%BA%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
-            let str = 'RunScript("' + Url + '","东东农场自动脚本","com.jingdong.app.mall")';
-            let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="'+context_SettingsCard+'";context_Logo="'+context_Logo+'";';
-                engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
-        } else */
         if (ui.sp_Jd1.getSelectedItemPosition() == 1) {
             let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
             let str = 'RunScript("' + Url + '","自动宠汪汪","com.jingdong.app.mall")';
@@ -751,13 +744,6 @@ function mainUi() {
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         }
     });
-
-    /*ui.ScriptTen.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E5%A4%9A%E5%A4%9A%E6%9E%9C%E5%9B%AD%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E6%8B%BC%E5%A4%9A%E5%A4%9A%E8%84%9A%E6%9C%AC.js";
-        let str = 'RunScript("' + Url + '","多多果园自动脚本","com.xunmeng.pinduoduo")';
-        let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="'+context_SettingsCard+'";context_Logo="'+context_Logo+'";';
-            engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
-    });*/
     ui.ScriptNine.click(() => {
         let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E5%BE%AE%E5%8D%9A%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E5%BE%AE%E5%8D%9A%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","微博任务自动脚本","com.sina.weibo")';
@@ -776,76 +762,7 @@ function mainUi() {
         TalkToDeveloper();
     });
 
-    ui.JoinQQGroup.click(() => {
-        let view = ui.inflate(
-            <vertical padding="25 0" bg="{{context_framebg}}">
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <img src="@drawable/ic_supervisor_account_black_48dp" h="20" marginTop="3" tint="#777777" layout_gravity="center" />
-                    <text text="加入QQ群" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#777777" />
-                </linear>
-                <text text="请选择加群方式，期待与您一起愉快的玩耍:D" textSize="10" margin="10 5 10 5" textColor="#777777" />
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                        <text id="Determine" text="使用QQ加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                        <text id="cancel" text="使用TIM加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                </linear>
-            </vertical>, null, false);
-        view.cancel.click(() => {
-            DHK.dismiss();
-            try {
-                app.startActivity({
-                    action: "android.intent.action.VIEW",
-                    packageName: "com.tencent.tim",
-                    className: "com.tencent.mobileqq.activity.JumpActivity",
-                    data: app.parseUri("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3Dv5ohaWahdOfqDmyX7L_a196dl3K-SX5_"),
-                    flags: ["grant_read_uri_permission", "grant_write_uri_permission"],
-                });
-            } catch (e) {
-                let view = ui.inflate(
-                    <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="当前设备未安装TIM" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
-                );
-                dialogs.build({
-                    customView: view,
-                    wrapInScrollView: false,
-                    autoDismiss: false
-                }).show();
-            }
-        });
-        view.Determine.click(() => {
-            DHK.dismiss();
-            try {
-                app.startActivity({
-                    action: "android.intent.action.VIEW",
-                    packageName: "com.tencent.mobileqq",
-                    className: "com.tencent.mobileqq.activity.JumpActivity",
-                    data: app.parseUri("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3Dv5ohaWahdOfqDmyX7L_a196dl3K-SX5_"),
-                    flags: ["grant_read_uri_permission", "grant_write_uri_permission"],
-                });
-            } catch (e) {
-                let view = ui.inflate(
-                    <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="当前设备未安装QQ" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
-                );
-                dialogs.build({
-                    customView: view,
-                    wrapInScrollView: false,
-                    autoDismiss: false
-                }).show();
-            }
-        });
-        var DHK = dialogs.build({
-            customView: view,
-            wrapInScrollView: false,
-            autoDismiss: false
-        }).show();
 
-    });
     ui.StopAllScript.click(() => {
         controlScript();
         function controlScript() {
@@ -863,7 +780,7 @@ function mainUi() {
                     <scroll bg="{{context_framebg}}">
                         <vertical bg="{{context_framebg}}">
                             <linear orientation="horizontal" gravity="left||center">
-                                {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                                <img src="{{context_Logo}}" w="85" h="35" />
                                 <linear orientation="horizontal" w="match_parent" gravity="right||center">
                                     <text text="管理运行脚本" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
                                 </linear>
@@ -1079,7 +996,6 @@ function mainUi() {
                             </linear>
                         </vertical>, null, false);
                     view.deleteTitle.setText("您确定要强行停止“[" + item.Id + "]" + item.name + "”脚本吗？");
-
                     view.Determine.click(() => {
                         if (stopscript(item.Id) == true) {
                             items.splice(itemHolder.position, 1);
@@ -1206,9 +1122,9 @@ function mainUi() {
     ui.ViewLog.click(() => {
         app.startActivity({
             action: "android.intent.action.VIEW",
-            packageName: "com.orange.RanyongJs",
+            packageName: "com.ranyong.orangejs",
             className: "com.stardust.auojs.inrt.LogActivity"
-        })
+        });
     })
     ui.changeColor.click(() => {
         if (getStorageData("DayNightSetting", "AutoDayNight") != undefined) {
@@ -1241,7 +1157,7 @@ function mainUi() {
             }
             view.nowInformation.setText("当前时段切换设置 浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时");
             view.Determine.click(() => {
-                delStorageData("DayNightSetting", "AutoDayNight")
+                delStorageData("DayNightSetting", "AutoDayNight");
                 DHK.dismiss();
                 if (context_DayOrNight == 1) {
                     context_DayOrNight = 0
@@ -1278,7 +1194,7 @@ function SignUp() {
         <scroll bg="#FFFFFF">
             <vertical layout_gravity="center" marginBottom="0">
                 <linear orientation="horizontal" gravity="center">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/RanyongJs_logo.png" w="85" h="35" /> */}
+                    <img src="{{context_Logo}}" w="85" h="35" />
                 </linear>
                 <text text="欢迎使用" textSize="45sp" textColor="#000000" gravity="center" />
                 <text text="全新1.1.0主界面" marginTop="10" textSize="15sp" textColor="#000000" gravity="center" />
@@ -1301,7 +1217,7 @@ function SignUp() {
         let view = ui.inflate(
             <vertical bg="#FFFFFF" padding="25 10 25 0">
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/RanyongJs_logo.png" w="85" h="35" /> */}
+                    <img src="{{context_Logo}}" w="85" h="35" />
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
                         <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true" />
                     </linear>
@@ -1357,7 +1273,8 @@ function SignUp() {
                     autoDismiss: true
                 }).show()
             } else {
-                view.password.setError("激活码输入错误");
+                view.password.setError("激活码输入错误")
+
             }
         });
         let DHK = dialogs.build({
@@ -1973,7 +1890,7 @@ function SettingsUI() {
         ui.nighttip.setText("浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时")
     }
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
-        ui.Gradient.setChecked(false)
+        ui.Gradient.setChecked(true)
     }
     if (getStorageData("uiProtectSetting", "UiProtect") != undefined) {
         ui.uiProtect.setChecked(false)
@@ -2060,7 +1977,7 @@ function SettingsUI() {
             ui.DayNight.setChecked(false);
             delStorageData("DayNightSetting", "AutoDayNight");
             ui.nighttip.attr("textSize", "0sp");
-            ui.nighttip.setText("");
+            ui.nighttip.setText("1111");
         }
     });
     ui.Gradient.on("check", (checked) => {
@@ -2444,7 +2361,8 @@ function SettingsUI() {
     }
     if (context_DayOrNight == 1) {
         ZhuTiTu.push({
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/blob/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            // https://gitee.com/mirrors_Orange-shirt/OrangeJs/blob/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
@@ -2646,7 +2564,7 @@ function AboutApp() {
         </frame>
     );
     ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
-    ui.OpenSource.text("Github：https://github.com/Orange-shirt/RanyongJs" + "\nGitee：https://gitee.com/Orange_shirt/RanyongJs\nCoding：https://orange-shirt.coding.net/p/RanyongJs/git");
+    ui.OpenSource.text("Github：https://github.com/ranyong1997/AutoJS" + "\nGitee：https://gitee.com/ran_yong/auto.js");
     ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
     ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
     ui.Back.click(() => {
@@ -2714,7 +2632,7 @@ function AboutApp() {
         </frame>
     );
     ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
-    ui.OpenSource.text("Github：https://github.com/Orange-shirt/OrangeJs" + "\nGitee：https://gitee.com/Orange_shirt/OrangeJs\nCoding：https://orange-shirt.coding.net/p/OrangeJs/git");
+    ui.OpenSource.text("Github：https://github.com/ranyong1997/AutoJS" + "\nGitee：https://gitee.com/ran_yong/auto.js");
     ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
     ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
     ui.Back.click(() => {

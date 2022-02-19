@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-20 20:30:35
- * @LastEditTime: 2022-02-19 15:06:07
+ * @LastEditTime: 2022-02-19 20:31:37
  * @description: 
  * @param: 
  * @return: 
@@ -34,15 +34,9 @@
 
 
 
-// md5(a.toString()) == "109e1be70ecf784109576e7a5df1750a"
 
-var a = getStorageData("RanyongJS", "token")
-log(a)
-
-function getStorageData(name, key) {
-    const storage = storages.create(name)
-    log("storage",storage)
-    if (storage.contains(key)) {
-        return storage.get(key, "")
-    }
+function md5(string) {
+    return java.math.BigInteger(1, java.security.MessageDigest.getInstance("MD5")
+        .digest(java.lang.String(string).getBytes())).toString(4 * 4);
 }
+log(md5("ranyong"))
