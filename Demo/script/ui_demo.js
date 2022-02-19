@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 14:34:35
+ * @LastEditTime: 2022-02-19 15:12:36
  */
 "ui";
 
@@ -84,10 +84,9 @@ function setDayMode() {
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
-    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png";
-    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png";
-    // context_TopPics = getStorageData("DayUiPicture", "TopPics");
-    context_TopPics = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png";
+    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png"; // 设置首页顶部LOGO
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png"; // 设置首页顶部LOGO
+    context_TopPics = getStorageData("DayUiPicture", "TopPics");
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
     context_BottomPics_Copyright = getStorageData("DayUiPicture", "BottomPicsCopyright");
@@ -129,7 +128,7 @@ function setNightMode() {
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png";
-    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png";
+    context_Logo = "https://raw.githubusercontent.com/ranyong1997/AutoJS/main/Log/ranyongJS-logoBlack.png";
     context_TopPics = getStorageData("DayUiPicture", "TopPics");
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -245,7 +244,7 @@ ui.emitter.on("resume", function () {
     try {
         ui.autoService.checked = auto.service != null
     } catch (error) {
-        throw error
+        // throw error
     }
 })
 if (getStorageData("Sign", "SignKey") != undefined && md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
@@ -1955,7 +1954,7 @@ function SettingsUI() {
         if (c > d) {
             var NIGHT = "次日"
         }
-        ui.nighttip.attr("textSize", "5sp");
+        ui.nighttip.attr("textSize", "10sp");
         ui.nighttip.setText("浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时")
     }
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
@@ -2044,7 +2043,7 @@ function SettingsUI() {
             }).show();
         } else {
             ui.DayNight.setChecked(false);
-            delStorageData("DayNightSetting", "AutoDayNight");
+            // delStorageData("DayNightSetting", "AutoDayNight");
             ui.nighttip.attr("textSize", "0sp");
             ui.nighttip.setText("");
         }
