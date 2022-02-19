@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 13:42:30
+ * @LastEditTime: 2022-02-19 14:34:35
  */
 "ui";
 
@@ -85,8 +85,9 @@ function setDayMode() {
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png";
-    context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png";
-    context_TopPics = getStorageData("DayUiPicture", "TopPics");
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png";
+    // context_TopPics = getStorageData("DayUiPicture", "TopPics");
+    context_TopPics = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png";
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
     context_BottomPics_Copyright = getStorageData("DayUiPicture", "BottomPicsCopyright");
@@ -423,10 +424,10 @@ function mainUi() {
         }).show()
         setStorageData("mainUi", "NewWay", "true")
     }
-    if (context_TopPics != "http://www.googole.com" && context_TopPics_Copyright != undefined) {
+    if (context_TopPics != "http://www.baidu.com" && context_TopPics_Copyright != undefined) {
         ui.CopyRightTop.setText(context_TopPics_Copyright)
     }
-    if (context_BottomPics != "http://www.googole.com" && context_BottomPics_Copyright != undefined) {
+    if (context_BottomPics != "http://www.baidu.com" && context_BottomPics_Copyright != undefined) {
         ui.CopyrightBottom.setText(context_BottomPics_Copyright)
     }
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
@@ -1220,19 +1221,19 @@ function mainUi() {
             let c = Number(getStorageData("DayNightSetting", "NightTime"));
             let d = Number(getStorageData("DayNightSetting", "DayTime"));
             if (a > b) {
-                var DAY = "次日";
+                var DAY = "次日"
             }
             if (c > d) {
-                var NIGHT = "次日";
+                var NIGHT = "次日"
             }
             view.nowInformation.setText("当前时段切换设置 浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时");
             view.Determine.click(() => {
-                delStorageData("DayNightSetting", "AutoDayNight");
+                delStorageData("DayNightSetting", "AutoDayNight")
                 DHK.dismiss();
                 if (context_DayOrNight == 1) {
-                    context_DayOrNight = 0;
+                    context_DayOrNight = 0
                 } else {
-                    context_DayOrNight = 1;
+                    context_DayOrNight = 1
                 }
                 mainUi();
             });
@@ -1334,7 +1335,6 @@ function SignUp() {
                     <vertical bg="#FFFFFF" padding="25 0 25 0">
                         <text text="欢迎" textSize="25" textStyle="bold" textColor="#000000" gravity="left" />
                         <text text="先来进行设置吧～" textSize="15" textStyle="bold" textColor="#000000" gravity="left" margin="0 5" />
-                        <img src="@drawable/ic_ac_unit_black_48dp" tint="#4CAF50" w="40" h="40" gravity="left" />
                     </vertical>
                 )
                 dialogs.build({
@@ -1361,7 +1361,7 @@ function SettingsUI() {
             <scroll bg="{{context_framebg}}">
                 <vertical margin="0 25 0 0">
                     <linear orientation="horizontal" gravity="left||center">
-                        {/* <img src="{{context_Logo}}" w="85" h="30" /> */}
+                        <img src="{{context_Logo}}" w="85" h="30" />
                         <linear orientation="horizontal" w="match_parent" gravity="right||center">
                             <text text="设置" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
                         </linear>
@@ -1664,7 +1664,6 @@ function SettingsUI() {
             });
             view.DeletePic.click(() => {
                 DHK.dismiss();
-
                 if (context_DayOrNight == 0) {
                     delStorageData("NightUiPicture", "TopPics");
                     delStorageData("NightUiPicture", "TopPicsCopyright");
@@ -2056,7 +2055,7 @@ function SettingsUI() {
             setStorageData("ColorSetting", "GradientColor", true);
         } else {
             ui.Gradient.setChecked(false);
-            delStorageData("ColorSetting", "GradientColor");
+            // delStorageData("ColorSetting", "GradientColor");
         }
     });
     ui.uiProtect.on("check", (checked) => {
@@ -2066,7 +2065,7 @@ function SettingsUI() {
             setStorageData("uiProtectSetting", "UiProtect", true);
         } else {
             ui.uiProtect.setChecked(false);
-            delStorageData("uiProtectSetting", "UiProtect");
+            // delStorageData("uiProtectSetting", "UiProtect");
             ui.tips.setText("* 推荐开启以防止直接退出导致界面关闭");
         }
     });
@@ -2076,7 +2075,7 @@ function SettingsUI() {
                 <scroll>
                     <vertical>
                         <linear orientation="horizontal" gravity="left||center">
-                            {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                            <img src="{{context_Logo}}" w="85" h="35" />
                             <linear orientation="horizontal" w="match_parent" gravity="right||center">
                                 <text text="删除脚本配置" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
                             </linear>
@@ -2416,7 +2415,7 @@ function SettingsUI() {
         });
     });
     var ZhuTiTu = [];
-    if (context_TopPics != undefined && context_TopPics != "http://www.google.com") {
+    if (context_TopPics != undefined && context_TopPics != "http://www.baidu.com") {
         ZhuTiTu.push({
             Picture: context_TopPics,
             TextofPic: '当前顶图'
