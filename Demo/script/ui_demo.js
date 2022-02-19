@@ -3,10 +3,9 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 15:49:47
+ * @LastEditTime: 2022-02-19 17:06:40
  */
 "ui";
-
 // 导包
 importClass(android.content.Intent)
 importClass(android.net.Uri)
@@ -81,6 +80,14 @@ function setDayMode() {
     context_textColor = "#000000" // 全局文字颜色
     context_texBg = "#FAFAFA" // 文本背景
     context_Fgx = "#EEEEEE" // 分割线颜色
+    context_TBbgColor = "FF5722" //淘宝背景颜色
+    context_PDDbgColor = "FF1744" //拼多多背景颜色
+    context_WBbgColor = "FF8F00" //微博背景颜色
+    context_WXbgColor = "4CAF50" //微信背景颜色
+    context_QQbgColor = "2196F3" //QQ背景颜色
+    context_JDbgColor = "F44336" //京东背景颜色
+    context_WMbgColor = "FD7034" //完美校园背景颜色
+    context_JBScolor = "FAFAFA"
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
@@ -100,10 +107,10 @@ function setDayMode() {
         let img = images.read(context_TopPics.replace("file://", ""))
         imgWidth = img.getWidth()
         imgHeight = img.getHeight()
-        context_TopPics = device.width
-        context_TopPics_Height = Math.round(clacAspectRatio(imgWidth, imgHeight, device.width, true))
+        context_TopPics_width = device.width
+        context_TopPics_Height = Math.round(clacAspectRatio(imgWidth, imgHeight, context_TopPics_width, true))
     } else {
-        context_TopPics = 0
+        context_TopPics_width = 0
         context_TopPics_height = 0
     }
     if (context_BottomPics.search("file://") == 0 && images.read(context_BottomPics.replace("file://", "")) == null) {
@@ -124,6 +131,14 @@ function setNightMode() {
     context_textColor = "#FFFFFF" // 全局文字颜色
     context_texBg = "#000000" // 文本背景
     context_Fgx = "#50EEEEEE" // 分割线颜色
+    context_TBbgColor = "000000" //淘宝背景颜色
+    context_PDDbgColor = "000000" //拼多多背景颜色
+    context_WBbgColor = "000000" //微博背景颜色
+    context_WXbgColor = "000000" //微信背景颜色
+    context_QQbgColor = "000000" //QQ背景颜色
+    context_JDbgColor = "000000" //京东背景颜色
+    context_WMbgColor = "000000" //完美校园背景颜色
+    context_JBScolor = "000000"
     context_SettingsCard = "#616161" //设置卡片颜色
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
@@ -143,8 +158,8 @@ function setNightMode() {
         let img = images.read(context_TopPics.replace("file://", ""))
         imgWidth = img.getWidth()
         imgHeight = img.getHeight()
-        context_TopPics = device.width
-        context_TopPics_Height = Math.round(clacAspectRatio(imgWidth, imgHeight, device.width, true))
+        context_TopPics_width = device.width
+        context_TopPics_Height = Math.round(clacAspectRatio(imgWidth, imgHeight, context_TopPics_width, true))
     } else {
         context_TopPics_width = 0
         context_TopPics_height = 0
@@ -279,9 +294,9 @@ function mainUi() {
         return android.graphics.Color.parseColor(color)
     }
     function GradientDrawable(orientation, color) {
-        var colors = []
-        color.forEach(color => colors.push(Color(color)))
-        return new android.graphics.drawable.GradientDrawable(android.graphics.GradientDrawable.Orientation[orientation], colors)
+        var colors = [];
+        color.forEach(color => colors.push(Color(color)));
+        return new android.graphics.drawable.GradientDrawable(android.graphics.drawable.GradientDrawable.Orientation[orientation], colors);
     }
     ui.layout(
         <scroll bg="{{context_framebg}}">
@@ -291,7 +306,7 @@ function mainUi() {
                         <img id="Pics" src="{{context_TopPics}}" scaleType="fitXY" />
                         <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0" />
                     </card>
-                    {/* <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" /> */}
+                    <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" />
                     <linear orientation="horizontal" align="left">
                         <HorizontalScrollView>
                             <linear orientation="horizontal" align="left" h="70" padding="0 10">
@@ -703,11 +718,10 @@ function mainUi() {
     ui.RefreshUI.click(() => {
         ui.finish()
         engines.execScript("重启刷新界面", "RefreshMainUI();\n" + RefreshMainUI.toString())
-
         function RefreshMainUI() {
             app.startActivity({
                 action: "android.intent.action.VIEW",
-                packageName: "com.orange.RanyongJs",
+                packageName: "com.orange.orangejs",
                 className: "com.stardust.auojs.inrt.SplashActivity"
             })
         }
@@ -1289,6 +1303,7 @@ function SignUp() {
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
                     {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/RanyongJs_logo.png" w="85" h="35" /> */}
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                        <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true" />
                     </linear>
                 </linear>
                 <ScrollView>
@@ -1342,7 +1357,7 @@ function SignUp() {
                     autoDismiss: true
                 }).show()
             } else {
-                view.password.setErrorh("激活码输入错误")
+                view.password.setError("激活码输入错误");
             }
         });
         let DHK = dialogs.build({
@@ -1436,7 +1451,7 @@ function SettingsUI() {
                             <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
                         </linear>
                     </card>
-                    <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    {/* <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
                             <img src="@drawable/ic_open_in_new_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
                             <linear orientation="vertical" marginLeft="5" gravity="center">
@@ -1446,7 +1461,7 @@ function SettingsUI() {
                         <linear gravity="center||right" marginRight="10">
                             <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
                         </linear>
-                    </card>
+                    </card> */}
                 </vertical>
             </scroll>
             <fab id="back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
@@ -2043,7 +2058,7 @@ function SettingsUI() {
             }).show();
         } else {
             ui.DayNight.setChecked(false);
-            // delStorageData("DayNightSetting", "AutoDayNight");
+            delStorageData("DayNightSetting", "AutoDayNight");
             ui.nighttip.attr("textSize", "0sp");
             ui.nighttip.setText("");
         }
@@ -2054,7 +2069,7 @@ function SettingsUI() {
             setStorageData("ColorSetting", "GradientColor", true);
         } else {
             ui.Gradient.setChecked(false);
-            // delStorageData("ColorSetting", "GradientColor");
+            delStorageData("ColorSetting", "GradientColor");
         }
     });
     ui.uiProtect.on("check", (checked) => {
@@ -2064,7 +2079,7 @@ function SettingsUI() {
             setStorageData("uiProtectSetting", "UiProtect", true);
         } else {
             ui.uiProtect.setChecked(false);
-            // delStorageData("uiProtectSetting", "UiProtect");
+            delStorageData("uiProtectSetting", "UiProtect");
             ui.tips.setText("* 推荐开启以防止直接退出导致界面关闭");
         }
     });
@@ -2406,14 +2421,14 @@ function SettingsUI() {
             engines.execScript("开关人员代码测试", "'ui';\nTESTCode();\n" + TESTCode.toString());
         }
     });
-    ui.Appsettings.click(() => {
-        log("点击软件自带设置")
-        app.startActivity({
-            action: "android.intent.action.VIEW",
-            packageName: "com.orange.orangejs",
-            className: "com.stardust.auojs.inrt.SettingsActivity"
-        });
-    });
+    // ui.Appsettings.click(() => {
+    //     log("点击软件自带设置")
+    //     app.startActivity({
+    //         action: "android.intent.action.VIEW",
+    //         packageName: "com.orange.orangejs",
+    //         className: "com.stardust.auojs.inrt.SettingsActivity"
+    //     });
+    // });
     var ZhuTiTu = [];
     if (context_TopPics != undefined && context_TopPics != "http://www.baidu.com") {
         ZhuTiTu.push({
@@ -2532,7 +2547,7 @@ function TalkToDeveloper() {
         <frame bg="{{context_framebg}}" w="*" h="*" marginTop="25">
             <vertical align="left">
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
-                    {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                    <img src="{{context_Logo}}" w="85" h="35" />
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
                         <text text="反馈问题" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
                     </linear>
@@ -2546,7 +2561,7 @@ function TalkToDeveloper() {
                 margin="16" layout_gravity="bottom|right" tint="#ffffff" />
         </frame>
     );
-    ui.webview.loadUrl("https://wj.qq.com/s2/5238744/d982");
+    ui.webview.loadUrl("https://wj.qq.com/s2/8104693/5e7b");
     ui.Back.click(() => {
         clearInterval(contextJdtX);
         android.webkit.WebStorage.getInstance().deleteAllData();
@@ -2577,7 +2592,7 @@ function AboutApp() {
         <frame w="*" h="*" background="{{context_framebg}}">
             <scroll bg="{{context_framebg}}">
                 <vertical align="left">
-                    {/* <img src="{{context_Logo}}" w="auto" h="50" gravity="center" /> */}
+                    <img src="{{context_Logo}}" w="auto" h="50" gravity="center" />
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
@@ -2638,6 +2653,75 @@ function AboutApp() {
         mainUi();
     });
 }
+function AboutApp() {
+    context_NowUi = "AboutApp";
+    ui.layout(
+        <frame w="*" h="*" background="{{context_framebg}}">
+            <scroll bg="{{context_framebg}}">
+                <vertical align="left">
+                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" marginTop="50" w="auto" h="50" gravity="center" />//应用logo */}
+                    <img src="{{context_Logo}}" w="auto" h="50" gravity="center" />
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFEA3324" h="*" w="*" />
+                    </card>
+                    <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名 */}
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFFF711F" h="*" w="*" />
+                    </card>
+                    <text text="软件版本" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="AppVision" color="{{context_textColor}}" textSize="20" textStyle="normal" gravity="center" />
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFFABB06" h="*" w="*" />
+                    </card>
+                    <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center" />
+
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF34A853" h="*" w="*" />
+                    </card>
+                    <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0" />
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF4285F4" h="*" w="*" />
+                    </card>
+                    <text id="Ttip" color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center" />
+                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF9D41F9" h="*" w="*" />
+                    </card>
+                </vertical>
+            </scroll>
+            <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
+                margin="0 0 15 15" layout_gravity="bottom|right" tint="#ffffff" />
+        </frame>
+    );
+    ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
+    ui.OpenSource.text("Github：https://github.com/Orange-shirt/OrangeJs" + "\nGitee：https://gitee.com/Orange_shirt/OrangeJs\nCoding：https://orange-shirt.coding.net/p/OrangeJs/git");
+    ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
+    ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
+    ui.Back.click(() => {
+        mainUi();
+    });
+}
+
 function SP() {
     context_NowUi = "SP";
     events.removeAllListeners();

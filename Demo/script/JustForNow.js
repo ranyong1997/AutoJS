@@ -6,22 +6,6 @@ context_DayOrNight = 1;
 activity.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 context_LogomarginTop = "0"
 
-//保存本地数据
-function setStorageData(name, key, value) {
-    const storage = storages.create(name);
-    storage.put(key, value);
-};
-
-
-//读取本地数据
-function getStorageData(name, key) {
-    const storage = storages.create(name);
-    if (storage.contains(key)) {
-        return storage.get(key, "");
-    };
-    //默认返回undefined
-};
-
 function enableAbs() {
     importClass(android.content.Context);
     importClass(android.provider.Settings);
@@ -50,9 +34,10 @@ function enableAbs() {
                 return false;
             } else {
                 log("使用shell开启授权失败");
-                return false
             }
         }
+        log("使用Shell开启无障碍失败，错误:" + error);
+        
     }
 }
 
@@ -191,19 +176,19 @@ function md5(string) {
 ui.emitter.on("back_pressed", e => {
     try {
         clearInterval(contextJdtX);
-    } catch (e) { }
+    } catch (e) {}
     if (context_NowUi != "SignUp" && context_NowUi != "mainUi") {
         mainUi();
         e.consumed = true;
     } else if (getStorageData("uiProtectSetting", "UiProtect") != undefined) {
         let view = ui.inflate(
             <vertical bg="{{context_framebg}}">
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <img src="@drawable/ic_lock_outline_black_48dp" w="20" h="20" margin="18 10 2 0" tint="{{context_textColor}}" gravity="left" />
-                    <text text="UI界面锁定" textSize="15" textStyle="bold" margin="0 10 0 0" textColor="{{context_textColor}}" />
-                </linear>
-                <text id="tip" textSize="10" margin="20 5 10 10" textColor="{{context_textColor}}" />
-            </vertical>, null, false);
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <img src="@drawable/ic_lock_outline_black_48dp" w="20" h="20" margin="18 10 2 0" tint="{{context_textColor}}" gravity="left"/>
+                            <text text="UI界面锁定" textSize="15" textStyle="bold" margin="0 10 0 0" textColor="{{context_textColor}}"/>
+                        </linear>
+                        <text id="tip" textSize="10" margin="20 5 10 10" textColor="{{context_textColor}}"/>
+                    </vertical>, null, false);
         view.tip.setText("• 如需保留界面和后台脚本，请点按Home键或直接切换到其它应用中\n• 若当前无定时任务且需要强制关闭界面，请点击“管理运行脚本”");
         dialogs.build({
             customView: view,
@@ -214,7 +199,7 @@ ui.emitter.on("back_pressed", e => {
     }
 });
 
-ui.emitter.on("resume", function () {
+ui.emitter.on("resume", function() {
     if (WhatNowColor() == 1 && WhatNowColor() != context_DayOrNight) {
         context_DayOrNight = 1;
         setDayMode();
@@ -242,7 +227,7 @@ ui.emitter.on("resume", function () {
     }
     try {
         ui.autoService.checked = auto.service != null;
-    } catch (e) { }
+    } catch (e) {}
 });
 if (getStorageData("SignUp", "SignKey") != undefined &&
     md5(getStorageData("SignUp", "SignKey")) == "109e1be70ecf784109576e7a5df1750a") {
@@ -287,110 +272,110 @@ function mainUi() {
             <frame id="main" background="{{context_framebg}}">
                 <vertical align="center" margin="0">
                     <card w="{{context_TopPics_width}}px" h="{{context_TopPics_height}}px" cardElevation="0dp" gravity="center_vertical">
-                        <img id="Pics" src="{{context_TopPics}}" scaleType="fitXY" />
-                        <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0" />
+                        <img id="Pics" src="{{context_TopPics}}"  scaleType="fitXY"/>
+                        <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0"/>
                     </card>
-                    <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" />
+                    <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10"/>
                     <linear orientation="horizontal" align="left">
                         <HorizontalScrollView>
                             <linear orientation="horizontal" align="left" h="70" padding="0 10">
-                                <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
+                                <card w="150dp" h="50" marginLeft="2"  cardCornerRadius="25dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
                                     <card h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}">
-                                        <Switch id="autoService" margin="7 0" text="无障碍服务" textColor="{{context_textColor}}" gravity="center" textStyle="bold" checked="{{auto.service != null}}" textSize="12sp" />
+                                        <Switch id="autoService" margin="7 0" text="无障碍服务" textColor="{{context_textColor}}" gravity="center" textStyle="bold" checked="{{auto.service != null}}" textSize="12sp"/>
                                     </card>
                                 </card>
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
                                     <card id="StopAllScript" w="*" h="40" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}" foreground="?selectableItemBackground">
-                                        <text text="管理运行脚本" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12" />
+                                        <text text="管理运行脚本" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12"/>
                                     </card>
                                 </card>
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
                                     <card id="ViewLog" w="*" h="40" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}" foreground="?selectableItemBackground" clickable="true">
-                                        <text text="查看运行日志" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12" />
+                                        <text text="查看运行日志" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12"/>
                                     </card>
                                 </card>
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
                                     <card id="RefreshUI" w="*" h="40" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}" foreground="?selectableItemBackground" clickable="true">
-                                        <text text="重启刷新界面" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12" />
+                                        <text text="重启刷新界面" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12"/>
                                     </card>
                                 </card>
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
                                     <card id="Settings" w="*" h="40" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}" foreground="?selectableItemBackground" clickable="true">
-                                        <text text="脚本设置" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12" />
+                                        <text text="软件设置" textStyle="bold" color="{{context_textColor}}" gravity="center" size="12"/>
                                     </card>
                                 </card>
                             </linear>
                         </HorizontalScrollView>
                     </linear>
-                    <card h="1" margin="5 5" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" />
+                    <card h="1" margin="5 5" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}"/>
                     <linear orientation="horizontal" align="left" margin="0 5 0 0">
                         <card id="R_JD" layout_weight="50" h="120" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5" foreground="?selectableItemBackground">
-                            <View id="Jingdongbg" bg="#{{context_JDbgColor}}" h="*" w="*" />
+                            <View id="Jingdongbg" bg="#{{context_JDbgColor}}" h="*" w="*"/>
                             <linear orientation="horizontal" align="left" margin="0">
-                                <img src="https://app.jd.com/uploads/client-1.png" w="30" h="26" margin="15 18 0 0" />
+                                <img src="https://app.jd.com/uploads/client-1.png" w="30" h="26" margin="15 18 0 0"/>
                                 <vertical padding="0 0" h="auto">
-                                    <text text="京东" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="0 23 0 0" />
+                                    <text text="京东" typeface="sans" textStyle="bold" color="#FFFFFF"  gravity="center" size="15" margin="0 23 0 0"/>
                                 </vertical>
                             </linear>
                             <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
-                                <View bg="#90{{context_JDbgColor}}" />
-                                <spinner id="sp_Jd1" entries="种豆得豆自动脚本|自动宠汪汪" textColor="#FFFFFF" align="center" marginLeft="10" textSize="15" gravity="center" />
+                                <View bg="#90{{context_JDbgColor}}"/>
+                                <spinner id="sp_Jd1" entries="种豆得豆自动脚本|自动宠汪汪" textColor="#FFFFFF" align="center" marginLeft="10" textSize="15" gravity="center"/>
                             </card>
                         </card>
                         <card h="120" layout_weight="50" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5">
-                            <View id="Weibobg" bg="#{{context_WBbgColor}}" h="*" w="*" />
+                            <View id="Weibobg" bg="#{{context_WBbgColor}}" h="*" w="*"/>
                             <linear orientation="horizontal" align="left" margin="0">
-                                <img src="https://pp.myapp.com/ma_icon/0/icon_9926_1588143998/96" w="20" h="20" margin="20 23 0 0" />
+                                <img src="https://pp.myapp.com/ma_icon/0/icon_9926_1588143998/96" w="20" h="20" margin="20 23 0 0"/>
                                 <vertical padding="0 0" h="auto">
-                                    <text text="微博" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="5 23 0 0" />
+                                    <text text="微博" typeface="sans" textStyle="bold" color="#FFFFFF"  gravity="center" size="15" margin="5 23 0 0"/>
                                 </vertical>
                             </linear>
                             <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
-                                <View w="*" h="*" bg="#90{{context_WBbgColor}}" />
-                                <text id="ScriptNine" text="微博任务自动脚本" typeface="sans" color="#FFFFFF" gravity="center" size="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true" />
+                                <View w="*" h="*" bg="#90{{context_WBbgColor}}"/>
+                                <text id="ScriptNine" text="微博任务自动脚本" typeface="sans" color="#FFFFFF"  gravity="center" size="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true"/>
                             </card>
                         </card>
                     </linear>
                     <linear orientation="horizontal" align="left" margin="0">
                         <card h="120" layout_weight="50" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="3 0 5 5">
-                            <View id="Weixinbg" bg="#{{context_WXbgColor}}" h="*" w="*" />
+                            <View id="Weixinbg" bg="#{{context_WXbgColor}}" h="*" w="*"/>
                             <linear orientation="horizontal" align="left" margin="0">
-                                <img src="http://pp.myapp.com/ma_icon/0/icon_10910_1577346809/256" w="20" h="20" margin="20 23 0 0" />
+                                <img src="http://pp.myapp.com/ma_icon/0/icon_10910_1577346809/256" w="20" h="20" margin="20 23 0 0"/>
                                 <vertical padding="0 0" h="auto">
-                                    <text text="微信" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="5 23 0 0" />
+                                    <text text="微信" typeface="sans" textStyle="bold" color="#FFFFFF"  gravity="center" size="15" margin="5 23 0 0"/>
                                 </vertical>
                             </linear>
                             <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
-                                <View w="*" h="*" bg="#90{{context_WXbgColor}}" />
-                                <text id="ScriptOne" text="自动微信发消息" typeface="sans" color="#FFFFFF" gravity="center" textSize="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true" />
+                                <View w="*" h="*" bg="#90{{context_WXbgColor}}"/>
+                                <text id="ScriptOne" text="自动微信发消息" typeface="sans" color="#FFFFFF"  gravity="center" textSize="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true"/>
                             </card>
                         </card>
                         <card h="120" layout_weight="50" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5">
-                            <View id="QQbg" bg="#{{context_QQbgColor}}" h="*" w="*" />
+                            <View id="QQbg" bg="#{{context_QQbgColor}}" h="*" w="*"/>
                             <linear orientation="horizontal" align="left" margin="0">
-                                <img src="http://pp.myapp.com/ma_icon/0/icon_6633_1584375640/256" w="20" h="20" margin="20 23 0 0" />
+                                <img src="http://pp.myapp.com/ma_icon/0/icon_6633_1584375640/256" w="20" h="20" margin="20 23 0 0"/>
                                 <vertical padding="0 0" h="auto">
-                                    <text text="QQ" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="5 23 0 0" />
+                                    <text text="QQ" typeface="sans" textStyle="bold" color="#FFFFFF"  gravity="center" size="15" margin="5 23 0 0"/>
                                 </vertical>
                             </linear>
                             <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
-                                <View w="*" h="*" bg="#90{{context_QQbgColor}}" />
-                                <text id="ScriptThi" text="自动动态点赞" typeface="sans" color="#FFFFFF" gravity="center" size="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true" />
+                                <View w="*" h="*" bg="#90{{context_QQbgColor}}"/>
+                                <text id="ScriptThi" text="自动动态点赞" typeface="sans" color="#FFFFFF"  gravity="center" size="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true"/>
                             </card>
                         </card>
                     </linear>
-                    <card h="1" margin="5 0" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" />
-
+                    <card h="1" margin="5 0" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}"/>
+                    
                     <linear orientation="horizontal" gravity="center" margin="5 15 5 15" >
-                        <img src="{{context_SunMoon}}" id="changeColor" w="30" h="30" tint="{{context_textColor}}" layout_weight="20" gravity="center" foreground="?attr/selectableItemBackground" clickable="true" />
-                        <text id="Privacy_Security" text="隐私与安全" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
-                        <text id="JoinQQGroup" text="加入QQ群" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
-                        <text id="TalktoDeveloper" text="反馈问题" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
-                        <text id="AboutApp" text="关于软件" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
+                        <img src="{{context_SunMoon}}" id="changeColor" w="30" h="30"  tint="{{context_textColor}}" layout_weight="20" gravity="center" foreground="?attr/selectableItemBackground" clickable="true"/>
+                        <text id="Privacy_Security" text="隐私与安全" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true"/>
+                        <text id="JoinQQGroup" text="加入QQ群" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true"/>
+                        <text id="TalktoDeveloper" text="反馈问题" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true"/>
+                        <text id="AboutApp" text="关于软件" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true"/>
                     </linear>
                     <card w="{{context_BottomPics_width}}px" h="{{context_BottomPics_height}}px" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_SettingsCard}}">
-                        <img src="{{context_BottomPics}}" scaleType="fitXY" />
-                        <text id="CopyrightBottom" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 0 20" padding="0 0 0 0" />
+                        <img src="{{context_BottomPics}}"  scaleType="fitXY"/>
+                        <text id="CopyrightBottom" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 0 20" padding="0 0 0 0"/>
                     </card>
                 </vertical>
             </frame>
@@ -400,14 +385,14 @@ function mainUi() {
         let view = ui.inflate(
             <vertical bg="{{context_framebg}}">
                 <linear orientation="horizontal" align="left" margin="10" paddingTop="0">
-                    <img src="@drawable/ic_fiber_new_black_48dp" w="20" h="20" tint="#3EC3FE" layout_gravity="center" />
-                    <text text="新的操作方式" textStyle="bold" textSize="15" textColor="#3EC3FE" layout_gravity="center" />
+                    <img src="@drawable/ic_fiber_new_black_48dp" w="20" h="20" tint="#3EC3FE" layout_gravity="center"/>
+                    <text text="新的操作方式" textStyle="bold" textSize="15" textColor="#3EC3FE" layout_gravity="center"/>
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                        <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true" />
+                        <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true"/>
                     </linear>
                 </linear>
                 <linear gravity="center">
-                    <img src="https://gitee.com/Orange_shirt/OrangeJs/raw/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center" />
+                    <img src="https://gitee.com/Orange_shirt/OrangeJs/raw/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center"/>
                 </linear>
             </vertical>, null, false);
         view.ExitScript.click(() => {
@@ -438,21 +423,21 @@ function mainUi() {
     ui.UiLogo.click(() => {
         let view = ui.inflate(
             <vertical padding="25 0" bg="{{context_framebg}}">
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <img src="@drawable/ic_unfold_more_black_48dp" h="30" marginTop="3" tint="{{context_textColor}}" layout_gravity="center" />
-                    <text text="上间距调整" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="{{context_textColor}}" layout_gravity="center" />
-                </linear>
-                <text id="nJj" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                <input id="TopMargin" hint="请输入10～100的数字" inputType="number" textColor="{{context_textColor}}" textColorHint="#9E9E9E" />
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <card layout_weight="50" h="30" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                        <text id="Determine" text="取消" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                    <card layout_weight="50" h="30" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                        <text id="cancel" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                </linear>
-            </vertical>, null, false);
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <img src="@drawable/ic_unfold_more_black_48dp" h="30" marginTop="3" tint="{{context_textColor}}" layout_gravity="center"/>
+                            <text text="上间距调整" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="{{context_textColor}}" layout_gravity="center"/>
+                        </linear>
+                        <text id="nJj" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                        <input id="TopMargin" hint="请输入10～100的数字" inputType="number" textColor="{{context_textColor}}" textColorHint="#9E9E9E"/>
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <card layout_weight="50" h="30" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                <text id="Determine" text="取消" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                            <card layout_weight="50" h="30" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                <text id="cancel" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                        </linear>
+                    </vertical>, null, false);
         if (context_DayOrNight == 1) {
             view.nJj.setText("当前上间距为：" + getStorageData("DayUi", "LogomarginTop"));
         } else {
@@ -477,9 +462,9 @@ function mainUi() {
                 mainUi();
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                        <text id="tio" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
+                                        <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center"tint="{{context_textColor}}"/>
+                                        <text id="tio" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                    </vertical>
                 );
                 view.tio.setText("上间距已调整为" + a.toString() + "\n如未变化请刷新界面");
                 dialogs.build({
@@ -496,7 +481,7 @@ function mainUi() {
         }).show();
     });
 
-    ui.autoService.on("check", function (checked) {
+    ui.autoService.on("check", function(checked) {
         if (checked && auto.service == null) {
             var absPermittedByshell = false;
             try {
@@ -514,20 +499,20 @@ function mainUi() {
         if (!checked && auto.service != null) {
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                        <text text="您确定要关闭“无障碍服务”吗？" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
-                    </linear>
-                    <text text="本软件内的所有脚本均需要“无障碍服务”，若您关闭“无障碍服务”，本软件内的所有脚本都将立即无法工作，请确认" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                            <text id="Determine" text="确认关闭" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                            <text id="cancel" text="保持开启" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                <text text="您确定要关闭“无障碍服务”吗？" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336"/>
+                            </linear>
+                            <text text="本软件内的所有脚本均需要“无障碍服务”，若您关闭“无障碍服务”，本软件内的所有脚本都将立即无法工作，请确认" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                    <text id="Determine" text="确认关闭" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                    <text id="cancel" text="保持开启" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             view.cancel.click(() => {
                 ui.autoService.setChecked(true);
                 DHK.dismiss();
@@ -546,15 +531,16 @@ function mainUi() {
     });
 
     function RunScript(ScriptUrl, ScriptName, AppPackageName) {
+        log(ScriptUrl)
         if (app.getAppName(AppPackageName) != null && auto.service != null) {
-            threads.start(function () {
+            threads.start(function() {
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text id="scriptText" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                        <text id="Network" textSize="10" margin="10 0 10 0" textColor="{{context_textColor}}" alpha="0.9" />
-                        <text id="tips" textSize="8" margin="10 5 10 0" textColor="{{context_textColor}}" alpha="0.9" />
-                        <progressbar indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
-                    </vertical>, null, false);
+                                <text id="scriptText" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                <text id="Network" textSize="10" margin="10 0 10 0" textColor="{{context_textColor}}" alpha="0.9"/>
+                                <text id="tips" textSize="8" margin="10 5 10 0" textColor="{{context_textColor}}" alpha="0.9"/>
+                                <progressbar indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"/>
+                            </vertical>, null, false);
                 view.scriptText.setText("正在请求“" + ScriptName + "”");
                 let sometips = ["每次请求到的脚本都是最新的哦，懒到不用更新爽吧？🤪", "世界上最遥远的距离是“没网”，而最尴尬的事情是“网慢”🙃", "开发者很佛系的，若您有任何问题记得及时提交反馈哈～😃", "撸码可是很辛苦的内～有时候要有耐心哦😬", "偶尔去看看日志也许会有新发现呢～🤓", "人类的本质是……“🕊？”", "告诉你个小秘密，这条线最多只能坚持20秒……🙈", "哦～我亲爱的上帝～快来带走我所有的BUG吧～😇", "写代码能当饭吃的话还是挺不错的😋", "喝着Orange Juice用着Orange Js，嗯…很Nice！😗"]
                 view.tips.setText("tips:" + sometips[random(0, sometips.length - 1)]);
@@ -588,13 +574,13 @@ function mainUi() {
                         contextDownJs.dismiss();
                         let view = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <linear orientation="horizontal" gravity="left" marginTop="10">
-                                    <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27" />
-                                    <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}" />
-                                </linear>
-                                <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                                <text id="tips" textSize="10" margin="10 0 40 10" textColor="{{context_textColor}}" alpha="0.9" />
-                            </vertical>, null, false);
+                                        <linear orientation="horizontal" gravity="left" marginTop="10">
+                                            <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27"/>
+                                            <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}"/>
+                                        </linear>
+                                        <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                        <text id="tips" textSize="10" margin="10 0 40 10" textColor="{{context_textColor}}" alpha="0.9"/>
+                                    </vertical>, null, false);
                         view.tip.setText("“" + ScriptName + "”" + "请求错误！");
                         view.tips.setText("这可能是一个严重的服务器端的错误，请先检查您的网络配置是否正确，若多次出现此错误请联系开发者。");
                         view.Statuscode.setText(res_script.statusMessage + res_script.statusCode);
@@ -609,13 +595,13 @@ function mainUi() {
                     contextDownJs.dismiss();
                     let views = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <linear orientation="horizontal" gravity="left" marginTop="10">
-                                <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27" />
-                                <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}" />
-                            </linear>
-                            <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                            <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
-                        </vertical>, null, false);
+                                    <linear orientation="horizontal" gravity="left" marginTop="10">
+                                        <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27"/>
+                                        <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}"/>
+                                    </linear>
+                                    <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                    <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}"/>
+                                </vertical>, null, false);
                     views.tip.setText("无法请求“" + ScriptName + "”");
                     views.tips.setText("请检查您当前的网络连接可用性，连接可用网络并授予本软件联网权限后再尝试重新运行。\n\n错误代码：" + e);
                     views.Statuscode.setText("无可用网络");
@@ -627,16 +613,16 @@ function mainUi() {
                     exit();
                 }
             });
-            setTimeout(function () {
+            setTimeout(function() {
                 contextDownJs.dismiss();
                 let views = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" gravity="left" marginTop="10">
-                            <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27" />
-                        </linear>
-                        <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                        <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
-                    </vertical>, null, false);
+                                <linear orientation="horizontal" gravity="left" marginTop="10">
+                                    <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27"/>
+                                </linear>
+                                <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}"/>
+                            </vertical>, null, false);
                 views.tip.setText("“" + ScriptName + "”请求超时");
                 views.tips.setText("请检查您当前的网络连接可用性，连接可用网络并授予本软件联网权限并保障网络通畅后可再尝试运行。");
                 dialogs.build({
@@ -650,11 +636,11 @@ function mainUi() {
             let viewss = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
                     <linear orientation="horizontal" gravity="left" marginTop="10">
-                        <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27" />
-                        <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}" />
+                        <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27"/>
+                        <text id="Statuscode" textStyle="bold" textSize="20" textColor="{{context_textColor}}"/>
                     </linear>
-                    <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                    <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
+                    <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                    <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}"/>
                 </vertical>, null, false);
             viewss.tip.setText("“" + ScriptName + "”" + "：未安装支持的APP");
             dialogs.build({
@@ -666,10 +652,10 @@ function mainUi() {
             let views = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
                     <linear orientation="horizontal" gravity="left" marginTop="10">
-                        <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27" />
+                        <img src="@drawable/ic_warning_black_48dp" tint="{{context_textColor}}" h="27"/>
                     </linear>
-                    <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                    <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
+                    <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                    <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}"/>
                 </vertical>, null, false);
             views.tip.setText("请开启无障碍权限");
             views.tips.setText("很抱歉，脚本运行必须使用“无障碍服务”，请在您的设备上自行授予“Orange Js橘衫の脚本”软件“无障碍权限”，之后可再次尝试运行脚本");
@@ -707,8 +693,7 @@ function mainUi() {
     });
     ui.RefreshUI.click(() => {
         ui.finish();
-        engines.execScript("重启刷新界面", "RefreshMainUI();\n" + RefreshMainUI.toString());
-
+        engines.execScript("重启刷新界面", "RefreshMainUI();\n" + RefreshMainUI.toString())
         function RefreshMainUI() {
             app.startActivity({
                 action: "android.intent.action.VIEW",
@@ -718,7 +703,7 @@ function mainUi() {
         }
     });
     ui.ScriptOne.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%BE%AE%E4%BF%A1%E5%8F%91%E6%B6%88%E6%81%AF_%E5%BE%AE%E4%BF%A1%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + encodeURI("/OrangeJs_自动微信发消息.js");
         let str = 'RunScript("' + Url + '","自动微信发消息","com.tencent.mm")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
@@ -732,33 +717,27 @@ function mainUi() {
                 engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         } else */
         if (ui.sp_Jd1.getSelectedItemPosition() == 1) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = getStorageData('APPbasic', 'URLprefix') + encodeURI("/OrangeJs_自动宠汪汪.js");
             let str = 'RunScript("' + Url + '","自动宠汪汪","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         } else if (ui.sp_Jd1.getSelectedItemPosition() == 0) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E7%A7%8D%E8%B1%86%E5%BE%97%E8%B1%86%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = getStorageData('APPbasic', 'URLprefix') + encodeURI("/OrangeJs_种豆得豆自动脚本.js");
             let str = 'RunScript("' + Url + '","种豆得豆自动脚本","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         }
     });
 
-    /*ui.ScriptTen.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E5%A4%9A%E5%A4%9A%E6%9E%9C%E5%9B%AD%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E6%8B%BC%E5%A4%9A%E5%A4%9A%E8%84%9A%E6%9C%AC.js";
-        let str = 'RunScript("' + Url + '","多多果园自动脚本","com.xunmeng.pinduoduo")';
-        let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="'+context_SettingsCard+'";context_Logo="'+context_Logo+'";';
-            engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
-    });*/
     ui.ScriptNine.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E5%BE%AE%E5%8D%9A%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E5%BE%AE%E5%8D%9A%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + encodeURI("/OrangeJs_微博任务自动脚本.js");
         let str = 'RunScript("' + Url + '","微博任务自动脚本","com.sina.weibo")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     });
 
     ui.ScriptThi.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%8A%A8%E6%80%81%E7%82%B9%E8%B5%9E_QQ%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + encodeURI("/OrangeJs_自动动态点赞.js");
         let str = 'RunScript("' + Url + '","自动动态点赞","com.tencent.mobileqq")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
@@ -771,20 +750,20 @@ function mainUi() {
     ui.JoinQQGroup.click(() => {
         let view = ui.inflate(
             <vertical padding="25 0" bg="{{context_framebg}}">
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <img src="@drawable/ic_supervisor_account_black_48dp" h="20" marginTop="3" tint="#777777" layout_gravity="center" />
-                    <text text="加入QQ群" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#777777" />
-                </linear>
-                <text text="请选择加群方式，期待与您一起愉快的玩耍:D" textSize="10" margin="10 5 10 5" textColor="#777777" />
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                        <text id="Determine" text="使用QQ加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                        <text id="cancel" text="使用TIM加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                </linear>
-            </vertical>, null, false);
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <img src="@drawable/ic_supervisor_account_black_48dp" h="20" marginTop="3" tint="#777777" layout_gravity="center"/>
+                            <text text="加入QQ群" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#777777"/>
+                        </linear>
+                        <text text="请选择加群方式，期待与您一起愉快的玩耍:D" textSize="10" margin="10 5 10 5" textColor="#777777"/>
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                <text id="Determine" text="使用QQ加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                <text id="cancel" text="使用TIM加群" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                        </linear>
+                    </vertical>, null, false);
         view.cancel.click(() => {
             DHK.dismiss();
             try {
@@ -798,8 +777,8 @@ function mainUi() {
             } catch (e) {
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="当前设备未安装TIM" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
+                                        <text text="当前设备未安装TIM" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                    </vertical>
                 );
                 dialogs.build({
                     customView: view,
@@ -821,8 +800,8 @@ function mainUi() {
             } catch (e) {
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="当前设备未安装QQ" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
+                                        <text text="当前设备未安装QQ" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                    </vertical>
                 );
                 dialogs.build({
                     customView: view,
@@ -840,6 +819,7 @@ function mainUi() {
 
     ui.StopAllScript.click(() => {
         controlScript();
+
         function controlScript() {
             function stopscript(scriptId) {
                 let execution = engines.all();
@@ -852,43 +832,44 @@ function mainUi() {
             }
             let DHK = ui.inflate(
                 <frame background="{{context_framebg}}" padding="5">
-                    <scroll bg="{{context_framebg}}">
-                        <vertical bg="{{context_framebg}}">
-                            <linear orientation="horizontal" gravity="left||center">
-                                <img src="{{context_Logo}}" w="85" h="35" />
-                                <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                                    <text text="管理运行脚本" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
+                            <scroll bg="{{context_framebg}}">
+                                <vertical bg="{{context_framebg}}">
+                                    <linear orientation="horizontal" gravity="left||center">
+                                        <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                                        <img src="{{context_Logo}}" w="85" h="35"/>
+                                        <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                                            <text text="管理运行脚本" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5"/>
+                                        </linear>
+                                    </linear>
+                                    <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5"/>
+                                    <list id="alljslist">
+                                        <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
+                                            <linear orientation="horizontal" gravity="center|left">
+                                                <img id="checkthisjs" src="{{icon}}" w="30" h="30" tint="{{context_textColor}}" marginLeft="5"/>
+                                                <text id="TAG" textSize="16sp" gravity="left||center" textColor="#FF9800" text="{{tag}}"/>
+                                                <text id="ID" textSize="16sp" gravity="left||center" textColor="#4CAF50" text="[{{Id}}]"/>
+                                                <text id="name" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="{{name}}"/>
+                                            </linear>
+                                            <linear gravity="center||right" marginRight="20">
+                                                <img id="deleteItem" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </linear>
+                                        </card>
+                                    </list>
+                                    <text text="已经到底啦" textSize="10" textColor="{{context_textColor}}" margin="5 5 5 100" alpha="0.5" gravity="bottom||center"/>
+                                </vertical>
+                            </scroll>
+                            <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" layout_gravity="bottom" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
+                                <linear orientation="horizontal" gravity="center|left">
+                                    <img id="checkAll" src="@drawable/ic_panorama_fish_eye_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginLeft="5"/>
+                                    <text id="checkAllText" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="全选"/>
                                 </linear>
-                            </linear>
-                            <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5" />
-                            <list id="alljslist">
-                                <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <linear orientation="horizontal" gravity="center|left">
-                                        <img id="checkthisjs" src="{{icon}}" w="30" h="30" tint="{{context_textColor}}" marginLeft="5" />
-                                        <text id="TAG" textSize="16sp" gravity="left||center" textColor="#FF9800" text="{{tag}}" />
-                                        <text id="ID" textSize="16sp" gravity="left||center" textColor="#4CAF50" text="[{{Id}}]" />
-                                        <text id="name" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="{{name}}" />
-                                    </linear>
-                                    <linear gravity="center||right" marginRight="20">
-                                        <img id="deleteItem" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
-                                    </linear>
-                                </card>
-                            </list>
-                            <text text="已经到底啦" textSize="10" textColor="{{context_textColor}}" margin="5 5 5 100" alpha="0.5" gravity="bottom||center" />
-                        </vertical>
-                    </scroll>
-                    <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" layout_gravity="bottom" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                        <linear orientation="horizontal" gravity="center|left">
-                            <img id="checkAll" src="@drawable/ic_panorama_fish_eye_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginLeft="5" />
-                            <text id="checkAllText" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="全选" />
-                        </linear>
-                        <linear gravity="center||right" marginRight="20">
-                            <card id="finaldel" h="0" cardCornerRadius="5dp" gravity="center_vertical" cardBackgroundColor="#000000" foreground="?attr/selectableItemBackground" clickable="true">
-                                <text text="强行停止" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0" />
+                                <linear gravity="center||right" marginRight="20">
+                                    <card id="finaldel" h="0" cardCornerRadius="5dp" gravity="center_vertical" cardBackgroundColor="#000000" foreground="?attr/selectableItemBackground" clickable="true">
+                                        <text text="强行停止" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0"/>
+                                    </card>
+                                </linear>
                             </card>
-                        </linear>
-                    </card>
-                </frame>, null, false);
+                        </frame>, null, false);
             let ControlDHK = dialogs.build({
                 customView: DHK,
                 wrapInScrollView: false,
@@ -897,20 +878,20 @@ function mainUi() {
             DHK.finaldel.click(() => {
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                            <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
-                        </linear>
-                        <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                                <text id="Determine" text="确认停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                                <text id="cancel" text="取消停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                        </linear>
-                    </vertical>, null, false);
+                                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                            <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                            <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336"/>
+                                        </linear>
+                                        <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                                <text id="Determine" text="确认停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                                <text id="cancel" text="取消停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                        </linear>
+                                    </vertical>, null, false);
                 view.deleteTitle.setText("您确定要强行停止以下" + context_ListDeletejs.length + "个脚本吗？");
                 var waitdel = [];
                 for (let i = 0; i < context_ListDeletejs.length; i++) {
@@ -931,10 +912,10 @@ function mainUi() {
                         DHK.dismiss();
                         let views = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                                <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center" />
-                            </vertical>
+                                                        <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center"tint="{{context_textColor}}"/>
+                                                        <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                        <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center"/>
+                                                    </vertical>
                         );
                         views.deleteDone.setText("已强行停止" + context_ListDeletejs.length + "个脚本");
                         deleteAlready = [];
@@ -951,10 +932,10 @@ function mainUi() {
                         DHK.dismiss();
                         let views = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                                <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center" />
-                            </vertical>
+                                                        <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}"/>
+                                                        <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                        <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center"/>
+                                                    </vertical>
                         );
                         views.deleteDone.setText("共有" + deleteWrong.length + "个脚本强行停止失败！");
                         views.deleteDonetips.setText("以下为本次强行停止失败的脚本：\n“" + deleteWrong + "”");
@@ -1016,7 +997,7 @@ function mainUi() {
             }
             DHK.alljslist.setDataSource(items);
             context_ListDeletejs = [];
-            DHK.alljslist.on("item_click", function (item, i, itemView, alljslistView) {
+            DHK.alljslist.on("item_click", function(item, i, itemView, alljslistView) {
                 function WhetherAlready(D) {
                     for (let i = 0; i < context_ListDeletejs.length; i++) {
                         if (D == context_ListDeletejs[i].Id) {
@@ -1052,25 +1033,25 @@ function mainUi() {
                 }
             });
 
-            DHK.alljslist.on("item_bind", function (itemView, itemHolder) {
-                itemView.deleteItem.on("click", function () {
+            DHK.alljslist.on("item_bind", function(itemView, itemHolder) {
+                itemView.deleteItem.on("click", function() {
                     let item = itemHolder.item;
                     let view = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <linear orientation="horizontal" align="left">
-                                <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                                <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 0 0" textColor="#F44336" />
-                            </linear>
-                            <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                                    <text id="Determine" text="强行停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                                    <text id="cancel" text="取消停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                            </linear>
-                        </vertical>, null, false);
+                                                    <linear orientation="horizontal" align="left">
+                                                        <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                                        <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 0 0" textColor="#F44336"/>
+                                                    </linear>
+                                                    <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                                                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                                            <text id="Determine" text="强行停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                                            <text id="cancel" text="取消停止" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                    </linear>
+                                                </vertical>, null, false);
                     view.deleteTitle.setText("您确定要强行停止“[" + item.Id + "]" + item.name + "”脚本吗？");
 
                     view.Determine.click(() => {
@@ -1079,9 +1060,9 @@ function mainUi() {
                             DHK.dismiss();
                             let views = ui.inflate(
                                 <vertical padding="25 0" bg="{{context_framebg}}">
-                                    <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                                </vertical>
+                                                                    <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center"tint="{{context_textColor}}"/>
+                                                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                                </vertical>
                             );
                             views.deleteDone.setText("已成功停止“" + item.name + "(" + item.Id + ")”脚本");
                             dialogs.build({
@@ -1093,9 +1074,9 @@ function mainUi() {
                             DHK.dismiss();
                             let views = ui.inflate(
                                 <vertical padding="25 0" bg="{{context_framebg}}">
-                                    <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                                </vertical>
+                                                                    <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}"/>
+                                                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                                </vertical>
                             );
                             views.deleteDone.setText("停止“" + item.name + "(" + item.Id + ")”脚本失败！");
                             dialogs.build({
@@ -1116,7 +1097,7 @@ function mainUi() {
                 });
             })
             context_CheckAlldelete = false;
-            DHK.checkAll.on("click", function (item, i, itemView, alljslistView) {
+            DHK.checkAll.on("click", function(item, i, itemView, alljslistView) {
                 if (context_CheckAlldelete == true) {
                     context_CheckAlldelete = false;
                     DHK.checkAll.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
@@ -1182,13 +1163,13 @@ function mainUi() {
                 }
             });
 
-            Array.prototype.indexOf = function (val) {
+            Array.prototype.indexOf = function(val) {
                 for (var i = 0; i < this.length; i++) {
                     if (this[i] == val) return i;
                 }
                 return -1;
             };
-            Array.prototype.remove = function (val) {
+            Array.prototype.remove = function(val) {
                 var index = this.indexOf(val);
                 if (index > -1) {
                     this.splice(index, 1);
@@ -1209,19 +1190,19 @@ function mainUi() {
         if (getStorageData("DayNightSetting", "AutoDayNight") != undefined) {
             let view = ui.inflate(
                 <vertical bg="{{context_framebg}}" padding="25 0">
-                    <img src="@drawable/ic_announcement_black_48dp" w="25" h="25" margin="5 0" tint="{{context_textColor}}" />
-                    <text text="您已开启“自动切换主题”确定要关闭吗？" textSize="15sp" textStyle="bold" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0" />
-                    <text id="nowInformation" textSize="10sp" textStyle="bold" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0" />
-                    <text text="*要在“自动切换主题”开启的情况下手动切换主题，你必须先点击“确定”关闭“自动切换主题”功能才能成功完成一次手动切换主题" textSize="5sp" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0" />
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <img src="@drawable/ic_announcement_black_48dp" w="25" h="25" margin="5 0" tint="{{context_textColor}}"/>
+                            <text text="您已开启“自动切换主题”确定要关闭吗？" textSize="15sp" textStyle="bold" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0"/>
+                            <text id="nowInformation" textSize="10sp" textStyle="bold" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0"/>
+                            <text text="*要在“自动切换主题”开启的情况下手动切换主题，你必须先点击“确定”关闭“自动切换主题”功能才能成功完成一次手动切换主题" textSize="5sp" textColor="{{context_textColor}}" gravity="left" margin="5 0 5 0"/>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             let DAY = "";
             let NIGHT = "";
             let a = Number(getStorageData("DayNightSetting", "DayTime"));
@@ -1276,19 +1257,20 @@ function SignUp() {
         <scroll bg="#FFFFFF">
             <vertical layout_gravity="center" marginBottom="0">
                 <linear orientation="horizontal" gravity="center">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35" /> */}
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35"/>
                 </linear>
-                <text text="欢迎使用" textSize="45sp" textColor="#000000" gravity="center" />
-                <text text="全新1.1.0主界面" marginTop="10" textSize="15sp" textColor="#000000" gravity="center" />
+                <text text="欢迎使用" textSize="45sp" textColor="#000000" gravity="center"/>
+                <text text="全新1.1.0主界面" marginTop="10" textSize="15sp" textColor="#000000" gravity="center"/>
                 <linear orientation="horizontal" gravity="center" marginTop="150">
                     <card w="150dp" h="50" marginRight="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#2196F3" alpha="0.7">
                         <card id="SignUp" h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="#FFFFFF" foreground="?selectableItemBackground" clickable="true">
-                            <text text="填写注册问卷" textStyle="bold" color="#2196F3" gravity="center" size="12" />
+                            <text text="填写注册问卷" textStyle="bold" color="#2196F3" gravity="center" size="12"/>
                         </card>
                     </card>
                     <card w="50dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#4CAF50" alpha="0.7">
                         <card id="SignIn" h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="#FFFFFF" foreground="?selectableItemBackground" clickable="true">
-                            <img src="@drawable/ic_vpn_key_black_48dp" tint="#4CAF50" w="30" h="30" />
+                            <img src="@drawable/ic_vpn_key_black_48dp" tint="#4CAF50" w="30" h="30"/>
                         </card>
                     </card>
                 </linear>
@@ -1298,16 +1280,17 @@ function SignUp() {
     ui.SignUp.click(() => {
         let view = ui.inflate(
             <vertical bg="#FFFFFF" padding="25 10 25 0">
-                <linear orientation="horizontal" gravity="left||center" marginBottom="5">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35" /> */}
-                    <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                        <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </linear>
-                </linear>
-                <ScrollView>
-                    <webview id="webview" />
-                </ScrollView>
-            </vertical>
+                        <linear orientation="horizontal" gravity="left||center" marginBottom="5">
+                            <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                            <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35"/>
+                            <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                                <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </linear>
+                        </linear>
+                        <ScrollView>
+                            <webview id="webview"/>
+                        </ScrollView>
+                    </vertical>
         );
         view.webview.loadUrl("https://www.wjx.top/jq/94788811.aspx");
         view.ExitScript.click(() => {
@@ -1325,9 +1308,9 @@ function SignUp() {
     ui.SignIn.click(() => {
         let view = ui.inflate(
             <vertical bg="#FFFFFF" padding="25 10 25 0">
-                <input id="password" textColor="#000000" hint="请输入激活码[填写问卷立得]" textColorHint="#9E9E9E" />
-                <button id="ok" text="确定" style="Widget.AppCompat.Button.Borderless.Colored" w="50" layout_gravity="right" />
-            </vertical>
+                        <input id="password" textColor="#000000" hint="请输入激活码[填写问卷立得]" textColorHint="#9E9E9E"/>
+                        <button id="ok" text="确定" style="Widget.AppCompat.Button.Borderless.Colored" w="50" layout_gravity="right"/>
+                    </vertical>
         );
 
         view.ok.click(() => {
@@ -1346,9 +1329,9 @@ function SignUp() {
                 SettingsUI();
                 let views = ui.inflate(
                     <vertical bg="#FFFFFF" padding="25 0 25 0">
-                        <text text="欢迎" textSize="25" textStyle="bold" textColor="#000000" gravity="left" />
-                        <text text="先来进行设置吧～" textSize="15" textStyle="bold" textColor="#000000" gravity="left" margin="0 5" />
-                    </vertical>
+                                        <text text="欢迎" textSize="25" textStyle="bold" textColor="#000000" gravity="left"/>
+                                        <text text="先来进行设置吧～" textSize="15" textStyle="bold" textColor="#000000" gravity="left" margin="0 5"/>
+                                    </vertical>
                 );
                 dialogs.build({
                     customView: views,
@@ -1375,103 +1358,104 @@ function SettingsUI() {
             <scroll bg="{{context_framebg}}">
                 <vertical margin="0 25 0 0">
                     <linear orientation="horizontal" gravity="left||center">
-                        <img src="{{context_Logo}}" w="85" h="30" />
+                        <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                        <img src="{{context_Logo}}" w="85" h="30"/>
                         <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                            <text text="设置" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                            <text text="设置" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5"/>
                         </linear>
                     </linear>
-                    <card h="1" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" margin="5 0" />
+                    <card h="1" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" margin="5 0"/>
                     <list id='ZhuTiTu' orientation="horizontal" layout_gravity="center_vertical" layout_weight="80">
-                        <card w="180" h="180" cardCornerRadius="5dp" cardElevation="5dp" layout_gravity="center" cardBackgroundColor="{{context_Fgx}}" margin="5" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="picView" src="{{this.Picture}}" scaleType="centerCrop" />
+                        <card w="180"  h="180" cardCornerRadius="5dp" cardElevation="5dp" layout_gravity="center" cardBackgroundColor="{{context_Fgx}}" margin="5" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="picView" src="{{this.Picture}}" scaleType="centerCrop"/>
                             <card h="20" cardCornerRadius="2dp" cardElevation="0dp" layout_gravity="bottom|center" cardBackgroundColor="{{context_framebg}}" margin="50 5" alpha="0.8">
-                                <text text="{{this.TextofPic}}" textSize="10" textColor="{{context_textColor}}" margin="0 0 0 0" gravity="center" />
+                                <text text="{{this.TextofPic}}" textSize="10" textColor="{{context_textColor}}" margin="0 0 0 0" gravity="center"/>
                             </card>
                         </card>
                     </list>
-                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}">
+                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_brightness_4_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="自动切换时段主题" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_brightness_4_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="自动切换时段主题" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
-                        <text id="nighttip" textSize="5sp" textColor="{{context_textColor}}" paddingLeft="2" gravity="bottom||left" margin="45 0 0 10" />
-                        <Switch id="DayNight" marginRight="25" gravity="right||center" />
+                        <text id="nighttip" textSize="5sp" textColor="{{context_textColor}}" paddingLeft="2" gravity="bottom||left" margin="45 0 0 10"/>
+                        <Switch id="DayNight" marginRight="25" gravity="right||center"/>
                     </card>
-                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}">
+                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_color_lens_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="主页卡片颜色渐变" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_color_lens_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="主页卡片颜色渐变" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
-                        <Switch id="Gradient" marginRight="25" gravity="right||center" />
+                        <Switch id="Gradient" marginRight="25" gravity="right||center"/>
                     </card>
-                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}">
+                    <card h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_lock_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="UI界面返回锁定" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_lock_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="UI界面返回锁定" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
-                        <text id="tips" text="* 推荐开启以防止直接返回退出导致界面关闭" textSize="5sp" textColor="{{context_textColor}}" paddingLeft="2" gravity="bottom||left" margin="45 0 0 5" />
-                        <Switch id="uiProtect" marginRight="25" gravity="right||center" />
+                        <text id="tips" text="* 推荐开启以防止直接返回退出导致界面关闭" textSize="5sp" textColor="{{context_textColor}}" paddingLeft="2" gravity="bottom||left" margin="45 0 0 5"/>
+                        <Switch id="uiProtect" marginRight="25" gravity="right||center"/>
                     </card>
-                    <card id="DeleteJsSettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    <card id="DeleteJsSettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_delete_sweep_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="手动删除脚本配置" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_delete_sweep_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="手动删除脚本配置" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
                         <linear gravity="center||right" marginRight="10">
-                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
+                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}"/>
                         </linear>
                     </card>
-                    <card id="GetUiObject" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    <card id="GetUiObject" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_poll_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="APP控件数据获取" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_poll_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="APP控件数据获取" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
                         <linear gravity="center||right" marginRight="10">
-                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
+                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}"/>
                         </linear>
                     </card>
-                    <card id="CodeTest" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    <card id="CodeTest" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_bug_report_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="开发人员代码测试" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_bug_report_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="开发人员代码测试" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
                         <linear gravity="center||right" marginRight="10">
-                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
+                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}"/>
                         </linear>
                     </card>
-                    <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10"cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
-                            <img src="@drawable/ic_open_in_new_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
-                            <linear orientation="vertical" marginLeft="5" gravity="center">
-                                <text text="跳转软件自带设置" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp" />
+                            <img src="@drawable/ic_open_in_new_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10"/>
+                            <linear orientation="vertical"  marginLeft="5" gravity="center">
+                                <text text="跳转软件自带设置" textColor="{{context_textColor}}" textStyle="bold" textSize="15sp"/>
                             </linear>
                         </linear>
                         <linear gravity="center||right" marginRight="10">
-                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
+                            <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}"/>
                         </linear>
                     </card>
                 </vertical>
             </scroll>
             <fab id="back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
-                margin="16" layout_gravity="bottom|right" tint="#ffffff" />
+            margin="16" layout_gravity="bottom|right" tint="#ffffff" />
         </frame>
     );
     ui.back.click(() => {
         mainUi();
     });
-    ui.ZhuTiTu.on("item_click", function (item, i, itemView, listView) {
+    ui.ZhuTiTu.on("item_click", function(item, i, itemView, listView) {
         function saveThisPic(ShouldsavePath) {
             var imgView = itemView.picView;
             var myBitmap = createBitmap(imgView);
@@ -1496,41 +1480,41 @@ function SettingsUI() {
         if (item.TextofPic == "当前顶图") {
             var view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <text text="您想对当前顶图做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center" />
-                    <linear gravity="center">
-                        <img src="{{context_TopPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center" />
-                    </linear>
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="ChangePic" text="更换图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="BeBottomPic" text="设为底图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="SharePic" text="分享图片" textStyle="bold" textColor="#4CAF50" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="DeletePic" text="移除图片" textStyle="bold" textColor="#FF3D00" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <text text="您想对当前顶图做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center"/>
+                            <linear gravity="center">
+                                <img src="{{context_TopPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center"/>
+                            </linear>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="ChangePic" text="更换图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="BeBottomPic" text="设为底图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="SharePic" text="分享图片" textStyle="bold" textColor="#4CAF50" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="DeletePic" text="移除图片" textStyle="bold" textColor="#FF3D00" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             view.ChangePic.click(() => {
                 DHK.dismiss();
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="请选择您要更换的图片类型" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center" />
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                <text id="LocalPic" text="更换本地图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                <text id="UrlPic" text="更换网络图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                        </linear>
-                    </vertical>, null, false);
+                                        <text text="请选择您要更换的图片类型" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center"/>
+                                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                <text id="LocalPic" text="更换本地图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                <text id="UrlPic" text="更换网络图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                        </linear>
+                                    </vertical>, null, false);
                 view.LocalPic.click(() => {
                     DHKs.dismiss();
                     startChooseFile("image/*", {}, "选择顶图");
@@ -1538,19 +1522,19 @@ function SettingsUI() {
                 view.UrlPic.click(() => {
                     let view = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <text text="请输入网络图片直链" textStyle="bold" textColor="{{context_textColor}}" />
-                            <input id="PictureUrl" text="http://" textColor="{{context_textColor}}" textColorHint="#9E9E9E" />
-                            <text text="请输入图片版权信息" textStyle="bold" textColor="{{context_textColor}}" />
-                            <input id="PictureCopyright" text="©" textColor="{{context_textColor}}" textColorHint="#9E9E9E" />
-                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                            </linear>
-                        </vertical>, null, false);
+                                                    <text text="请输入网络图片直链" textStyle="bold" textColor="{{context_textColor}}" />
+                                                    <input id="PictureUrl" text="http://" textColor="{{context_textColor}}" textColorHint="#9E9E9E"/>
+                                                    <text text="请输入图片版权信息" textStyle="bold" textColor="{{context_textColor}}"/>
+                                                    <input id="PictureCopyright" text="©" textColor="{{context_textColor}}" textColorHint="#9E9E9E"/>
+                                                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                            <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                            <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                    </linear>
+                                                </vertical>, null, false);
                     view.Determine.click(() => {
                         let Purl = String(view.PictureUrl.getText());
                         let Pcopyright = String(view.PictureCopyright.getText());
@@ -1566,11 +1550,11 @@ function SettingsUI() {
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             }
-                            var keep = setInterval(function () { }, 1000);
-                            var chaoshi = setTimeout(function () {
+                            var keep = setInterval(function() {}, 1000);
+                            var chaoshi = setTimeout(function() {
                                 clearInterval(keep);
                             }, 25 * 1000);
-                            events.broadcast.on('imgSetOk', function (zt) {
+                            events.broadcast.on('imgSetOk', function(zt) {
                                 clearInterval(keep);
                                 clearTimeout(chaoshi);
                                 if (zt == "图片下载完成&设置成功") {
@@ -1614,8 +1598,8 @@ function SettingsUI() {
                 context_BottomPics_Copyright = context_TopPics_Copyright;
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="已设为底图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
+                                        <text text="已设为底图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                    </vertical>
                 );
                 dialogs.build({
                     customView: view,
@@ -1629,27 +1613,27 @@ function SettingsUI() {
                 if (context_TopPics.search("http://") == 0 || context_TopPics.search("https://") == 0) {
                     var view = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <linear gravity="center">
-                                <img src="{{context_TopPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center" />
-                            </linear>
-                            <text id="showurl" textSize="8" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="CopyUrltext" text="复制链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="shareUrltext" text="分享链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                            </linear>
-                        </vertical>, null, false);
+                                            <linear gravity="center">
+                                                <img src="{{context_TopPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center"/>
+                                            </linear>
+                                            <text id="showurl" textSize="8" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                    <text id="CopyUrltext" text="复制链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                </card>
+                                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                    <text id="shareUrltext" text="分享链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                </card>
+                                            </linear>
+                                        </vertical>, null, false);
                     view.showurl.setText("图片直链：" + context_TopPics + "\n图片版权：" + context_TopPics_Copyright);
                     let a = view.showurl.getText();
                     view.CopyUrltext.click(() => {
                         setClip(a);
                         let view = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <text text="链接文字已复制到剪切板" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                            </vertical>
+                                                        <text text="链接文字已复制到剪切板" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                                    </vertical>
                         );
                         dialogs.build({
                             customView: view,
@@ -1691,41 +1675,41 @@ function SettingsUI() {
         } else if (item.TextofPic == "当前底图") {
             var view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <text text="您想对当前底图做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center" />
-                    <linear gravity="center">
-                        <img src="{{context_BottomPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center" />
-                    </linear>
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="ChangePic" text="更换图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="BeTopPic" text="设为顶图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="SharePic" text="分享图片" textStyle="bold" textColor="#4CAF50" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="DeletePic" text="移除图片" textStyle="bold" textColor="#FF3D00" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <text text="您想对当前底图做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center"/>
+                            <linear gravity="center">
+                                <img src="{{context_BottomPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center"/>
+                            </linear>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="ChangePic" text="更换图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 0"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="BeTopPic" text="设为顶图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="SharePic" text="分享图片" textStyle="bold" textColor="#4CAF50" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5 5 5 5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="DeletePic" text="移除图片" textStyle="bold" textColor="#FF3D00" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             view.ChangePic.click(() => {
                 DHK.dismiss();
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="请选择您要更换的图片类型" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center" />
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                <text id="LocalPic" text="更换本地图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                <text id="UrlPic" text="更换网络图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                        </linear>
-                    </vertical>, null, false);
+                                        <text text="请选择您要更换的图片类型" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center"/>
+                                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                <text id="LocalPic" text="更换本地图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                <text id="UrlPic" text="更换网络图片" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                            </card>
+                                        </linear>
+                                    </vertical>, null, false);
                 view.LocalPic.click(() => {
                     DHKs.dismiss();
                     startChooseFile("image/*", {}, "选择底图");
@@ -1733,19 +1717,19 @@ function SettingsUI() {
                 view.UrlPic.click(() => {
                     let view = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <text text="请输入网络图片直链" textStyle="bold" textColor="{{context_textColor}}" />
-                            <input id="PictureUrl" text="http://" textColor="{{context_textColor}}" textColorHint="#9E9E9E" />
-                            <text text="请输入图片版权信息" textStyle="bold" textColor="{{context_textColor}}" />
-                            <input id="PictureCopyright" text="©" textColor="{{context_textColor}}" textColorHint="#9E9E9E" />
-                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                            </linear>
-                        </vertical>, null, false);
+                                                    <text text="请输入网络图片直链" textStyle="bold" textColor="{{context_textColor}}" />
+                                                    <input id="PictureUrl" text="http://" textColor="{{context_textColor}}" textColorHint="#9E9E9E"/>
+                                                    <text text="请输入图片版权信息" textStyle="bold" textColor="{{context_textColor}}"/>
+                                                    <input id="PictureCopyright" text="©" textColor="{{context_textColor}}" textColorHint="#9E9E9E"/>
+                                                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                            <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                            <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                        </card>
+                                                    </linear>
+                                                </vertical>, null, false);
                     view.Determine.click(() => {
                         let Purl = String(view.PictureUrl.getText());
                         let Pcopyright = String(view.PictureCopyright.getText());
@@ -1761,11 +1745,11 @@ function SettingsUI() {
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             }
-                            var keep = setInterval(function () { }, 1000);
-                            var chaoshi = setTimeout(function () {
+                            var keep = setInterval(function() {}, 1000);
+                            var chaoshi = setTimeout(function() {
                                 clearInterval(keep);
                             }, 25 * 1000);
-                            events.broadcast.on('imgSetOk', function (zt) {
+                            events.broadcast.on('imgSetOk', function(zt) {
                                 clearInterval(keep);
                                 clearTimeout(chaoshi);
                                 if (zt == "图片下载完成&设置成功") {
@@ -1810,8 +1794,8 @@ function SettingsUI() {
                 context_TopPics_Copyright = context_BottomPics_Copyright;
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <text text="已设为顶图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                    </vertical>
+                                        <text text="已设为顶图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                    </vertical>
                 );
                 dialogs.build({
                     customView: view,
@@ -1826,27 +1810,27 @@ function SettingsUI() {
                 if (context_BottomPics.search("http://") == 0 || context_BottomPics.search("https://") == 0) {
                     var view = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <linear gravity="center">
-                                <img src="{{context_BottomPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center" />
-                            </linear>
-                            <text id="showurl" textSize="8" margin="10 5 10 5" textColor="{{context_textColor}}" />
-                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="CopyUrltext" text="复制链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                    <text id="shareUrltext" text="分享链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </card>
-                            </linear>
-                        </vertical>, null, false);
+                                            <linear gravity="center">
+                                                <img src="{{context_BottomPics}}" margin="10" scaleType="centerCrop" w="200" h="200" gravity="center"/>
+                                            </linear>
+                                            <text id="showurl" textSize="8" margin="10 5 10 5" textColor="{{context_textColor}}"/>
+                                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                    <text id="CopyUrltext" text="复制链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                </card>
+                                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                                    <text id="shareUrltext" text="分享链接文字" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                </card>
+                                            </linear>
+                                        </vertical>, null, false);
                     view.showurl.setText("图片直链：" + context_BottomPics + "\n图片版权：" + context_BottomPics_Copyright);
                     let a = view.showurl.getText();
                     view.CopyUrltext.click(() => {
                         setClip(a);
                         let view = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <text text="链接文字已复制到剪切板" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                            </vertical>
+                                                        <text text="链接文字已复制到剪切板" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                                                    </vertical>
                         );
                         dialogs.build({
                             customView: view,
@@ -1888,16 +1872,16 @@ function SettingsUI() {
         } else {
             var view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <text text="您想对这张图片做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center" />
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="BeTopPic" text="设为顶图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="BeBottomPic" text="设为底图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <text text="您想对这张图片做什么？" textStyle="bold" textSize="15" marginTop="10" textColor="#777777" gravity="center"/>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="BeTopPic" text="设为顶图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="BeBottomPic" text="设为底图" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             view.BeTopPic.click(() => {
                 DHK.dismiss();
                 files.ensureDir("/storage/emulated/0/OrangeJs/主界面示例图片");
@@ -1910,11 +1894,11 @@ function SettingsUI() {
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 }
-                var keep = setInterval(function () { }, 1000);
-                var chaoshi = setTimeout(function () {
+                var keep = setInterval(function() {}, 1000);
+                var chaoshi = setTimeout(function() {
                     clearInterval(keep);
                 }, 25 * 1000);
-                events.broadcast.on('imgSetOk', function (zt) {
+                events.broadcast.on('imgSetOk', function(zt) {
                     clearInterval(keep);
                     clearTimeout(chaoshi);
                     if (zt == "图片下载完成&设置成功") {
@@ -1935,11 +1919,11 @@ function SettingsUI() {
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 }
-                var keep = setInterval(function () { }, 1000);
-                var chaoshi = setTimeout(function () {
+                var keep = setInterval(function() {}, 1000);
+                var chaoshi = setTimeout(function() {
                     clearInterval(keep);
                 }, 25 * 1000);
-                events.broadcast.on('imgSetOk', function (zt) {
+                events.broadcast.on('imgSetOk', function(zt) {
                     clearInterval(keep);
                     clearTimeout(chaoshi);
                     if (zt == "图片下载完成&设置成功") {
@@ -1986,21 +1970,21 @@ function SettingsUI() {
             ui.DayNight.setChecked(false);
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <img src="@drawable/ic_brightness_4_black_48dp" w="20" h="20" margin="5" tint="{{context_textColor}}" />
-                    <text text="*请输入0-23的小时数字" textSize="10" textColor="#90A6AE" />
-                    <text text="自动开启浅色主题时间" textColor="{{context_textColor}}" />
-                    <input id="Day" textColor="{{context_textColor}}" inputType="number" hint="开启浅色时间（0～23数字）" textColorHint="#9E9E9E" />
-                    <text text="自动开启夜间主题时间" textColor="{{context_textColor}}" />
-                    <input id="Night" textColor="{{context_textColor}}" inputType="number" hint="开启深色时间（0～23数字）" textColorHint="#9E9E9E" />
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                            <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                            <img src="@drawable/ic_brightness_4_black_48dp" w="20" h="20" margin="5" tint="{{context_textColor}}"/>
+                            <text text="*请输入0-23的小时数字" textSize="10" textColor="#90A6AE"/>
+                            <text text="自动开启浅色主题时间" textColor="{{context_textColor}}" />
+                            <input id="Day" textColor="{{context_textColor}}" inputType="number" hint="开启浅色时间（0～23数字）" textColorHint="#9E9E9E"/>
+                            <text text="自动开启夜间主题时间" textColor="{{context_textColor}}"/>
+                            <input id="Night" textColor="{{context_textColor}}" inputType="number" hint="开启深色时间（0～23数字）" textColorHint="#9E9E9E"/>
+                            <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="Determine" text="确定" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                                <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="{{context_SettingsCard}}">
+                                    <text id="cancel" text="取消" textStyle="bold" textColor="{{context_textColor}}" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                </card>
+                            </linear>
+                        </vertical>, null, false);
             view.Determine.click(() => {
                 let day = String(view.Day.getText());
                 let night = String(view.Night.getText());
@@ -2090,61 +2074,62 @@ function SettingsUI() {
     ui.DeleteJsSettings.click(() => {
         let Deletejsview = ui.inflate(
             <frame background="{{context_framebg}}" padding="5">
-                <scroll>
-                    <vertical>
-                        <linear orientation="horizontal" gravity="left||center">
-                            <img src="{{context_Logo}}" w="85" h="35" />
-                            <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                                <text text="删除脚本配置" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
+                        <scroll>
+                            <vertical>
+                                <linear orientation="horizontal" gravity="left||center">
+                                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                                    <img src="{{context_Logo}}" w="85" h="35"/>
+                                    <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                                        <text text="删除脚本配置" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5"/>
+                                    </linear>
+                                </linear>
+                                <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5"/>
+                                <list id="alljslist">
+                                    <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
+                                        <linear orientation="horizontal" gravity="center|left">
+                                            <img id="checkthisjs" src="{{icon}}" w="30" h="30" tint="{{context_textColor}}" marginLeft="5"/>
+                                            <text id="name" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="{{name}}"/>
+                                        </linear>
+                                        <linear gravity="center||right" marginRight="20">
+                                            <img id="deleteItem" src="@drawable/ic_delete_forever_black_48dp" w="35" h="35" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                        </linear>
+                                    </card>
+                                </list>
+                                <text id="Ttip" text="已经到底啦" textSize="10" textColor="{{context_textColor}}" margin="5 5 5 100" alpha="0.5" gravity="bottom||center"/>
+                            </vertical>
+                        </scroll>
+                        <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" layout_gravity="bottom" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
+                            <linear orientation="horizontal" gravity="center|left">
+                                <img id="checkAll" src="@drawable/ic_panorama_fish_eye_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginLeft="5"/>
+                                <text id="checkAllText" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="全选"/>
                             </linear>
-                        </linear>
-                        <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5" />
-                        <list id="alljslist">
-                            <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                                <linear orientation="horizontal" gravity="center|left">
-                                    <img id="checkthisjs" src="{{icon}}" w="30" h="30" tint="{{context_textColor}}" marginLeft="5" />
-                                    <text id="name" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="{{name}}" />
-                                </linear>
-                                <linear gravity="center||right" marginRight="20">
-                                    <img id="deleteItem" src="@drawable/ic_delete_forever_black_48dp" w="35" h="35" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
-                                </linear>
-                            </card>
-                        </list>
-                        <text id="Ttip" text="已经到底啦" textSize="10" textColor="{{context_textColor}}" margin="5 5 5 100" alpha="0.5" gravity="bottom||center" />
-                    </vertical>
-                </scroll>
-                <card w="*" h="50" cardCornerRadius="10dp" cardElevation="0dp" layout_gravity="bottom" margin="5" cardBackgroundColor="{{context_SettingsCard}}">
-                    <linear orientation="horizontal" gravity="center|left">
-                        <img id="checkAll" src="@drawable/ic_panorama_fish_eye_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginLeft="5" />
-                        <text id="checkAllText" textSize="16sp" gravity="left||center" textColor="{{context_textColor}}" text="全选" />
-                    </linear>
-                    <linear gravity="center||right" marginRight="20">
-                        <card id="finaldel" h="0" cardCornerRadius="5dp" gravity="center_vertical" cardBackgroundColor="#000000" foreground="?attr/selectableItemBackground" clickable="true">
-                            <text text="删除" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0" />
+                            <linear gravity="center||right" marginRight="20">
+                                <card id="finaldel" h="0" cardCornerRadius="5dp" gravity="center_vertical" cardBackgroundColor="#000000" foreground="?attr/selectableItemBackground" clickable="true">
+                                    <text text="删除" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0"/>
+                                </card>
+                            </linear>
                         </card>
-                    </linear>
-                </card>
-            </frame>, null, false);
+                    </frame>, null, false);
         if (files.listDir("/sdcard/").length == 0) {
             Deletejsview.Ttip.setText("无存储权限，无法获取脚本配置");
         }
         Deletejsview.finaldel.click(() => {
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                        <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
-                    </linear>
-                    <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                            <text id="Determine" text="确定删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                            <text id="cancel" text="取消删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                        </card>
-                    </linear>
-                </vertical>, null, false);
+                                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                        <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                        <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336"/>
+                                    </linear>
+                                    <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                                    <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                            <text id="Determine" text="确定删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                        </card>
+                                        <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                            <text id="cancel" text="取消删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                        </card>
+                                    </linear>
+                                </vertical>, null, false);
             view.deleteTitle.setText("您确定要删除以下" + context_ListDeletejs.length + "个脚本配置吗？");
             view.deleteTips.setText("本次将删除的脚本配置包含：\n“" + context_ListDeletejs + "”\n\n脚本配置一旦删除将无法恢复，若有个人文件存储于这些目录下请点击对应的单独删除按钮进行检查");
             view.cancel.click(() => {
@@ -2161,10 +2146,10 @@ function SettingsUI() {
                     DHK.dismiss();
                     let views = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                            <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                            <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center" />
-                        </vertical>
+                                                    <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center"tint="{{context_textColor}}"/>
+                                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                    <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center"/>
+                                                </vertical>
                     );
                     views.deleteDone.setText("已成功删除" + context_ListDeletejs.length + "个脚本配置");
                     views.deleteDonetips.setText("已被删除的脚本配置目录：\n“" + context_ListDeletejs + "”");
@@ -2177,10 +2162,10 @@ function SettingsUI() {
                     DHK.dismiss();
                     let views = ui.inflate(
                         <vertical padding="25 0" bg="{{context_framebg}}">
-                            <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                            <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                            <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center" />
-                        </vertical>
+                                                    <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}"/>
+                                                    <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                    <text id="deleteDonetips" textSize="10" margin="5" textColor="{{context_textColor}}" gravity="center"/>
+                                                </vertical>
                     );
                     views.deleteDone.setText("共有" + deleteWrong.length + "个脚本配置删除失败！");
                     views.deleteDonetips.setText("以下为本次删除失败的脚本配置目录：\n“" + deleteWrong + "”");
@@ -2223,7 +2208,7 @@ function SettingsUI() {
         }
         Deletejsview.alljslist.setDataSource(items);
         context_ListDeletejs = [];
-        Deletejsview.alljslist.on("item_click", function (item, i, itemView, alljslistView) {
+        Deletejsview.alljslist.on("item_click", function(item, i, itemView, alljslistView) {
             if (context_ListDeletejs.indexOf(item.name) >= 0) {
                 context_ListDeletejs.remove(item.name);
                 itemView.checkthisjs.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
@@ -2249,25 +2234,25 @@ function SettingsUI() {
             }
         });
 
-        Deletejsview.alljslist.on("item_bind", function (itemView, itemHolder) {
-            itemView.deleteItem.on("click", function () {
+        Deletejsview.alljslist.on("item_bind", function(itemView, itemHolder) {
+            itemView.deleteItem.on("click", function() {
                 let item = itemHolder.item;
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                            <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
-                        </linear>
-                        <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                                <text id="Determine" text="确定删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                                <text id="cancel" text="取消删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                        </linear>
-                    </vertical>, null, false);
+                                                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                    <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                                    <text id="deleteTitle" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336"/>
+                                                </linear>
+                                                <text id="deleteTips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                                                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                                        <text id="Determine" text="确定删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                    </card>
+                                                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                                        <text id="cancel" text="取消删除" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                                    </card>
+                                                </linear>
+                                            </vertical>, null, false);
                 view.deleteTitle.setText("您确定要删除“" + item.name + "”的脚本配置吗？");
                 if (files.isDir("/storage/emulated/0/OrangeJs/" + item.name) == true && files.isEmptyDir("/storage/emulated/0/OrangeJs/" + item.name) == true) {
                     view.deleteTips.setText("“" + item.name + "”是一个空文件夹，可以放心删除");
@@ -2290,9 +2275,9 @@ function SettingsUI() {
                         DHK.dismiss();
                         let views = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                            </vertical>
+                                                                <img src="@drawable/ic_check_circle_black_48dp" size="20" margin="5" gravity="center"tint="{{context_textColor}}"/>
+                                                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                            </vertical>
                         );
                         views.deleteDone.setText("已成功删除“" + item.name + "”的脚本配置");
                         dialogs.build({
@@ -2304,9 +2289,9 @@ function SettingsUI() {
                         DHK.dismiss();
                         let views = ui.inflate(
                             <vertical padding="25 0" bg="{{context_framebg}}">
-                                <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}" />
-                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center" />
-                            </vertical>
+                                                                <img src="@drawable/ic_cancel_black_48dp" size="20" margin="5" gravity="center" tint="{{context_textColor}}"/>
+                                                                <text id="deleteDone" textStyle="bold" textSize="15" margin="10" textColor="{{context_textColor}}" gravity="center"/>
+                                                            </vertical>
                         );
                         views.deleteDone.setText("删除“" + item.name + "”的脚本配置失败！");
                         dialogs.build({
@@ -2327,7 +2312,7 @@ function SettingsUI() {
             });
         })
         context_CheckAlldelete = false;
-        Deletejsview.checkAll.on("click", function (item, i, itemView, alljslistView) {
+        Deletejsview.checkAll.on("click", function(item, i, itemView, alljslistView) {
             if (context_CheckAlldelete == true) {
                 context_CheckAlldelete = false;
                 Deletejsview.checkAll.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
@@ -2370,13 +2355,13 @@ function SettingsUI() {
             }
         });
 
-        Array.prototype.indexOf = function (val) {
+        Array.prototype.indexOf = function(val) {
             for (var i = 0; i < this.length; i++) {
                 if (this[i] == val) return i;
             }
             return -1;
         };
-        Array.prototype.remove = function (val) {
+        Array.prototype.remove = function(val) {
             var index = this.indexOf(val);
             if (index > -1) {
                 this.splice(index, 1);
@@ -2394,10 +2379,10 @@ function SettingsUI() {
         if (a == null) {
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <img src="@drawable/ic_error_outline_black_48dp" h="35" tint="{{context_textColor}}" marginTop="5" />
-                    <text text="请开启“无障碍服务”" textSize="15" margin="5 0" textStyle="bold" gravity="center" textColor="{{context_textColor}}" />
-                    <text text="此功能需要“无障碍服务”，请前往主界面打开" textSize="10" gravity="center" margin="5 0 5 5" textColor="{{context_textColor}}" alpha="0.9" />
-                </vertical>, null, false);
+                            <img src="@drawable/ic_error_outline_black_48dp" h="35" tint="{{context_textColor}}" marginTop="5"/>
+                            <text text="请开启“无障碍服务”" textSize="15" margin="5 0" textStyle="bold" gravity="center" textColor="{{context_textColor}}"/>
+                            <text text="此功能需要“无障碍服务”，请前往主界面打开" textSize="10" gravity="center" margin="5 0 5 5" textColor="{{context_textColor}}" alpha="0.9"/>
+                        </vertical>, null, false);
             dialogs.build({
                 customView: view,
                 wrapInScrollView: false,
@@ -2413,10 +2398,10 @@ function SettingsUI() {
         if (a == null) {
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <img src="@drawable/ic_error_outline_black_48dp" h="35" tint="{{context_textColor}}" marginTop="5" />
-                    <text text="请开启“无障碍服务”" textSize="15" margin="5 0" textStyle="bold" gravity="center" textColor="{{context_textColor}}" />
-                    <text text="此功能需要“无障碍服务”，请前往主界面打开" textSize="10" gravity="center" margin="5 0 5 5" textColor="{{context_textColor}}" alpha="0.9" />
-                </vertical>, null, false);
+                            <img src="@drawable/ic_error_outline_black_48dp" h="35" tint="{{context_textColor}}" marginTop="5"/>
+                            <text text="请开启“无障碍服务”" textSize="15" margin="5 0" textStyle="bold" gravity="center" textColor="{{context_textColor}}"/>
+                            <text text="此功能需要“无障碍服务”，请前往主界面打开" textSize="10" gravity="center" margin="5 0 5 5" textColor="{{context_textColor}}" alpha="0.9"/>
+                        </vertical>, null, false);
             dialogs.build({
                 customView: view,
                 wrapInScrollView: false,
@@ -2553,18 +2538,19 @@ function TalkToDeveloper() {
         <frame bg="{{context_framebg}}" w="*" h="*" marginTop="25">
             <vertical align="left">
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
-                    <img src="{{context_Logo}}" w="85" h="35" />
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                    <img src="{{context_Logo}}" w="85" h="35"/>
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                        <text text="反馈问题" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                        <text text="反馈问题" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5"/>
                     </linear>
                 </linear>
-                <progressbar id="progressX" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" layout_gravity="top" />
+                <progressbar id="progressX" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"layout_gravity="top"/>
                 <ScrollView>
-                    <webview id="webview" />
+                    <webview id="webview"/>
                 </ScrollView>
             </vertical>
             <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
-                margin="16" layout_gravity="bottom|right" tint="#ffffff" />
+            margin="16" layout_gravity="bottom|right" tint="#ffffff" />
         </frame>
     );
     ui.webview.loadUrl("https://wj.qq.com/s2/5238744/d982");
@@ -2599,57 +2585,58 @@ function AboutApp() {
         <frame w="*" h="*" background="{{context_framebg}}">
             <scroll bg="{{context_framebg}}">
                 <vertical align="left">
-                    <img src="{{context_Logo}}" w="auto" h="50" gravity="center" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFEA3324" h="*" w="*" />
-                    </card>
-                    <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFFF711F" h="*" w="*" />
-                    </card>
-                    <text text="软件版本" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="AppVision" color="{{context_textColor}}" textSize="20" textStyle="normal" gravity="center" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFFABB06" h="*" w="*" />
-                    </card>
-                    <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center" />
-
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF34A853" h="*" w="*" />
-                    </card>
-                    <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF4285F4" h="*" w="*" />
-                    </card>
-                    <text id="Ttip" color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center" />
-                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF9D41F9" h="*" w="*" />
-                    </card>
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" marginTop="50" w="auto"h="50" gravity="center"/>//应用logo
+                    <img src="{{context_Logo}}" w="auto"h="50" gravity="center"/>
+                    <card  h="5" marginTop="10" cardCornerRadius="0dp"
+                    cardElevation="0dp" gravity="center_vertical">
+                    <vertical padding="0 0" h="auto">
+                    </vertical>
+                    <View bg="#FFEA3324" h="*" w="*"/>
+                </card>
+                <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5"/>
+                <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名
+                <card  h="5" marginTop="10" cardCornerRadius="0dp"
+                cardElevation="0dp" gravity="center_vertical">
+                <vertical padding="0 0" h="auto">
                 </vertical>
-            </scroll>
-            <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
-                margin="0 0 15 15" layout_gravity="bottom|right" tint="#ffffff" />
+                <View bg="#FFFF711F" h="*" w="*"/>
+            </card>
+            <text text="软件版本" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5"/>
+            <text id="AppVision" color="{{context_textColor}}" textSize="20" textStyle="normal" gravity="center"/>
+            <card  h="5" marginTop="10" cardCornerRadius="0dp"
+            cardElevation="0dp" gravity="center_vertical">
+            <vertical padding="0 0" h="auto">
+            </vertical>
+            <View bg="#FFFABB06" h="*" w="*"/>
+        </card>
+        <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5"/>
+        <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center"/>
+        
+        <card  h="5" marginTop="10" cardCornerRadius="0dp"
+        cardElevation="0dp" gravity="center_vertical">
+        <vertical padding="0 0" h="auto">
+        </vertical>
+        <View bg="#FF34A853" h="*" w="*"/>
+        </card>
+        <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5"/>
+        <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0"/>
+        <card  h="5" marginTop="10" cardCornerRadius="0dp"
+        cardElevation="0dp" gravity="center_vertical">
+        <vertical padding="0 0" h="auto">
+        </vertical>
+        <View bg="#FF4285F4" h="*" w="*"/>
+        </card>
+        <text id="Ttip"  color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center"/>
+        <card  h="5" margin="0 10 0 10" cardCornerRadius="0dp"
+        cardElevation="0dp" gravity="center_vertical">
+        <vertical padding="0 0" h="auto">
+        </vertical>
+        <View bg="#FF9D41F9" h="*" w="*"/>
+        </card>
+        </vertical>
+        </scroll>
+        <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
+        margin="0 0 15 15" layout_gravity="bottom|right" tint="#ffffff" />
         </frame>
     );
     ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
@@ -2668,40 +2655,41 @@ function SP() {
         <frame background="{{context_framebg}}">
             <vertical align="left" margin="10 25 10 0">
                 <linear orientation="horizontal" gravity="left||center">
-                    <img src="{{context_Logo}}" w="85" h="35" />
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                    <img src="{{context_Logo}}" w="85" h="35"/>
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                        <text text="隐私与安全" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                        <text text="隐私与安全" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5"/>
                     </linear>
                 </linear>
                 <scroll>
                     <linear orientation="vertical" align="left" margin="0" paddingTop="0">
-                        <text id="Privacy" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                        <text id="Privacy" color="{{context_textColor}}" textStyle="bold" typeface="sans"/>
                         <frame id="Q0" marginTop="5">
-                            <text text="软件需要什么权限？" gravity="left" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <text text="软件需要什么权限？" gravity="left" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans"/>
                             <linear gravity="center||right" marginRight="10">
-                                <img id="Q0img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                                <img id="Q0img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true"/>
                             </linear>
                         </frame>
-                        <text id="A0" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                        <text id="A0" textSize="0" typeface="sans" color="{{context_textColor}}"/>
                         <frame id="Q1" marginTop="5">
-                            <text text="为什么要收集信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <text text="为什么要收集信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans"/>
                             <linear gravity="center||right" marginRight="10">
-                                <img id="Q1img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                                <img id="Q1img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true"/>
                             </linear>
                         </frame>
-                        <text id="A1" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                        <text id="A1" textSize="0" typeface="sans" color="{{context_textColor}}"/>
                         <frame id="Q2" marginTop="5">
-                            <text text="本软件会收集哪些信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <text text="本软件会收集哪些信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans"/>
                             <linear gravity="center||right" marginRight="10">
-                                <img id="Q2img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                                <img id="Q2img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true"/>
                             </linear>
                         </frame>
-                        <text id="A2" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                        <text id="A2"  textSize="0" typeface="sans" color="{{context_textColor}}"/>
                     </linear>
                 </scroll>
             </vertical>
             <fab id="back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
-                margin="16" layout_gravity="bottom|right" tint="#ffffff" />
+            margin="16" layout_gravity="bottom|right" tint="#ffffff" />
         </frame>
     );
 
@@ -2790,7 +2778,7 @@ function TESTCode() {
             <text text="* 使用 Auto.js(4.1) 作为脚本引擎" color="#9e9e9e" textSize="10" marginTop="10" gravity="center" />
         </vertical>
     );
-    events.on("状态", function (words) {
+    events.on("状态", function(words) {
         if (words == "结束") {
             ui.ru.text("运行");
         }
@@ -2816,16 +2804,16 @@ function TESTCode() {
     ui.qk.on("click", () => {
         let view = ui.inflate(
             <vertical padding="25 0" bg="#000000">
-                <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5" />
-                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#FF5722">
-                        <text id="Determine" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                        <text id="cancel" text="取消" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                    </card>
-                </linear>
-            </vertical>, null, false);
+                        <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5"/>
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#FF5722">
+                                <text id="Determine" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
+                                <text id="cancel" text="取消" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                            </card>
+                        </linear>
+                    </vertical>, null, false);
         view.tip.setText("您确定要清空全部代码吗？\n此操作将无法撤销");
         view.Determine.click(() => {
             ui.x.setText("");
@@ -2847,8 +2835,8 @@ function TESTCode() {
 
     let view = ui.inflate(
         <vertical bg="#000000" padding="25 0 25 0">
-            <img src="@drawable/ic_report_problem_black_48dp" h="35" tint="#FFFFFF" margin="5" />
-            <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5" />
+            <img src="@drawable/ic_report_problem_black_48dp" h="35" tint="#FFFFFF" margin="5"/>
+            <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5"/>
         </vertical>
     );
     view.tip.setText("注意！此功能仅供开发人员使用，小白用户请严格在开发者指导下使用！\n\n请不要运行来路不明的代码，以免造成隐私信息泄露等不可挽回的严重后果！");
@@ -2862,12 +2850,12 @@ function TESTCode() {
 
 var ResultIntent = {
     intentCallback: {},
-    init: function () {
+    init: function() {
         activity.getEventEmitter().on("activity_result", (requestCode, resultCode, data) => {
             this.onActivityResult(requestCode, resultCode, data);
         });
     },
-    startActivityForResult: function (intent, callback) {
+    startActivityForResult: function(intent, callback) {
         var i;
         for (i = 0; i < 65536; i++) {
             if (!(i in this.intentCallback)) break;
@@ -2879,7 +2867,7 @@ var ResultIntent = {
         this.intentCallback[i] = callback;
         activity.startActivityForResult(intent, i);
     },
-    onActivityResult: function (requestCode, resultCode, data) {
+    onActivityResult: function(requestCode, resultCode, data) {
         var cb = this.intentCallback[requestCode];
         if (!cb) return;
         delete this.intentCallback[requestCode];
@@ -2938,7 +2926,7 @@ function URIUtils_uriToFile(uri) { //Source : https://www.cnblogs.com/panhouye/a
 function startChooseFile(mimeType, callback, Type) {
     var i = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
     i.setType(mimeType);
-    ResultIntent.startActivityForResult(i, function (resultCode, data) {
+    ResultIntent.startActivityForResult(i, function(resultCode, data) {
         if (resultCode != activity.RESULT_OK) return;
         let fileurlselect = URIUtils_uriToFile(data.getData());
         if (fileurlselect != null && fileurlselect != undefined && Type == "选择底图") {
@@ -2955,8 +2943,8 @@ function startChooseFile(mimeType, callback, Type) {
             }
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <text text="已将您的本地图片设为底图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                </vertical>
+                            <text text="已将您的本地图片设为底图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                        </vertical>
             );
             dialogs.build({
                 customView: view,
@@ -2978,8 +2966,8 @@ function startChooseFile(mimeType, callback, Type) {
             }
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <text text="已将您的本地图片设为顶图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
-                </vertical>
+                            <text text="已将您的本地图片设为顶图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center"/>
+                        </vertical>
             );
             dialogs.build({
                 customView: view,
@@ -3011,13 +2999,13 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
     let view = ui.inflate(
         <vertical padding="25 0" bg="{{context_framebg}}">
             <linear orientation="horizontal" gravity="left" marginTop="10">
-                <img src="@drawable/ic_get_app_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
-                <text text="正在下载图片……" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+                <img src="@drawable/ic_get_app_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center"/>
+                <text text="正在下载图片……" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center"/>
             </linear>
-            <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
-            <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+            <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8"/>
+            <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"/>
             <linear orientation="horizontal" gravity="center||right" margin="0 5 10 10">
-                <text id="exit" text="取消" textStyle="bold" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0" foreground="?attr/selectableItemBackground" clickable="true" />
+                <text id="exit" text="取消" textStyle="bold" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0" foreground="?attr/selectableItemBackground" clickable="true"/>
             </linear>
         </vertical>, null, false);
 
@@ -3034,7 +3022,7 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
         exit();
     });
 
-    var Downloadimgthread = threads.start(function () {
+    var Downloadimgthread = threads.start(function() {
         try {
             let res = http.get(imgUrl, {
                 headers: {
@@ -3093,12 +3081,12 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                 context_imgDownloadDHK.dismiss();
                 let views = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" gravity="left" marginTop="10">
-                            <img src="@drawable/ic_offline_pin_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
-                            <text id="title" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
-                        </linear>
-                        <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
-                    </vertical>, null, false);
+                                <linear orientation="horizontal" gravity="left" marginTop="10">
+                                    <img src="@drawable/ic_offline_pin_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center"/>
+                                    <text id="title" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center"/>
+                                </linear>
+                                <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8"/>
+                            </vertical>, null, false);
                 views.title.setText("图片下载完成&设置成功");
                 views.tip.setText("图片下载成功并已设置为主界面“" + WhatIsThis + "”");
                 dialogs.build({
@@ -3112,12 +3100,12 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                 context_imgDownloadDHK.dismiss();
                 let views = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" gravity="left" marginTop="10">
-                            <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
-                            <text text="图片下载失败" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
-                        </linear>
-                        <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
-                    </vertical>, null, false);
+                                <linear orientation="horizontal" gravity="left" marginTop="10">
+                                    <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center"/>
+                                    <text text="图片下载失败" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center"/>
+                                </linear>
+                                <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8"/>
+                            </vertical>, null, false);
                 views.tip.setText("该图片不存在或者该图片无法解码，请检查后重试\nHTTP状态码：" + res.statusCode + res.statusMessage + "\n图片链接：" + imgUrl);
                 dialogs.build({
                     customView: views,
@@ -3131,12 +3119,12 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
             context_imgDownloadDHK.dismiss();
             let views = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
-                    <linear orientation="horizontal" gravity="left" marginTop="10">
-                        <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
-                        <text text="网络连接错误" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
-                    </linear>
-                    <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
-                </vertical>, null, false);
+                            <linear orientation="horizontal" gravity="left" marginTop="10">
+                                <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center"/>
+                                <text text="网络连接错误" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center"/>
+                            </linear>
+                            <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8"/>
+                        </vertical>, null, false);
             views.tip.setText("当前网络错误，请检查后重试\n错误代码：" + e);
             dialogs.build({
                 customView: views,
@@ -3147,16 +3135,16 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
             exit();
         }
     });
-    setTimeout(function () {
+    setTimeout(function() {
         context_imgDownloadDHK.dismiss();
         let views = ui.inflate(
             <vertical padding="25 0" bg="{{context_framebg}}">
-                <linear orientation="horizontal" gravity="left" marginTop="10">
-                    <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
-                    <text text="图片下载超时" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
-                </linear>
-                <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
-            </vertical>, null, false);
+                        <linear orientation="horizontal" gravity="left" marginTop="10">
+                            <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center"/>
+                            <text text="图片下载超时" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center"/>
+                        </linear>
+                        <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8"/>
+                    </vertical>, null, false);
         views.tip.setText("这种情况可能是图片过大造成的，若图片过大可更换小体积图片后重试。\n也有可能是您的网络原因所导致，若网络连接错误请检查网络后重试");
         var DHK = dialogs.build({
             customView: views,
@@ -3202,51 +3190,52 @@ function UiObjectSearch() {
             <scroll>
                 <vertical>
                     <linear orientation="horizontal" gravity="left||center">
-                        <img src="{{context_Logo}}" w="85" h="35" />
+                        <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                        <img src="{{context_Logo}}" w="85" h="35"/>
                         <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                            <text text="APP控件数据获取" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                            <text text="APP控件数据获取" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5"/>
                         </linear>
                     </linear>
-                    <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5" />
+                    <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5"/>
                     <linear orientation="horizontal" gravity="center|left" margin="5">
                         <vertical layout_weight="50" id="getAllObject">
-                            <text id="getAll_text" text="获取全部控件" textStyle="bold" textSize="20" textColor="#17B978" gravity="center" />
-                            <card id="getAll_spot" w="25" h="3" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true" />
+                            <text id="getAll_text" text="获取全部控件" textStyle="bold" textSize="20" textColor="#17B978" gravity="center"/>
+                            <card id="getAll_spot" w="25" h="3" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true"/>
                         </vertical>
                         <vertical layout_weight="50" id="getPointObject">
-                            <text id="getPoint_Text" text="定向获取控件" textSize="18" textColor="#767676" textStyle="bold" gravity="center" />
-                            <card id="getPoint_spot" w="25" h="0" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true" />
+                            <text id="getPoint_Text" text="定向获取控件" textSize="18" textColor="#767676"textStyle="bold" gravity="center"/>
+                            <card id="getPoint_spot" w="25" h="0" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true"/>
                         </vertical>
                     </linear>
-                    <text text="隐私数据选项" textStyle="bold" textSize="10" textColor="{{context_textColor}}" marginLeft="5" />
-                    <linear orientation="horizontal" gravity="center|left" margin="0 5">
+                    <text text="隐私数据选项" textStyle="bold" textSize="10" textColor="{{context_textColor}}" marginLeft="5"/>
+                    <linear orientation="horizontal" gravity="center|left"margin="0 5">
                         <card id="getText" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="getText_img" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
-                            <text marginBottom="2" text="text" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                            <img id="getText_img"  w="45" h="45" layout_gravity="center" tint="{{context_textColor}}"/>
+                            <text marginBottom="2" text="text" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center"/>
                         </card>
                         <card id="getDesc" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="getDesc_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
-                            <text marginBottom="2" text="desc" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                            <img id="getDesc_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}"/>
+                            <text marginBottom="2" text="desc" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center"/>
                         </card>
                         <card id="getPassword" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="getPassword_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
-                            <text marginBottom="2" text="password" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                            <img id="getPassword_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}"/>
+                            <text marginBottom="2" text="password" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center"/>
                         </card>
-                        <card id="getChecked" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="getChecked_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
-                            <text marginBottom="2" text="checked" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        <card id="getChecked" layout_weight="20"w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getChecked_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}"/>
+                            <text marginBottom="2" text="checked" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center"/>
                         </card>
-                        <card id="getSelected" layout_weight="20" w="80" h="80" margin="5 0" cardCornerRadius="5dp" cardBackgroundColor="#FF1E56" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="getSelected_img" src="@drawable/ic_event_busy_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
-                            <text marginBottom="2" text="selected" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        <card id="getSelected" layout_weight="20"w="80" h="80" margin="5 0" cardCornerRadius="5dp" cardBackgroundColor="#FF1E56" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getSelected_img" src="@drawable/ic_event_busy_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}"/>
+                            <text marginBottom="2" text="selected" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center"/>
                         </card>
                     </linear>
-                    <text id="privatcyTips" textSize="10" textColor="{{context_textColor}}" marginLeft="5" />
-                    <input id="PointObject" hint="请输入指定控件代码" textColor="{{context_textColor}}" textColorHint="#9E9E9E" margin="5" h="auto" alpha="0" />
+                    <text id="privatcyTips" textSize="10" textColor="{{context_textColor}}" marginLeft="5"/>
+                    <input id="PointObject" hint="请输入指定控件代码" textColor="{{context_textColor}}" textColorHint="#9E9E9E" margin="5" h="auto" alpha="0"/>
                 </vertical>
             </scroll>
             <card id="startGetData" w="*" h="50" cardCornerRadius="25dp" layout_gravity="bottom" margin="100 5 100 5" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
-                <text id="startGetDataText" text="启动获取数据悬浮窗" textStyle="bold" textSize="15" textColor="{{context_textColor}}" gravity="center" />
+                <text id="startGetDataText" text="启动获取数据悬浮窗" textStyle="bold" textSize="15" textColor="{{context_textColor}}" gravity="center"/>
             </card>
         </frame>
     );
@@ -3343,14 +3332,14 @@ function UiObjectSearch() {
         if (WhetherStart == "启动获取数据悬浮窗" && SearchScript("获取控件数据悬浮窗.js") == true) {
             ui.startGetDataText.setText("已经启动了");
             ui.startGetData.setCardBackgroundColor(colors.parseColor(context_framebg));
-            setTimeout(function () {
+            setTimeout(function() {
                 ui.startGetDataText.setText("启动获取数据悬浮窗");
                 ui.startGetData.setCardBackgroundColor(colors.parseColor("#17B978"));
             }, 5000);
         } else if (WhetherStart == "启动获取数据悬浮窗") {
             ui.startGetDataText.setText("已尝试启动");
             ui.startGetData.setCardBackgroundColor(colors.parseColor(context_framebg));
-            setTimeout(function () {
+            setTimeout(function() {
                 ui.startGetDataText.setText("启动获取数据悬浮窗");
                 ui.startGetData.setCardBackgroundColor(colors.parseColor("#17B978"));
             }, 3000);
@@ -3381,20 +3370,20 @@ function UiObjectSearch() {
             } else {
                 let view = ui.inflate(
                     <vertical padding="25 0" bg="{{context_framebg}}">
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
-                            <text text="定向控件代码输入错误" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
-                        </linear>
-                        <text id="tips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
-                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
-                                <text id="clear" text="清空代码" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
-                                <text id="ok" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
-                            </card>
-                        </linear>
-                    </vertical>, null, false);
+                                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                    <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center"/>
+                                    <text text="定向控件代码输入错误" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336"/>
+                                </linear>
+                                <text id="tips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F"/>
+                                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#F44336">
+                                        <text id="clear" text="清空代码" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                    </card>
+                                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5"cardBackgroundColor="#4CAF50">
+                                        <text id="ok" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true"/>
+                                    </card>
+                                </linear>
+                            </vertical>, null, false);
                 view.tips.setText("* 代码必须以.findOnce();结束，不能有空格等;\n* 代码长度不得少于15个字符;");
                 ui.PointObject.setError("代码必须以.findOnce();结束，且长度不得少于15个字符");
                 view.clear.click(() => {
@@ -3441,39 +3430,40 @@ function UiObjectSearch() {
                 <scroll>
                     <vertical>
                         <linear orientation="horizontal" gravity="left||center">
-                            <img src="{{context_Logo}}" w="85" h="30" />
+                            <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" w="30" h="30" margin="5 0"/>
+                            <img src="{{context_Logo}}" w="85" h="30"/>
                             <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                                <img id="Stop" src="@drawable/ic_close_black_48dp" w="40" h="0" tint="{{context_textColor}}" marginRight="5" layout_gravity="right||center" />
+                                <img id="Stop" src="@drawable/ic_close_black_48dp" w="40" h="0" tint="{{context_textColor}}" marginRight="5" layout_gravity="right||center"/>
                                 <linear id="action" orientation="horizontal" gravity="right||center">
-                                    <img src="@drawable/ic_open_with_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginRight="5" />
+                                    <img src="@drawable/ic_open_with_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginRight="5"/>
                                 </linear>
                             </linear>
                         </linear>
-                        <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5 5 5 5" />
-                        <text id="loadingText" textColor="{{context_textColor}}" textSize="0" gravity="center" textStyle="bold" margin="5 0" />
-                        <text id="ModeText" textColor="{{context_textColor}}" textSize="10" textStyle="bold" margin="5 0" />
-                        <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" h="0" />
-                        <text id="tips" textColor="{{context_textColor}}" textSize="0" margin="5 0" />
-                        <text id="nowAppName" text="当前应用名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
-                        <text id="nowAppPackageName" text="应用包名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
-                        <text id="nowAppActivity" text="应用Activity：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
+                        <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5 5 5 5"/>
+                        <text id="loadingText" textColor="{{context_textColor}}" textSize="0" gravity="center" textStyle="bold" margin="5 0"/>
+                        <text id="ModeText" textColor="{{context_textColor}}" textSize="10" textStyle="bold" margin="5 0"/>
+                        <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" h="0"/>
+                        <text id="tips" textColor="{{context_textColor}}" textSize="0" margin="5 0"/>
+                        <text id="nowAppName" text="当前应用名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0"/>
+                        <text id="nowAppPackageName" text="应用包名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0"/>
+                        <text id="nowAppActivity" text="应用Activity：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0"/>
                     </vertical>
                 </scroll>
                 <vertical gravity="center||bottom">
                     <linear orientation="horizontal" gravity="left||center">
-                        <card id="cancelGet" layout_weight="5" h="30" cardCornerRadius="25dp" cardBackgroundColor="#FF1E56" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
-                            <text id="cancelGetText" text="取消获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        <card id="cancelGet" layout_weight="5" h="30" cardCornerRadius="25dp"  cardBackgroundColor="#FF1E56" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="cancelGetText" text="取消获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center"/>
                         </card>
-                        <card id="startGet" layout_weight="5" h="30" cardCornerRadius="25dp" cardBackgroundColor="#17B978" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
-                            <text id="startGetText" text="立即获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        <card id="startGet" layout_weight="5"  h="30" cardCornerRadius="25dp"  cardBackgroundColor="#17B978" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="startGetText" text="立即获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center"/>
                         </card>
                     </linear>
                     <linear orientation="horizontal" gravity="left||center" marginTop="2">
-                        <card id="setClips" layout_weight="5" h="0" cardCornerRadius="25dp" cardBackgroundColor="#FFC107" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
-                            <text id="setClipsText" text="存至剪切板" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        <card id="setClips" layout_weight="5" h="0" cardCornerRadius="25dp"  cardBackgroundColor="#FFC107" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="setClipsText" text="存至剪切板" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center"/>
                         </card>
-                        <card id="saveOpen" layout_weight="5" h="0" cardCornerRadius="25dp" cardBackgroundColor="#2196F3" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
-                            <text id="saveOpenText" text="保存并查看" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        <card id="saveOpen" layout_weight="5"  h="0" cardCornerRadius="25dp"  cardBackgroundColor="#2196F3" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="saveOpenText" text="保存并查看" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center"/>
                         </card>
                     </linear>
                 </vertical>
@@ -3502,7 +3492,7 @@ function UiObjectSearch() {
                 window.tips.setText("tips:获取期间手机会稍有卡顿属正常现象，复杂界面可能需要几分钟时间获取数据，提示未响应或过长时间未成功则请尝试重启软件。");
                 window.loading.attr("h", 15);
                 window.loading.attr("margin", "5 5 5 0");
-                setTimeout(function () {
+                setTimeout(function() {
                     if (context_getDatamode == "ALL") {
                         generateObjectTree(null);
                     } else {
@@ -3535,14 +3525,14 @@ function UiObjectSearch() {
                         context.startActivity(intent);
                     }
                     shareFile(filename, "*/*");
-                    setTimeout(function () {
+                    setTimeout(function() {
                         window.startGetText.setText("保存并分享");
                         window.tips.setText(before);
                     }, 5000);
                 } else if (files.listDir("/sdcard/").length == 0 && a == "保存并分享") {
                     window.startGetText.setText("无存储权限");
                     window.startGet.setCardBackgroundColor(colors.parseColor("#FF1E56"));
-                    setTimeout(function () {
+                    setTimeout(function() {
                         window.startGetText.setText("保存并分享");
                         window.startGet.setCardBackgroundColor(colors.parseColor("#17B978"));
                     }, 3000);
@@ -3593,7 +3583,7 @@ function UiObjectSearch() {
             } else if (files.listDir("/sdcard/").length == 0 && a == "保存并查看") {
                 window.saveOpenText.setText("无存储权限");
                 window.saveOpen.setCardBackgroundColor(colors.parseColor("#FF1E56"));
-                setTimeout(function () {
+                setTimeout(function() {
                     window.saveOpenText.setText("保存并查看");
                     window.saveOpen.setCardBackgroundColor(colors.parseColor("#2196F3"));
                 }, 3000);
@@ -3631,7 +3621,7 @@ function UiObjectSearch() {
             y = 0;
         var windowX, windowY;
         var downTime;
-        window.action.setOnTouchListener(function (view, event) {
+        window.action.setOnTouchListener(function(view, event) {
             switch (event.getAction()) {
                 case event.ACTION_DOWN:
                     x = event.getRawX();
