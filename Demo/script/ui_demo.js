@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 10:17:13
+ * @LastEditTime: 2022-02-19 13:42:30
  */
 "ui";
 
@@ -78,9 +78,9 @@ function clacAspectRatio(fromWidth, fromHeight, toWidthOrHeight, isWidth) {
 // 设置日间模式
 function setDayMode() {
     context_framebg = "#FFFFFF" // 全局背景
-    context_textcolor = "#000000" // 全局文字颜色
+    context_textColor = "#000000" // 全局文字颜色
     context_texBg = "#FAFAFA" // 文本背景
-    context_Fgb = "#EEEEEE" // 分割线颜色
+    context_Fgx = "#EEEEEE" // 分割线颜色
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
@@ -121,9 +121,9 @@ function setDayMode() {
 // 设置夜间模式
 function setNightMode() {
     context_framebg = "#000000" // 全局背景
-    context_textcolor = "#FFFFFF" // 全局文字颜色
+    context_textColor = "#FFFFFF" // 全局文字颜色
     context_texBg = "#000000" // 文本背景
-    context_Fgb = "#50EEEEEE" // 分割线颜色
+    context_Fgx = "#50EEEEEE" // 分割线颜色
     context_SettingsCard = "#616161" //设置卡片颜色
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
@@ -228,8 +228,7 @@ ui.emitter.on("resume", function () {
     }
     function refreshUI() {
         if (context_NowUi == "mainUi") {
-            mainUi()
-
+            mainUi() 
         } else if (context_NowUi == "SettingsUI") {
             SettingsUI()
         } else if (context_NowUi == "AboutApp") {
@@ -248,7 +247,7 @@ ui.emitter.on("resume", function () {
         throw error
     }
 })
-if (getStorageData("Sign", "SignKey") != undefined && md5(getStorageData("SignUp", "SignKey")) == "109e1be70ecf784109576e7a5df1750a") {
+if (getStorageData("Sign", "SignKey") != undefined && md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
     mainUi()
 } else {
     if (context_DayOrNight == 1) {
@@ -292,7 +291,7 @@ function mainUi() {
                         <img id="Pics" src="{{context_TopPics}}" scaleType="fitXY" />
                         <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0" />
                     </card>
-                    <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" />
+                    {/* <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" /> */}
                     <linear orientation="horizontal" align="left">
                         <HorizontalScrollView>
                             <linear orientation="horizontal" align="left" h="70" padding="0 10">
@@ -850,7 +849,7 @@ function mainUi() {
                     <scroll bg="{{context_framebg}}">
                         <vertical bg="{{context_framebg}}">
                             <linear orientation="horizontal" gravity="left||center">
-                                <img src="{{context_Logo}}" w="85" h="35" />
+                                {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
                                 <linear orientation="horizontal" w="match_parent" gravity="right||center">
                                     <text text="管理运行脚本" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
                                 </linear>
@@ -1046,7 +1045,6 @@ function mainUi() {
                     DHK.checkAll.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
                 }
             });
-
             DHK.alljslist.on("item_bind", function (itemView, itemHolder) {
                 itemView.deleteItem.on("click", function () {
                     let item = itemHolder.item;
@@ -1291,7 +1289,6 @@ function SignUp() {
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
                     {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35" /> */}
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
-                        <img id="ExitScript" src="@drawable/ic_clear_black_48dp" w="35" h="35" tint="#000000" foreground="?attr/selectableItemBackground" clickable="true" />
                     </linear>
                 </linear>
                 <ScrollView>
@@ -1320,7 +1317,8 @@ function SignUp() {
         )
         view.ok.click(() => {
             let a = view.password.getText();
-            if (md5(a.toString()) == "109e1be70ecf784109576e7a5df1750a") {
+            // MD5加密：ranyong
+            if (md5(a.toString()) == "18acc87c4ffb6d96007f0dd907e6da52") {
                 DHK.dismiss();
                 setStorageData("SignUp", "SignKey", a.toString());
                 if (getStorageData("DayUi", "LogomarginTop") == undefined) {
@@ -1336,6 +1334,7 @@ function SignUp() {
                     <vertical bg="#FFFFFF" padding="25 0 25 0">
                         <text text="欢迎" textSize="25" textStyle="bold" textColor="#000000" gravity="left" />
                         <text text="先来进行设置吧～" textSize="15" textStyle="bold" textColor="#000000" gravity="left" margin="0 5" />
+                        <img src="@drawable/ic_ac_unit_black_48dp" tint="#4CAF50" w="40" h="40" gravity="left" />
                     </vertical>
                 )
                 dialogs.build({
@@ -1362,7 +1361,7 @@ function SettingsUI() {
             <scroll bg="{{context_framebg}}">
                 <vertical margin="0 25 0 0">
                     <linear orientation="horizontal" gravity="left||center">
-                        <img src="{{context_Logo}}" w="85" h="30" />
+                        {/* <img src="{{context_Logo}}" w="85" h="30" /> */}
                         <linear orientation="horizontal" w="match_parent" gravity="right||center">
                             <text text="设置" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
                         </linear>
@@ -1370,7 +1369,7 @@ function SettingsUI() {
                     <card h="1" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" margin="5 0" />
                     <list id='ZhuTiTu' orientation="horizontal" layout_gravity="center_vertical" layout_weight="80">
                         <card w="180" h="180" cardCornerRadius="5dp" cardElevation="5dp" layout_gravity="center" cardBackgroundColor="{{context_Fgx}}" margin="5" foreground="?attr/selectableItemBackground" clickable="true">
-                            <img id="picView" src="{{this.Picture}}" scaleType="centerCrop" />
+                            {/* <img id="picView" src="{{this.Picture}}" scaleType="centerCrop" /> */}
                             <card h="20" cardCornerRadius="2dp" cardElevation="0dp" layout_gravity="bottom|center" cardBackgroundColor="{{context_framebg}}" margin="50 5" alpha="0.8">
                                 <text text="{{this.TextofPic}}" textSize="10" textColor="{{context_textColor}}" margin="0 0 0 0" gravity="center" />
                             </card>
@@ -2077,7 +2076,7 @@ function SettingsUI() {
                 <scroll>
                     <vertical>
                         <linear orientation="horizontal" gravity="left||center">
-                            <img src="{{context_Logo}}" w="85" h="35" />
+                            {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
                             <linear orientation="horizontal" w="match_parent" gravity="right||center">
                                 <text text="删除脚本配置" textStyle="bold" textSize="20" textColor="{{context_textColor}}" marginRight="5" />
                             </linear>
@@ -2417,5 +2416,1429 @@ function SettingsUI() {
         });
     });
     var ZhuTiTu = [];
-    
+    if (context_TopPics != undefined && context_TopPics != "http://www.google.com") {
+        ZhuTiTu.push({
+            Picture: context_TopPics,
+            TextofPic: '当前顶图'
+        })
+    }
+    if (context_BottomPics != undefined && context_BottomPics != "http://www.google.com") {
+        ZhuTiTu.push({
+            Picture: context_BottomPics,
+            TextofPic: '当前底图'
+        });
+    }
+    if (context_DayOrNight == 1) {
+        ZhuTiTu.push({
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-08.00.59.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.06.03.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.06.39.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.07.53.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.03.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-07.56.51.jpg",
+            TextofPic: "示例底图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-07.19.32.jpg",
+            TextofPic: "示例底图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.13.12.jpg",
+            TextofPic: "示例底图",
+            CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
+        });
+    } else if (context_DayOrNight == 0) {
+        ZhuTiTu.push({
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE01.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE02.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE03.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE04.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE05.png",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©《星际穿越》(Interstellar)"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE07.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©《刺猬索尼克》(Sonic the Hedgehog)"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE08.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE09.jpg",
+            TextofPic: "示例底图",
+            CopyrightOfPicture: "©《为全人类》(For All Mankind)"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE10.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE11.png",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©索尼Sony"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE12.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©《哥斯拉》(Godzilla: King of the Monsters)"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE14.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©迪士尼Disney"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE15.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©《蜘蛛侠》"
+        }, {
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE17.jpg",
+            TextofPic: "示例顶图",
+            CopyrightOfPicture: "©《少年派的奇幻漂流》(Life of Pi)"
+        });
+    }
+    ui.ZhuTiTu.setDataSource(ZhuTiTu);
+}
+function TalkToDeveloper() {
+    context_NowUi = "TalkToDeveloper";
+    ui.layout(
+        <frame bg="{{context_framebg}}" w="*" h="*" marginTop="25">
+            <vertical align="left">
+                <linear orientation="horizontal" gravity="left||center" marginBottom="5">
+                    {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                    <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                        <text text="反馈问题" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                    </linear>
+                </linear>
+                <progressbar id="progressX" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" layout_gravity="top" />
+                <ScrollView>
+                    <webview id="webview" />
+                </ScrollView>
+            </vertical>
+            <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
+                margin="16" layout_gravity="bottom|right" tint="#ffffff" />
+        </frame>
+    );
+    ui.webview.loadUrl("https://wj.qq.com/s2/5238744/d982");
+    ui.Back.click(() => {
+        clearInterval(contextJdtX);
+        android.webkit.WebStorage.getInstance().deleteAllData();
+        mainUi();
+    });
+    contextJdtX = setInterval(() => {
+        try {
+            var P = ui.webview.getProgress();
+            var T = ui.webview.getTitle();
+            if (P == 100) {
+                ui.run(() => {
+                    ui.progressX.setVisibility(8);
+                });
+            } else {
+                ui.run(() => {
+                    ui.progressX.setVisibility(0);
+                    ui.progressX.progress = P;
+                });
+            }
+        } catch (e) {
+            log(e);
+        }
+    }, 100);
+}
+function AboutApp() {
+    context_NowUi = "AboutApp";
+    ui.layout(
+        <frame w="*" h="*" background="{{context_framebg}}">
+            <scroll bg="{{context_framebg}}">
+                <vertical align="left">
+                    {/* <img src="{{context_Logo}}" w="auto" h="50" gravity="center" /> */}
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFEA3324" h="*" w="*" />
+                    </card>
+                    <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFFF711F" h="*" w="*" />
+                    </card>
+                    <text text="软件版本" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="AppVision" color="{{context_textColor}}" textSize="20" textStyle="normal" gravity="center" />
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FFFABB06" h="*" w="*" />
+                    </card>
+                    <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center" />
+
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF34A853" h="*" w="*" />
+                    </card>
+                    <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
+                    <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0" />
+                    <card h="5" marginTop="10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF4285F4" h="*" w="*" />
+                    </card>
+                    <text id="Ttip" color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center" />
+                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp"
+                        cardElevation="0dp" gravity="center_vertical">
+                        <vertical padding="0 0" h="auto">
+                        </vertical>
+                        <View bg="#FF9D41F9" h="*" w="*" />
+                    </card>
+                </vertical>
+            </scroll>
+            <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
+                margin="0 0 15 15" layout_gravity="bottom|right" tint="#ffffff" />
+        </frame>
+    );
+    ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
+    ui.OpenSource.text("Github：https://github.com/Orange-shirt/OrangeJs" + "\nGitee：https://gitee.com/Orange_shirt/OrangeJs\nCoding：https://orange-shirt.coding.net/p/OrangeJs/git");
+    ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
+    ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
+    ui.Back.click(() => {
+        mainUi();
+    });
+}
+function SP() {
+    context_NowUi = "SP";
+    events.removeAllListeners();
+    ui.layout(
+        <frame background="{{context_framebg}}">
+            <vertical align="left" margin="10 25 10 0">
+                <linear orientation="horizontal" gravity="left||center">
+                    {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                    <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                        <text text="隐私与安全" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                    </linear>
+                </linear>
+                <scroll>
+                    <linear orientation="vertical" align="left" margin="0" paddingTop="0">
+                        <text id="Privacy" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                        <frame id="Q0" marginTop="5">
+                            <text text="软件需要什么权限？" gravity="left" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <linear gravity="center||right" marginRight="10">
+                                <img id="Q0img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                            </linear>
+                        </frame>
+                        <text id="A0" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                        <frame id="Q1" marginTop="5">
+                            <text text="为什么要收集信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <linear gravity="center||right" marginRight="10">
+                                <img id="Q1img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                            </linear>
+                        </frame>
+                        <text id="A1" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                        <frame id="Q2" marginTop="5">
+                            <text text="本软件会收集哪些信息？" textSize="15" color="{{context_textColor}}" textStyle="bold" typeface="sans" />
+                            <linear gravity="center||right" marginRight="10">
+                                <img id="Q2img" marginRight="25" src="@drawable/ic_chevron_left_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" foreground="?attr/selectableItemBackground" clickable="true" />
+                            </linear>
+                        </frame>
+                        <text id="A2" textSize="0" typeface="sans" color="{{context_textColor}}" />
+                    </linear>
+                </scroll>
+            </vertical>
+            <fab id="back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
+                margin="16" layout_gravity="bottom|right" tint="#ffffff" />
+        </frame>
+    );
+
+    ui.Privacy.text("隐私安全事关重大！脚本类软件更是无所不能！因此，隐私安全变得极为重要，保护隐私安全绝对是不可忽视的！\n\n作为一名开发者，在开发本软件、脚本以及各项功能时，我都在考虑该如何合理收集信息以及保持信息安全。\n\n本文档将以普通人也能理解的语言详细说明本软件（包括所有脚本）对您信息的收集及处理方式等，请您仔细阅读！");
+    ui.A0.setText("软件的正常运行需要“存储空间”权限！因为本软件/脚本内的设置项目都是以文件方式保存在您手机中的。" +
+        "\n\n脚本的运行需要“无障碍权限”来执行各种自动操作，例如:点击，滑动，获取文字等。" +
+        "\n\n“悬浮窗权限”是为了显示“停止运行脚本”等需要此权限才能使用的悬浮控件" +
+        "\n\n“联网权限”是本软件最重要的权限，软件的所有源码存储在网络，您必须联网获取后才能正常运行。这样的设计是为了方便更新以及提升体验，因此您无需操作即可同步最新代码");
+    ui.A1.text("软件只会在必要的前提下才会收集信息！\n例如：\n软件可能需要收集您的“应用版本号”、“设备名称”、“设备型号”、“系统版本”等信息来查找问题以及改善使用体验；");
+    ui.A2.text("本软件将收集的信息分为两类，分别为“个人信息（可辨识您身份的信息，如：电话、QQ、IP地址等）" +
+        "”与“非个人信息（除个人信息之外的信息，例如：手机品牌、型号、分辨率、系统版本等）”，本软件收集信息都是在必要前提下再进行的，且目前除反馈时所需收集的信息外，其它一切信息全部都保存在您的设备当中，对于收集的所有信息本软件都绝对不会在未经您允许的情况下传播给任何人" +
+        "");
+    ui.Q0.click(() => { //软件需要什么权限?
+        if (ui.A0.textSize == 0) {
+            ui.Q0img.rotation = "270";
+            ui.A0.textSize = "15";
+        } else {
+            ui.Q0img.rotation = "360";
+            ui.A0.textSize = "0";
+        }
+    });
+    ui.Q0img.click(() => {
+        if (ui.A0.textSize == 0) {
+            ui.Q0img.rotation = "270";
+            ui.A0.textSize = "15";
+        } else {
+            ui.Q0img.rotation = "360";
+            ui.A0.textSize = "0";
+        }
+    });
+
+    ui.Q1.click(() => { //为什么要收集信息？
+        if (ui.A1.textSize == 0) {
+            ui.Q1img.rotation = "270";
+            ui.A1.textSize = "15";
+        } else {
+            ui.Q1img.rotation = "360";
+            ui.A1.textSize = "0";
+        }
+    });
+    ui.Q1img.click(() => {
+        if (ui.A1.textSize == 0) {
+            ui.Q1img.rotation = "270";
+            ui.A1.textSize = "15";
+        } else {
+            ui.Q1img.rotation = "360";
+            ui.A1.textSize = "0";
+        }
+    });
+
+    ui.Q2.click(() => { //本软件会收集哪些信息?
+        if (ui.A2.textSize == 0) {
+            ui.Q2img.rotation = "270";
+            ui.A2.textSize = "15";
+        } else {
+            ui.Q2img.rotation = "360";
+            ui.A2.textSize = "0";
+        }
+    });
+    ui.Q2img.click(() => {
+        if (ui.A2.textSize == 0) {
+            ui.Q2img.rotation = "270";
+            ui.A2.textSize = "15";
+        } else {
+            ui.Q2img.rotation = "360";
+            ui.A2.textSize = "0";
+        }
+    });
+
+    ui.back.click(() => {
+        mainUi();
+    });
+}
+function TESTCode() {
+    context_framebg = importClass(android.view.WindowManager);
+    ui.statusBarColor("#000000");
+    ui.layout(
+        <vertical bg="#000000">
+            <input id="x" color="#FFFFFF" gravity="left|top" lines="32" inputType="textAutoComplete" textSize="16sp" hint="请输入要运行的代码" textColorHint="#9E9E9E" />
+            <linear orientation="horizontal" align="center" margin="5 0 5 0" weightSum="10">
+                <button id="ru" layout_weight="5" h="50" bg="#4CAF50" color="#FFFFFF" marginRight="5" text="运行" gravity="center" />
+                <button id="qk" layout_weight="5" h="50" bg="#FF5722" color="#FFFFFF" marginLeft="5" text="清空" gravity="center" />
+            </linear>
+            <button id="con" w="*" h="50" bg="#2196F3" color="#FFFFFF" margin="5 5 5 0" text="查看日志" gravity="center" />
+            <text text="* 使用 Auto.js(4.1) 作为脚本引擎" color="#9e9e9e" textSize="10" marginTop="10" gravity="center" />
+        </vertical>
+    );
+    events.on("状态", function (words) {
+        if (words == "结束") {
+            ui.ru.text("运行");
+        }
+    });
+    activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+    ui.ru.on("click", () => {
+        var text = 'if (engines.all()[0] == engines.myEngine()) {\n        序号 = 1\n    } else {\n        序号 = 0\n    }\n    try {\n' + ui.x.text() + '\n    } catch (error) {\n        let 行号 = error.stack.match(/(.js:(.*)\\n)/g).toString().replace(/(\.js:)|\\n/, "")\n        console.error(error.stack.replace(行号, 行号 - 6), "\\n" , error)\n        toast(error.stack.replace(行号, 行号 - 6) + "\\n" + error)\n    };\n    engines.all()[序号].emit("状态", "结束");';
+        if (text != "") {
+            switch (ui.ru.text()) {
+                case "运行":
+                    ui.ru.text("停止");
+                    当前引擎 = engines.execScript("测试运行", text);
+                    break;
+                case "停止":
+                    ui.ru.text("运行");
+                    当前引擎.getEngine().forceStop()
+                    break;
+            }
+        } else {
+            toastLog("没有输入任何代码");
+        }
+    });
+    ui.qk.on("click", () => {
+        let view = ui.inflate(
+            <vertical padding="25 0" bg="#000000">
+                <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5" />
+                <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#FF5722">
+                        <text id="Determine" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
+                    </card>
+                    <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
+                        <text id="cancel" text="取消" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
+                    </card>
+                </linear>
+            </vertical>, null, false);
+        view.tip.setText("您确定要清空全部代码吗？\n此操作将无法撤销");
+        view.Determine.click(() => {
+            ui.x.setText("");
+            DHK.dismiss();
+        });
+        view.cancel.click(() => {
+            DHK.dismiss();
+        });
+        let DHK = dialogs.build({
+            customView: view,
+            wrapInScrollView: false,
+            autoDismiss: false,
+            cancelable: false
+        }).show();
+    });
+    ui.con.on("click", () => {
+        app.startActivity("console");
+    });
+
+    let view = ui.inflate(
+        <vertical bg="#000000" padding="25 0 25 0">
+            <img src="@drawable/ic_report_problem_black_48dp" h="35" tint="#FFFFFF" margin="5" />
+            <text id="tip" textSize="15" textStyle="bold" textColor="#FFFFFF" gravity="left" margin="5" />
+        </vertical>
+    );
+    view.tip.setText("注意！此功能仅供开发人员使用，小白用户请严格在开发者指导下使用！\n\n请不要运行来路不明的代码，以免造成隐私信息泄露等不可挽回的严重后果！");
+    dialogs.build({
+        customView: view,
+        wrapInScrollView: false,
+        autoDismiss: true
+    }).show();
+    //感谢 @抠脚本人 对此处代码的优化 ：D
+}
+var ResultIntent = {
+    intentCallback: {},
+    init: function () {
+        activity.getEventEmitter().on("activity_result", (requestCode, resultCode, data) => {
+            this.onActivityResult(requestCode, resultCode, data);
+        });
+    },
+    startActivityForResult: function (intent, callback) {
+        var i;
+        for (i = 0; i < 65536; i++) {
+            if (!(i in this.intentCallback)) break;
+        }
+        if (i >= 65536) {
+            toast("启动Intent失败：同时请求的Intent过多");
+            return;
+        }
+        this.intentCallback[i] = callback;
+        activity.startActivityForResult(intent, i);
+    },
+    onActivityResult: function (requestCode, resultCode, data) {
+        var cb = this.intentCallback[requestCode];
+        if (!cb) return;
+        delete this.intentCallback[requestCode];
+        cb(resultCode, data);
+    }
+};
+ResultIntent.init();
+function URIUtils_uriToFile(uri) { //Source : https://www.cnblogs.com/panhouye/archive/2017/04/23/6751710.html
+    var r = null,
+        cursor, column_index, selection = null,
+        selectionArgs = null,
+        isKitKat = android.os.Build.VERSION.SDK_INT >= 19,
+        docs;
+    if (uri.getScheme().equalsIgnoreCase("content")) {
+        if (isKitKat && android.provider.DocumentsContract.isDocumentUri(activity, uri)) {
+            if (String(uri.getAuthority()) == "com.android.externalstorage.documents") {
+                docs = String(android.provider.DocumentsContract.getDocumentId(uri)).split(":");
+                if (docs[0] == "primary") {
+                    return android.os.Environment.getExternalStorageDirectory() + "/" + docs[1];
+                }
+            } else if (String(uri.getAuthority()) == "com.android.providers.downloads.documents") {
+                uri = android.content.ContentUris.withAppendedId(
+                    android.net.Uri.parse("content://downloads/public_downloads"),
+                    parseInt(android.provider.DocumentsContract.getDocumentId(uri))
+                );
+            } else if (String(uri.getAuthority()) == "com.android.providers.media.documents") {
+                docs = String(android.provider.DocumentsContract.getDocumentId(uri)).split(":");
+                if (docs[0] == "image") {
+                    uri = android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                } else if (docs[0] == "video") {
+                    uri = android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                } else if (docs[0] == "audio") {
+                    uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                }
+                selection = "_id=?";
+                selectionArgs = [docs[1]];
+            }
+        }
+        try {
+            cursor = activity.getContentResolver().query(uri, ["_data"], selection, selectionArgs, null);
+            if (cursor && cursor.moveToFirst()) {
+                r = String(cursor.getString(cursor.getColumnIndexOrThrow("_data")));
+            }
+        } catch (e) {
+            log(e)
+        }
+        if (cursor) cursor.close();
+        return r;
+    } else if (uri.getScheme().equalsIgnoreCase("file")) {
+        return String(uri.getPath());
+    }
+    return null;
+}
+function startChooseFile(mimeType, callback, Type) {
+    var i = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
+    i.setType(mimeType);
+    ResultIntent.startActivityForResult(i, function (resultCode, data) {
+        if (resultCode != activity.RESULT_OK) return;
+        let fileurlselect = URIUtils_uriToFile(data.getData());
+        if (fileurlselect != null && fileurlselect != undefined && Type == "选择底图") {
+            if (context_DayOrNight == 0) {
+                setStorageData("NightUiPicture", "BottomPics", "file://" + fileurlselect);
+                delStorageData("NightUiPicture", "BottomPicsCopyright");
+                context_BottomPics = "file://" + fileurlselect;
+                context_BottomPics_Copyright = "";
+            } else if (context_DayOrNight == 1) {
+                setStorageData("DayUiPicture", "BottomPics", "file://" + fileurlselect);
+                delStorageData("DayUiPicture", "BottomPicsCopyright");
+                context_BottomPics = "file://" + fileurlselect;
+                context_BottomPics_Copyright = "";
+            }
+            let view = ui.inflate(
+                <vertical padding="25 0" bg="{{context_framebg}}">
+                    <text text="已将您的本地图片设为底图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
+                </vertical>
+            );
+            dialogs.build({
+                customView: view,
+                wrapInScrollView: false,
+                autoDismiss: false
+            }).show();
+            SettingsUI();
+        } else if (fileurlselect != null && fileurlselect != undefined && Type == "选择顶图") {
+            if (context_DayOrNight == 0) {
+                setStorageData("NightUiPicture", "TopPics", "file://" + fileurlselect);
+                delStorageData("NightUiPicture", "TopPicsCopyright");
+                context_TopPics = "file://" + fileurlselect;
+                context_TopPics_Copyright = "";
+            } else if (context_DayOrNight == 1) {
+                setStorageData("DayUiPicture", "TopPics", "file://" + fileurlselect);
+                delStorageData("DayUiPicture", "TopPicsCopyright");
+                context_TopPics = "file://" + fileurlselect;
+                context_TopPics_Copyright = "";
+            }
+            let view = ui.inflate(
+                <vertical padding="25 0" bg="{{context_framebg}}">
+                    <text text="已将您的本地图片设为顶图" textStyle="bold" textSize="15" margin="10" textColor="#777777" gravity="center" />
+                </vertical>
+            );
+            dialogs.build({
+                customView: view,
+                wrapInScrollView: false,
+                autoDismiss: false
+            }).show();
+            SettingsUI();
+        }
+    });
+}
+function shareFile(file, type) {
+    importPackage(android.content);
+    importClass(android.net.Uri);
+    importClass(java.io.File);
+    importClass(android.provider.MediaStore);
+    let f = new File(file);
+    let uri = Uri.fromFile(f);
+    let fp = app.parseUri(uri.toString());
+    let intent = new Intent("android.intent.action.SEND");
+    intent.setType(type);
+    intent.putExtra(Intent.EXTRA_STREAM, uri);
+    intent.setClipData(ClipData.newRawUri(MediaStore.EXTRA_OUTPUT, fp));
+    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    context.startActivity(intent);
+}
+
+function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
+    let view = ui.inflate(
+        <vertical padding="25 0" bg="{{context_framebg}}">
+            <linear orientation="horizontal" gravity="left" marginTop="10">
+                <img src="@drawable/ic_get_app_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
+                <text text="正在下载图片……" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+            </linear>
+            <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
+            <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" />
+            <linear orientation="horizontal" gravity="center||right" margin="0 5 10 10">
+                <text id="exit" text="取消" textStyle="bold" textColor="{{context_textColor}}" textSize="16sp" gravity="center" margin="10 0" foreground="?attr/selectableItemBackground" clickable="true" />
+            </linear>
+        </vertical>, null, false);
+
+    context_imgDownloadDHK = dialogs.build({
+        customView: view,
+        wrapInScrollView: false,
+        autoDismiss: false,
+        cancelable: false
+    }).show();
+    view.tip.setText("图片链接：" + imgUrl);
+    view.exit.click(() => {
+        context_imgDownloadDHK.dismiss();
+        events.broadcast.emit('imgSetOk', '用户取消');
+        exit();
+    });
+
+    var Downloadimgthread = threads.start(function () {
+        try {
+            let res = http.get(imgUrl, {
+                headers: {
+                    'Accept-Language': 'en-us,en;q=0.5',
+                    'User-Agent': 'Mozilla/5.0(Macintosh;IntelMacOSX10_7_0)AppleWebKit/535.11(KHTML,likeGecko)Chrome/17.0.963.56Safari/535.11'
+                }
+            });
+            if (res.statusCode == 200) {
+                files.createWithDirs(imgSavePath);
+                files.writeBytes(imgSavePath, res.body.bytes());
+                if (WhatIsThis == "底图") {
+                    if (context_DayOrNight == 0) {
+                        setStorageData("NightUiPicture", "BottomPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png");
+                        if (PicCopyright != undefined) {
+                            setStorageData("NightUiPicture", "BottomPicsCopyright", PicCopyright);
+                            context_BottomPics_Copyright = PicCopyright;
+                        } else {
+                            delStorageData("DayUiPicture", "BottomPicsCopyright");
+                            context_BottomPics_Copyright = "";
+                        }
+                        context_BottomPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png"
+                    } else if (context_DayOrNight == 1) {
+                        setStorageData("DayUiPicture", "BottomPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png");
+                        if (PicCopyright != undefined) {
+                            setStorageData("DayUiPicture", "BottomPicsCopyright", PicCopyright);
+                            context_BottomPics_Copyright = PicCopyright;
+                        } else {
+                            delStorageData("DayUiPicture", "BottomPicsCopyright");
+                            context_BottomPics_Copyright = "";
+                        }
+                        context_BottomPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png";
+                    }
+                } else if (WhatIsThis == "顶图") {
+                    if (context_DayOrNight == 0) {
+                        setStorageData("NightUiPicture", "TopPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png");
+                        if (PicCopyright != undefined) {
+                            setStorageData("NightUiPicture", "TopPicsCopyright", PicCopyright);
+                            context_TopPics_Copyright = PicCopyright;
+                        } else {
+                            setStorageData("NightUiPicture", "TopPicsCopyright", "");
+                            context_TopPics_Copyright = "";
+                        }
+                        context_TopPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png"
+                    } else if (context_DayOrNight == 1) {
+                        setStorageData("DayUiPicture", "TopPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png");
+                        if (PicCopyright != undefined) {
+                            setStorageData("DayUiPicture", "TopPicsCopyright", PicCopyright);
+                            context_TopPics_Copyright = PicCopyright;
+                        } else {
+                            setStorageData("DayUiPicture", "TopPicsCopyright", "");
+                            context_TopPics_Copyright = "";
+                        }
+                        context_TopPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png";
+                    }
+                }
+                context_imgDownloadDHK.dismiss();
+                let views = ui.inflate(
+                    <vertical padding="25 0" bg="{{context_framebg}}">
+                        <linear orientation="horizontal" gravity="left" marginTop="10">
+                            <img src="@drawable/ic_offline_pin_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
+                            <text id="title" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+                        </linear>
+                        <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
+                    </vertical>, null, false);
+                views.title.setText("图片下载完成&设置成功");
+                views.tip.setText("图片下载成功并已设置为主界面“" + WhatIsThis + "”");
+                dialogs.build({
+                    customView: views,
+                    wrapInScrollView: false,
+                    autoDismiss: false
+                }).show();
+                events.broadcast.emit('imgSetOk', '图片下载完成&设置成功')
+                exit();
+            } else {
+                context_imgDownloadDHK.dismiss();
+                let views = ui.inflate(
+                    <vertical padding="25 0" bg="{{context_framebg}}">
+                        <linear orientation="horizontal" gravity="left" marginTop="10">
+                            <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
+                            <text text="图片下载失败" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+                        </linear>
+                        <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
+                    </vertical>, null, false);
+                views.tip.setText("该图片不存在或者该图片无法解码，请检查后重试\nHTTP状态码：" + res.statusCode + res.statusMessage + "\n图片链接：" + imgUrl);
+                dialogs.build({
+                    customView: views,
+                    wrapInScrollView: false,
+                    autoDismiss: false
+                }).show();
+                events.broadcast.emit('imgSetOk', '图片下载失败')
+                exit();
+            }
+        } catch (e) {
+            context_imgDownloadDHK.dismiss();
+            let views = ui.inflate(
+                <vertical padding="25 0" bg="{{context_framebg}}">
+                    <linear orientation="horizontal" gravity="left" marginTop="10">
+                        <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
+                        <text text="网络连接错误" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+                    </linear>
+                    <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
+                </vertical>, null, false);
+            views.tip.setText("当前网络错误，请检查后重试\n错误代码：" + e);
+            dialogs.build({
+                customView: views,
+                wrapInScrollView: false,
+                autoDismiss: false
+            }).show();
+            events.broadcast.emit('imgSetOk', '网络连接错误');
+            exit();
+        }
+    });
+    setTimeout(function () {
+        context_imgDownloadDHK.dismiss();
+        let views = ui.inflate(
+            <vertical padding="25 0" bg="{{context_framebg}}">
+                <linear orientation="horizontal" gravity="left" marginTop="10">
+                    <img src="@drawable/ic_cancel_black_48dp" tint="{{context_textColor}}" h="30" layout_gravity="center" />
+                    <text text="图片下载超时" textStyle="bold" textSize="20" textColor="{{context_textColor}}" layout_gravity="center" />
+                </linear>
+                <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
+            </vertical>, null, false);
+        views.tip.setText("这种情况可能是图片过大造成的，若图片过大可更换小体积图片后重试。\n也有可能是您的网络原因所导致，若网络连接错误请检查网络后重试");
+        var DHK = dialogs.build({
+            customView: views,
+            wrapInScrollView: false,
+            autoDismiss: true
+        }).show();
+        Downloadimgthread.interrupt();
+        events.broadcast.emit('imgSetOk', '图片下载超时');
+        exit();
+    }, 20000);
+}
+
+function haveScript(scriptName) {
+    try {
+        for (let i = 0; i < engines.all().length; i++) {
+            if (scriptName + ".js" == engines.all()[i].getSource().toString().match(/([^/]+)$/)[1] ||
+                scriptName == engines.all()[i].getSource().toString().match(/([^/]+)$/)[1]) {
+                return true;
+                break;
+            }
+        }
+    } catch (e) {
+        log("判断是否存在脚本" + scriptName + "时出现错误：" + e);
+    }
+}
+
+function UiObjectSearch() {
+    if (context_framebg == "#000000") {
+        ui.statusBarColor(context_framebg);
+    } else {
+        ui.statusBarColor("#EBEBEB");
+    }
+    var dataItem = {
+        text: true,
+        desc: true,
+        password: false,
+        checked: true,
+        selected: true
+    };
+    context_getDatamode = "ALL";
+    ui.layout(
+        <frame background="{{context_framebg}}">
+            <scroll>
+                <vertical>
+                    <linear orientation="horizontal" gravity="left||center">
+                        {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                        <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                            <text text="APP控件数据获取" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
+                        </linear>
+                    </linear>
+                    <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5" />
+                    <linear orientation="horizontal" gravity="center|left" margin="5">
+                        <vertical layout_weight="50" id="getAllObject">
+                            <text id="getAll_text" text="获取全部控件" textStyle="bold" textSize="20" textColor="#17B978" gravity="center" />
+                            <card id="getAll_spot" w="25" h="3" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true" />
+                        </vertical>
+                        <vertical layout_weight="50" id="getPointObject">
+                            <text id="getPoint_Text" text="定向获取控件" textSize="18" textColor="#767676" textStyle="bold" gravity="center" />
+                            <card id="getPoint_spot" w="25" h="0" layout_gravity="center" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true" />
+                        </vertical>
+                    </linear>
+                    <text text="隐私数据选项" textStyle="bold" textSize="10" textColor="{{context_textColor}}" marginLeft="5" />
+                    <linear orientation="horizontal" gravity="center|left" margin="0 5">
+                        <card id="getText" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getText_img" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
+                            <text marginBottom="2" text="text" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        </card>
+                        <card id="getDesc" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getDesc_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
+                            <text marginBottom="2" text="desc" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        </card>
+                        <card id="getPassword" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getPassword_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
+                            <text marginBottom="2" text="password" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        </card>
+                        <card id="getChecked" layout_weight="20" w="80" h="80" marginLeft="5" cardCornerRadius="5dp" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getChecked_img" src="@drawable/ic_event_available_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
+                            <text marginBottom="2" text="checked" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        </card>
+                        <card id="getSelected" layout_weight="20" w="80" h="80" margin="5 0" cardCornerRadius="5dp" cardBackgroundColor="#FF1E56" foreground="?attr/selectableItemBackground" clickable="true">
+                            <img id="getSelected_img" src="@drawable/ic_event_busy_black_48dp" w="45" h="45" layout_gravity="center" tint="{{context_textColor}}" />
+                            <text marginBottom="2" text="selected" textStyle="bold" textSize="13" textColor="{{context_textColor}}" gravity="bottom||center" />
+                        </card>
+                    </linear>
+                    <text id="privatcyTips" textSize="10" textColor="{{context_textColor}}" marginLeft="5" />
+                    <input id="PointObject" hint="请输入指定控件代码" textColor="{{context_textColor}}" textColorHint="#9E9E9E" margin="5" h="auto" alpha="0" />
+                </vertical>
+            </scroll>
+            <card id="startGetData" w="*" h="50" cardCornerRadius="25dp" layout_gravity="bottom" margin="100 5 100 5" cardBackgroundColor="#17B978" foreground="?attr/selectableItemBackground" clickable="true">
+                <text id="startGetDataText" text="启动获取数据悬浮窗" textStyle="bold" textSize="15" textColor="{{context_textColor}}" gravity="center" />
+            </card>
+        </frame>
+    );
+    ChangeIcon();
+
+    function SearchScript(scriptName) {
+        let execution = engines.all();
+        for (let i = 0; i < execution.length; i++) {
+            if (scriptName == execution[i].getSource().toString().match(/([^/]+)$/)[1]) {
+                return true;
+            }
+        }
+    }
+
+    function ChangeIcon() {
+        if (dataItem.text == true) {
+            ui.getText_img.setSource("@drawable/ic_event_available_black_48dp");
+            ui.getText.setCardBackgroundColor(colors.parseColor("#17B978"));
+        } else {
+            ui.getText_img.setSource("@drawable/ic_event_busy_black_48dp");
+            ui.getText.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+        }
+        if (dataItem.desc == true) {
+            ui.getDesc_img.setSource("@drawable/ic_event_available_black_48dp");
+            ui.getDesc.setCardBackgroundColor(colors.parseColor("#17B978"));
+        } else {
+            ui.getDesc_img.setSource("@drawable/ic_event_busy_black_48dp");
+            ui.getDesc.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+        }
+        if (dataItem.password == true) {
+            ui.getPassword_img.setSource("@drawable/ic_event_available_black_48dp");
+            ui.getPassword.setCardBackgroundColor(colors.parseColor("#17B978"));
+        } else {
+            ui.getPassword_img.setSource("@drawable/ic_event_busy_black_48dp");
+            ui.getPassword.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+        }
+        if (dataItem.checked == true) {
+            ui.getChecked_img.setSource("@drawable/ic_event_available_black_48dp");
+            ui.getChecked.setCardBackgroundColor(colors.parseColor("#17B978"));
+        } else {
+            ui.getChecked_img.setSource("@drawable/ic_event_busy_black_48dp");
+            ui.getChecked.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+        }
+        if (dataItem.selected == true) {
+            ui.getSelected_img.setSource("@drawable/ic_event_available_black_48dp");
+            ui.getSelected.setCardBackgroundColor(colors.parseColor("#17B978"));
+        } else {
+            ui.getSelected_img.setSource("@drawable/ic_event_busy_black_48dp");
+            ui.getSelected.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+        }
+    }
+    ui.getText.click(() => {
+        if (dataItem.text == true) {
+            dataItem.text = false;
+        } else {
+            dataItem.text = true;
+        }
+        ChangeIcon();
+    });
+    ui.getDesc.click(() => {
+        if (dataItem.desc == true) {
+            dataItem.desc = false;
+        } else {
+            dataItem.desc = true;
+        }
+        ChangeIcon();
+    });
+    ui.getPassword.click(() => {
+        if (dataItem.password == true) {
+            dataItem.password = false;
+        } else {
+            dataItem.password = true;
+        }
+        ChangeIcon();
+    });
+    ui.getChecked.click(() => {
+        if (dataItem.checked == true) {
+            dataItem.checked = false;
+        } else {
+            dataItem.checked = true;
+        }
+        ChangeIcon();
+    });
+    ui.getSelected.click(() => {
+        if (dataItem.selected == true) {
+            dataItem.selected = false;
+        } else {
+            dataItem.selected = true;
+        }
+        ChangeIcon();
+    });
+    ui.startGetData.click(() => {
+        let WhetherStart = ui.startGetDataText.getText();
+        if (WhetherStart == "启动获取数据悬浮窗" && SearchScript("获取控件数据悬浮窗.js") == true) {
+            ui.startGetDataText.setText("已经启动了");
+            ui.startGetData.setCardBackgroundColor(colors.parseColor(context_framebg));
+            setTimeout(function () {
+                ui.startGetDataText.setText("启动获取数据悬浮窗");
+                ui.startGetData.setCardBackgroundColor(colors.parseColor("#17B978"));
+            }, 5000);
+        } else if (WhetherStart == "启动获取数据悬浮窗") {
+            ui.startGetDataText.setText("已尝试启动");
+            ui.startGetData.setCardBackgroundColor(colors.parseColor(context_framebg));
+            setTimeout(function () {
+                ui.startGetDataText.setText("启动获取数据悬浮窗");
+                ui.startGetData.setCardBackgroundColor(colors.parseColor("#17B978"));
+            }, 3000);
+            var wei = null;
+            let pointObject = ui.PointObject.getText().toString();
+            if (pointObject.length > 15) {
+                for (let i = pointObject.length - 12; i < pointObject.length; i++) {
+                    if (wei == null) {
+                        var wei = pointObject[i];
+                    } else {
+                        var wei = wei + pointObject[i];
+                    }
+                }
+                if (wei == ".findOnce();" || wei.replace(wei[0], "") == ".findOnce()") {
+                    var wei = true;
+                }
+            }
+            if (context_getDatamode == "POINT" && pointObject != "" && pointObject.length > 15 && wei == true) {
+                let change = JSON.stringify(dataItem);
+                let str = 'FindUiObjectFloatWindow()';
+                let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_SettingsCard="' + context_SettingsCard + '";context_getDatamode ="' + context_getDatamode + '";context_Logo="' + context_Logo + '";dataItem=' + change + ';var pointObject="' + pointObject + '";';
+                engines.execScript("获取控件数据悬浮窗", sharevalue + str + ";\n" + FindUiObjectFloatWindow.toString());
+            } else if (context_getDatamode == "ALL") {
+                let change = JSON.stringify(dataItem);
+                let str = 'FindUiObjectFloatWindow()';
+                let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_SettingsCard="' + context_SettingsCard + '";context_getDatamode ="' + context_getDatamode + '";context_Logo="' + context_Logo + '";dataItem=' + change + ';';
+                engines.execScript("获取控件数据悬浮窗", sharevalue + str + ";\n" + FindUiObjectFloatWindow.toString());
+            } else {
+                let view = ui.inflate(
+                    <vertical padding="25 0" bg="{{context_framebg}}">
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <img src="@drawable/ic_warning_black_48dp" h="20" marginTop="3" tint="#F44336" layout_gravity="center" />
+                            <text text="定向控件代码输入错误" textSize="15" textStyle="bold" margin="0 5 10 0" textColor="#F44336" />
+                        </linear>
+                        <text id="tips" textStyle="bold" textSize="10" margin="10 5 10 5" textColor="#D32F2F" />
+                        <linear orientation="horizontal" align="left" margin="0" paddingTop="0">
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#F44336">
+                                <text id="clear" text="清空代码" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
+                            </card>
+                            <card layout_weight="50" h="40" cardCornerRadius="5dp" cardElevation="0dp" gravity="center_vertical" margin="5" cardBackgroundColor="#4CAF50">
+                                <text id="ok" text="确定" textStyle="bold" textColor="#FFFFFF" gravity="center" textSize="12sp" foreground="?attr/selectableItemBackground" clickable="true" />
+                            </card>
+                        </linear>
+                    </vertical>, null, false);
+                view.tips.setText("* 代码必须以.findOnce();结束，不能有空格等;\n* 代码长度不得少于15个字符;");
+                ui.PointObject.setError("代码必须以.findOnce();结束，且长度不得少于15个字符");
+                view.clear.click(() => {
+                    ui.PointObject.setText("");
+                    DHK.dismiss();
+                });
+                view.ok.click(() => {
+                    DHK.dismiss();
+                });
+                let DHK = dialogs.build({
+                    customView: view,
+                    wrapInScrollView: false,
+                    autoDismiss: false
+                }).show();
+            }
+        }
+    });
+    ui.getAllObject.click(() => {
+        context_getDatamode = "ALL";
+        ui.getAll_text.textSize = "20";
+        ui.getAll_text.setTextColor(colors.parseColor("#17B978"));
+        ui.getAll_spot.attr("h", 3);
+        ui.getPoint_Text.textSize = "18";
+        ui.getPoint_Text.setTextColor(colors.parseColor("#767676"));
+        ui.getPoint_spot.attr("h", 0);
+        ui.PointObject.attr("alpha", 0);
+    });
+    ui.privatcyTips.setText("text/desc:这两种属性可能会包含一些可见的文字信息，若在您要获取控件数据的界面上含有隐私信息文字可取消获取此属性的数据。\npassword:若在您要获取控件数据的界面上含有密码输入框且您不愿意获取其数据则可关闭获取此属性的数据。\nchecked/selected:若在您要获取控件数据的界面上含有您已做出选择的且您不愿获取的隐私选项则可关闭获取此属性的数据。");
+    ui.getPointObject.click(() => {
+        context_getDatamode = "POINT";
+        ui.getAll_text.textSize = "18";
+        ui.getAll_text.setTextColor(colors.parseColor("#767676"));
+        ui.getAll_spot.attr("h", 0);
+        ui.getPoint_Text.textSize = "20";
+        ui.getPoint_Text.setTextColor(colors.parseColor("#17B978"));
+        ui.getPoint_spot.attr("h", 3);
+        ui.PointObject.attr("alpha", 1);
+    });
+
+    function FindUiObjectFloatWindow() {
+        context_Data = null;
+        window = floaty.window(
+            <frame background="{{context_framebg}}" alpha="0.8" minHeight="250" padding="10">
+                <scroll>
+                    <vertical>
+                        <linear orientation="horizontal" gravity="left||center">
+                            {/* <img src="{{context_Logo}}" w="85" h="30" /> */}
+                            <linear orientation="horizontal" w="match_parent" gravity="right||center">
+                                <img id="Stop" src="@drawable/ic_close_black_48dp" w="40" h="0" tint="{{context_textColor}}" marginRight="5" layout_gravity="right||center" />
+                                <linear id="action" orientation="horizontal" gravity="right||center">
+                                    <img src="@drawable/ic_open_with_black_48dp" w="30" h="30" tint="{{context_textColor}}" marginRight="5" />
+                                </linear>
+                            </linear>
+                        </linear>
+                        <View bg="{{context_SettingsCard}}" w="*" h="1" margin="5 5 5 5" />
+                        <text id="loadingText" textColor="{{context_textColor}}" textSize="0" gravity="center" textStyle="bold" margin="5 0" />
+                        <text id="ModeText" textColor="{{context_textColor}}" textSize="10" textStyle="bold" margin="5 0" />
+                        <progressbar id="loading" indeterminate="true" style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal" h="0" />
+                        <text id="tips" textColor="{{context_textColor}}" textSize="0" margin="5 0" />
+                        <text id="nowAppName" text="当前应用名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
+                        <text id="nowAppPackageName" text="应用包名：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
+                        <text id="nowAppActivity" text="应用Activity：" textColor="{{context_textColor}}" textSize="8" textStyle="bold" margin="5 0" />
+                    </vertical>
+                </scroll>
+                <vertical gravity="center||bottom">
+                    <linear orientation="horizontal" gravity="left||center">
+                        <card id="cancelGet" layout_weight="5" h="30" cardCornerRadius="25dp" cardBackgroundColor="#FF1E56" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="cancelGetText" text="取消获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        </card>
+                        <card id="startGet" layout_weight="5" h="30" cardCornerRadius="25dp" cardBackgroundColor="#17B978" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="startGetText" text="立即获取" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        </card>
+                    </linear>
+                    <linear orientation="horizontal" gravity="left||center" marginTop="2">
+                        <card id="setClips" layout_weight="5" h="0" cardCornerRadius="25dp" cardBackgroundColor="#FFC107" margin="5 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="setClipsText" text="存至剪切板" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        </card>
+                        <card id="saveOpen" layout_weight="5" h="0" cardCornerRadius="25dp" cardBackgroundColor="#2196F3" margin="0 0 5 0" foreground="?attr/selectableItemBackground" clickable="true">
+                            <text id="saveOpenText" text="保存并查看" textStyle="bold" textSize="10" textColor="{{context_textColor}}" gravity="center" />
+                        </card>
+                    </linear>
+                </vertical>
+            </frame>
+        );
+        if (context_getDatamode == "ALL") {
+            window.ModeText.setText("* 本次将获取当前界面全部控件数据");
+        } else {
+            window.tips.setText("定向控件代码：" + pointObject);
+            window.tips.textSize = "8";
+            window.ModeText.setText("* 本次将定向获取当前界面控件数据");
+        }
+        window.startGet.click(() => {
+            let WhetherStart = window.startGetText.getText();
+            if (WhetherStart == "立即获取") {
+                window.ModeText.textSize = "0";
+                window.nowAppName.textSize = "0";
+                window.nowAppPackageName.textSize = "0";
+                window.nowAppActivity.textSize = "0";
+                window.cancelGet.attr("h", 0);
+                window.startGet.attr("h", 0);
+                window.action.attr("h", 0);
+                window.loadingText.textSize = "15";
+                window.loadingText.setText("正在获取，请勿操作！");
+                window.tips.textSize = "8";
+                window.tips.setText("tips:获取期间手机会稍有卡顿属正常现象，复杂界面可能需要几分钟时间获取数据，提示未响应或过长时间未成功则请尝试重启软件。");
+                window.loading.attr("h", 15);
+                window.loading.attr("margin", "5 5 5 0");
+                setTimeout(function () {
+                    if (context_getDatamode == "ALL") {
+                        generateObjectTree(null);
+                    } else {
+                        generateObjectTree(pointObject);
+                    }
+                }, 500);
+            } else if (WhetherStart == "保存并分享") {
+                let a = WhetherStart;
+                if (files.listDir("/sdcard/").length != 0 && a == "保存并分享") {
+                    let filename = "/storage/emulated/0/OrangeJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".orangejsUOD");
+                    files.createWithDirs(filename);
+                    files.write(filename, context_Data);
+                    window.startGetText.setText("已保存");
+                    let before = window.tips.getText();
+                    window.tips.setText(before + "\n数据文件已保存至：" + filename);
+
+                    function shareFile(file, type) {
+                        importPackage(android.content);
+                        importClass(android.net.Uri);
+                        importClass(java.io.File);
+                        importClass(android.provider.MediaStore);
+                        let f = new File(file);
+                        let uri = Uri.fromFile(f);
+                        let fp = app.parseUri(uri.toString());
+                        let intent = new Intent("android.intent.action.SEND");
+                        intent.setType(type);
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        intent.setClipData(ClipData.newRawUri(MediaStore.EXTRA_OUTPUT, fp));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                    shareFile(filename, "*/*");
+                    setTimeout(function () {
+                        window.startGetText.setText("保存并分享");
+                        window.tips.setText(before);
+                    }, 5000);
+                } else if (files.listDir("/sdcard/").length == 0 && a == "保存并分享") {
+                    window.startGetText.setText("无存储权限");
+                    window.startGet.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+                    setTimeout(function () {
+                        window.startGetText.setText("保存并分享");
+                        window.startGet.setCardBackgroundColor(colors.parseColor("#17B978"));
+                    }, 3000);
+                }
+            } else if (WhetherStart == "再重新获取" || WhetherStart == "重新获取") {
+                window.setClips.attr("h", 0);
+                window.saveOpen.attr("h", 0);
+                window.ModeText.textSize = "10";
+                window.nowAppName.textSize = "8";
+                window.nowAppPackageName.textSize = "8";
+                window.nowAppActivity.textSize = "8";
+                window.cancelGetText.setText("取消获取");
+                window.startGetText.setText("立即获取");
+                window.Stop.attr("h", 0);
+                window.loading.attr("margin", "0");
+                window.loadingText.textSize = "0";
+                window.tips.textSize = "0";
+                if (context_getDatamode == "ALL") {
+                    window.ModeText.setText("* 本次将获取当前界面全部控件数据");
+                } else {
+                    window.tips.setText("定向控件代码：" + pointObject);
+                    window.tips.textSize = "8";
+                    window.ModeText.setText("* 本次将定向获取当前界面控件数据");
+                }
+            }
+        });
+        window.Stop.longClick(() => {
+            toast("关闭");
+        });
+        window.Stop.click(() => {
+            window.close();
+            exit();
+        });
+        window.setClips.click(() => {
+            let a = window.setClipsText.getText();
+            if (a == "存至剪切板") {
+                setClip(context_Data);
+                window.setClipsText.setText("已复制至剪切板");
+            }
+        });
+        window.saveOpen.click(() => {
+            let a = window.saveOpenText.getText();
+            if (files.listDir("/sdcard/").length != 0 && a == "保存并查看") {
+                let filename = "/storage/emulated/0/OrangeJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".orangejsUOD");
+                files.createWithDirs(filename);
+                files.write(filename, context_Data);
+                app.viewFile(filename);
+            } else if (files.listDir("/sdcard/").length == 0 && a == "保存并查看") {
+                window.saveOpenText.setText("无存储权限");
+                window.saveOpen.setCardBackgroundColor(colors.parseColor("#FF1E56"));
+                setTimeout(function () {
+                    window.saveOpenText.setText("保存并查看");
+                    window.saveOpen.setCardBackgroundColor(colors.parseColor("#2196F3"));
+                }, 3000);
+            }
+        });
+        window.cancelGet.click(() => {
+            let WhetherStart = window.cancelGetText.getText();
+            if (WhetherStart == "取消获取") {
+                window.close();
+                exit();
+            } else if (WhetherStart == "重新获取" || WhetherStart == "再重新获取") {
+                window.setClips.attr("h", 0);
+                window.saveOpen.attr("h", 0);
+                window.ModeText.textSize = "10";
+                window.nowAppName.textSize = "8";
+                window.nowAppPackageName.textSize = "8";
+                window.nowAppActivity.textSize = "8";
+                window.cancelGetText.setText("取消获取");
+                window.startGetText.setText("立即获取");
+                window.Stop.attr("h", 0);
+                window.loading.attr("margin", "0");
+                window.loadingText.textSize = "0";
+                window.tips.textSize = "0";
+                if (context_getDatamode == "ALL") {
+                    window.ModeText.setText("* 本次将获取当前界面全部控件数据");
+                } else {
+                    window.tips.setText("定向控件代码：" + pointObject);
+                    window.tips.textSize = "8";
+                    window.ModeText.setText("* 本次将定向获取当前界面控件数据");
+                }
+            }
+        });
+        var execution = null;
+        var x = 0,
+            y = 0;
+        var windowX, windowY;
+        var downTime;
+        window.action.setOnTouchListener(function (view, event) {
+            switch (event.getAction()) {
+                case event.ACTION_DOWN:
+                    x = event.getRawX();
+                    y = event.getRawY();
+                    windowX = window.getX();
+                    windowY = window.getY();
+                    downTime = new Date().getTime();
+                    return true;
+                case event.ACTION_MOVE:
+                    window.setPosition(windowX + (event.getRawX() - x),
+                        windowY + (event.getRawY() - y));
+                    return true;
+                case event.ACTION_UP:
+                    return true;
+            }
+            return true;
+        });
+        setInterval(() => {
+            function getPackageVersion(packageName) {
+                importPackage(android.content);
+                var pckMan = context.getPackageManager();
+                var packageInfo = pckMan.getPackageInfo(packageName, 0);
+                return packageInfo.versionName;
+            }
+            ui.run(() => {
+                window.nowAppName.setText("当前应用名：" + app.getAppName(currentPackage()) + "（" + getPackageVersion(currentPackage()) + "）");
+                window.nowAppPackageName.setText("应用包名：" + currentPackage());
+                window.nowAppActivity.setText("应用Activity：" + currentActivity());
+            });
+        }, 10);
+
+        function getTime() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = '0' + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = '0' + strDate;
+            }
+            var currentdate = year + '-' + month + '-' + strDate + "-" + date.getDay() + "-" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":" + date.getMilliseconds();
+            return currentdate;
+        }
+
+        function generateObjectTree(pointObject) {
+            function StrRebuild(str, number) {
+                let a = {
+                    objectNumber: number,
+                    boundsInParent: str.boundsInParent().toString(),
+                    boundsInScreen: str.bounds().toString(),
+                    packageName: str.packageName(),
+                    className: str.className(),
+                    text: str.text(),
+                    desc: str.desc(),
+                    contentDescription: str.contentDescription,
+                    viewId: str.id(),
+                    drawingOrder: str.drawingOrder(),
+                    checkable: str.checkable(),
+                    checked: str.checked(),
+                    focusable: str.focusable(),
+                    focused: str.focused(),
+                    selected: str.selected(),
+                    clickable: str.clickable(),
+                    longClickable: str.longClickable(),
+                    enabled: str.enabled(),
+                    password: str.password(),
+                    scrollable: str.scrollable(),
+                    children: []
+                }
+                if (dataItem.text == false) {
+                    delete a.text;
+                }
+                if (dataItem.desc == false) {
+                    delete a.desc;
+                }
+                if (dataItem.password == false) {
+                    delete a.password;
+                }
+                if (dataItem.checked == false) {
+                    delete a.checked;
+                }
+                if (dataItem.selected == false) {
+                    delete a.selected;
+                }
+                return a;
+            }
+
+            function MakeNowUiObject(x) {
+                let x = x.toString();
+                var X = null;
+                for (let i = 0; i < x.length; i++) {
+                    if (X == null) {
+                        var X = "RootUiObject.child(" + x[i] + ")";
+                    } else {
+                        var X = X + ".child(" + x[i] + ")";
+                    }
+                }
+                try {
+                    let b = eval(X);
+                    return b;
+                } catch (e) {
+                    return null;
+                }
+            }
+
+            function Additem(nums, content) {
+                let content = JSON.stringify(content);
+                let num = nums.toString();
+                var X = null;
+                for (let i = 0; i < num.length; i++) {
+                    if (X == null) {
+                        var X = "ObjectTree[" + num[i] + "]";
+                    } else {
+                        var X = X + ".children[" + num[i] + "]";
+                    }
+                }
+                eval(X + '=' + content + '');
+                return X;
+            }
+            let Date = getTime();
+            let Information = {
+                APPname: app.getAppName(currentPackage()),
+                PackageName: currentPackage(),
+                Activity: currentActivity()
+            }
+            var WRONG = false;
+            RootUiObject = null;
+            if (pointObject == null) {
+                RootUiObject = selector().findOnce();
+            } else {
+                try {
+                    RootUiObject = eval(pointObject);
+                } catch (e) {
+                    var WRONG = true;
+                    ui.run(() => {
+                        window.cancelGetText.setText("取消获取");
+                        window.startGetText.setText("重新获取");
+                        window.cancelGet.attr("h", 30);
+                        window.startGet.attr("h", 30);
+                        window.action.attr("h", 30);
+                        window.loading.attr("h", 0);
+                        window.loading.attr("margin", "0");
+                        window.loadingText.setText("定向控件代码错误");
+                        window.ModeText.textSize = "10";
+                        window.ModeText.setText("请按照错误代码检查定向控件代码，如有疑问请联系开发者。\n" + e);
+                        window.tips.setText("\n定向控件代码：" + pointObject);
+                    });
+                }
+            }
+            if (RootUiObject != null && WRONG == false) {
+                AllUiObject = [];
+                while (true) {
+                    let Zancun = [];
+                    if (AllUiObject.length < 1) {
+                        for (let i = 0; i < RootUiObject.childCount(); i++) {
+                            Zancun.push(StrRebuild(RootUiObject.child(i), i));
+                        }
+                    } else if (AllUiObject[AllUiObject.length - 1].length > 0) {
+                        for (let i = 0; i < AllUiObject[AllUiObject.length - 1].length; i++) {
+                            let ParentObject = MakeNowUiObject(AllUiObject[AllUiObject.length - 1][i].objectNumber);
+                            if (ParentObject != null && ParentObject.childCount() > 0) {
+                                for (let s = 0; s < ParentObject.childCount(); s++) {
+                                    let thisObjectNumber = AllUiObject[AllUiObject.length - 1][i].objectNumber + s.toString();
+                                    Zancun.push(StrRebuild(ParentObject.child(s), thisObjectNumber));
+                                }
+                            }
+                        }
+                    } else {
+                        break;
+                    }
+                    AllUiObject.push(Zancun);
+                }
+                var Num = 0;
+                for (let i = 0; i < AllUiObject.length; i++) {
+                    var Num = Num + AllUiObject[i].length;
+                }
+                let ceng = AllUiObject.length - 1;
+                var ObjectTree = []
+                for (let i = 0; i < AllUiObject.length; i++) {
+                    let Jh = AllUiObject[i];
+                    if (Jh.length > 0) {
+                        for (let ii = 0; ii < Jh.length; ii++) {
+                            if (i > 0) {
+                                var ObjectTree = JSON.parse(JSON.stringify(ObjectTree));
+                            }
+                            Additem(Jh[ii].objectNumber, Jh[ii]);
+                        }
+                    }
+                }
+                let RootUiObjectText = StrRebuild(RootUiObject, "根");
+                let context_Datas = {
+                    Time: Date,
+                    Info: Information,
+                    RootUiObject: RootUiObjectText,
+                    General: "[" + context_getDatamode + "]共计" + ceng + "层，包含" + Num + "个控件",
+                    UiObjectTree: ObjectTree
+                };
+                context_Datafilename = context_Datas.Info.APPname + "_" + context_Datas.Time;
+                context_Data = JSON.stringify(context_Datas);
+                ui.run(() => {
+                    window.setClips.attr("h", 30);
+                    window.saveOpen.attr("h", 30);
+                    window.cancelGetText.setText("再重新获取");
+                    window.startGetText.setText("保存并分享");
+                    window.cancelGet.attr("h", 30);
+                    window.startGet.attr("h", 30);
+                    window.Stop.attr("h", 40);
+                    window.action.attr("h", 30);
+                    window.loading.attr("h", 0);
+                    window.loading.attr("margin", "0");
+                    window.loadingText.setText("获取成功\n共计" + ceng + "层，包含" + Num + "个控件");
+                    window.tips.setText("tips:控件数据可能包含明文隐私信息，分享前请使用文本查看工具仔细检查！请勿将控件数据公开分享或分享给不可靠之人，时刻注意个人隐私数据安全！");
+                });
+            } else if (WRONG == false) {
+                ui.run(() => {
+                    window.cancelGetText.setText("取消获取");
+                    window.startGetText.setText("重新获取");
+                    window.cancelGet.attr("h", 30);
+                    window.startGet.attr("h", 30);
+                    window.action.attr("h", 30);
+                    window.loading.attr("h", 0);
+                    window.loading.attr("margin", "0");
+                    window.loadingText.setText("未找到根控件");
+                    window.ModeText.textSize = "10";
+                    if (context_getDatamode == "ALL") {
+                        window.ModeText.setText("请检查当前无障碍服务状态，同时请关闭其它容易造成干扰的悬浮窗、其它脚本软件、其它无障碍服务等。");
+                    } else {
+                        window.ModeText.setText("请检查定向控件代码输入是否正确，是否处于代码对应界面，同时请关闭其它容易造成干扰的悬浮窗、其它脚本软件、其它无障碍服务等。");
+                        window.tips.setText("\n定向控件代码：" + pointObject);
+                    }
+                });
+            }
+        }
+    }
 }
