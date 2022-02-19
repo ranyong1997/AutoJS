@@ -10,7 +10,7 @@ function setDayMode() {
     context_QxtextBg = "#FAFAFA" //权限设置中的背景
     context_FctextBg = "#FAFAFA" //悬浮窗权限中的背景
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
-    context_Logo = "https://gitee.com/ran_yong/auto.js/blob/master/Log/ranyongJS-logoWhite.png" //黑色logo
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png" //黑色logo
 }
 
 
@@ -22,7 +22,7 @@ function setNightMode() {
     context_QxtextBg = "#903F3F3F" //权限设置中的背景
     context_FctextBg = "#646464" //悬浮窗的背景
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp" //🌙
-    context_Logo = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=3497626341,1295092338&fm=26&gp=0.jpg" //白色Logo
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png" //白色Logo
 }
 mainUi();
 function mainUi() {
