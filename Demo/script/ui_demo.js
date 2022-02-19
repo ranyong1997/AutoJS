@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 15:12:36
+ * @LastEditTime: 2022-02-19 15:49:47
  */
 "ui";
 
@@ -84,8 +84,8 @@ function setDayMode() {
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
-    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png"; // 设置首页顶部LOGO
-    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png"; // 设置首页顶部LOGO
+    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
+    context_Logo = "https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/ranyongJS-logoBlack.png"; // 设置首页顶部LOGO 需要重新更改
     context_TopPics = getStorageData("DayUiPicture", "TopPics");
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -127,8 +127,8 @@ function setNightMode() {
     context_SettingsCard = "#616161" //设置卡片颜色
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
-    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_logo.png";
-    context_Logo = "https://raw.githubusercontent.com/ranyong1997/AutoJS/main/Log/ranyongJS-logoBlack.png";
+    // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png";
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png"; // 设置首页顶部LOGO 勿动
     context_TopPics = getStorageData("DayUiPicture", "TopPics");
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -228,7 +228,7 @@ ui.emitter.on("resume", function () {
     }
     function refreshUI() {
         if (context_NowUi == "mainUi") {
-            mainUi() 
+            mainUi()
         } else if (context_NowUi == "SettingsUI") {
             SettingsUI()
         } else if (context_NowUi == "AboutApp") {
@@ -408,7 +408,7 @@ function mainUi() {
                     </linear>
                 </linear>
                 <linear gravity="center">
-                    <img src="https://gitee.com/Orange_shirt/OrangeJs/raw/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center" />
+                    <img src="https://gitee.com/Orange_shirt/RanyongJs/raw/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center" />
                 </linear>
             </vertical>, null, false)
         view.ExitScript.click(() => {
@@ -577,9 +577,9 @@ function mainUi() {
                         } catch (error) {
                             log("获取脚本时捕获到一个错误：", error)
                         }
-                        var OrangeJs = res_script.body.string()
+                        var RanyongJs = res_script.body.string()
                         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
-                        engines.execScript(ScriptName, sharevalue + OrangeJs)
+                        engines.execScript(ScriptName, sharevalue + RanyongJs)
                         exit()
                     } else {
                         contextDownJs.dismiss()
@@ -707,31 +707,31 @@ function mainUi() {
         function RefreshMainUI() {
             app.startActivity({
                 action: "android.intent.action.VIEW",
-                packageName: "com.orange.orangejs",
+                packageName: "com.orange.RanyongJs",
                 className: "com.stardust.auojs.inrt.SplashActivity"
             })
         }
     })
     ui.ScriptOne.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%BE%AE%E4%BF%A1%E5%8F%91%E6%B6%88%E6%81%AF_%E5%BE%AE%E4%BF%A1%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%BE%AE%E4%BF%A1%E5%8F%91%E6%B6%88%E6%81%AF_%E5%BE%AE%E4%BF%A1%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","自动微信发消息","com.tencent.mm")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     })
     ui.R_JD.click(() => {
         /*if (ui.sp_Jd1.getSelectedItemPosition() == 2) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E4%B8%9C%E4%B8%9C%E5%86%9C%E5%9C%BA%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E4%B8%9C%E4%B8%9C%E5%86%9C%E5%9C%BA%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
             let str = 'RunScript("' + Url + '","东东农场自动脚本","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="'+context_SettingsCard+'";context_Logo="'+context_Logo+'";';
                 engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         } else */
         if (ui.sp_Jd1.getSelectedItemPosition() == 1) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
             let str = 'RunScript("' + Url + '","自动宠汪汪","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
         } else if (ui.sp_Jd1.getSelectedItemPosition() == 0) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E7%A7%8D%E8%B1%86%E5%BE%97%E8%B1%86%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E7%A7%8D%E8%B1%86%E5%BE%97%E8%B1%86%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
             let str = 'RunScript("' + Url + '","种豆得豆自动脚本","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
@@ -739,20 +739,20 @@ function mainUi() {
     });
 
     /*ui.ScriptTen.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E5%A4%9A%E5%A4%9A%E6%9E%9C%E5%9B%AD%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E6%8B%BC%E5%A4%9A%E5%A4%9A%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E5%A4%9A%E5%A4%9A%E6%9E%9C%E5%9B%AD%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E6%8B%BC%E5%A4%9A%E5%A4%9A%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","多多果园自动脚本","com.xunmeng.pinduoduo")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="'+context_SettingsCard+'";context_Logo="'+context_Logo+'";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     });*/
     ui.ScriptNine.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E5%BE%AE%E5%8D%9A%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E5%BE%AE%E5%8D%9A%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E5%BE%AE%E5%8D%9A%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E5%BE%AE%E5%8D%9A%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","微博任务自动脚本","com.sina.weibo")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     });
 
     ui.ScriptThi.click(() => {
-        let Url = getStorageData('APPbasic', 'URLprefix') + "/OrangeJs_%E8%87%AA%E5%8A%A8%E5%8A%A8%E6%80%81%E7%82%B9%E8%B5%9E_QQ%E8%84%9A%E6%9C%AC.js";
+        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%8A%A8%E6%80%81%E7%82%B9%E8%B5%9E_QQ%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","自动动态点赞","com.tencent.mobileqq")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
@@ -1192,7 +1192,7 @@ function mainUi() {
     ui.ViewLog.click(() => {
         app.startActivity({
             action: "android.intent.action.VIEW",
-            packageName: "com.orange.orangejs",
+            packageName: "com.orange.RanyongJs",
             className: "com.stardust.auojs.inrt.LogActivity"
         })
     })
@@ -1264,7 +1264,7 @@ function SignUp() {
         <scroll bg="#FFFFFF">
             <vertical layout_gravity="center" marginBottom="0">
                 <linear orientation="horizontal" gravity="center">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35" /> */}
+                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/RanyongJs_logo.png" w="85" h="35" /> */}
                 </linear>
                 <text text="欢迎使用" textSize="45sp" textColor="#000000" gravity="center" />
                 <text text="全新1.1.0主界面" marginTop="10" textSize="15sp" textColor="#000000" gravity="center" />
@@ -1287,7 +1287,7 @@ function SignUp() {
         let view = ui.inflate(
             <vertical bg="#FFFFFF" padding="25 10 25 0">
                 <linear orientation="horizontal" gravity="left||center" marginBottom="5">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs_logo.png" w="85" h="35" /> */}
+                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/RanyongJs_logo.png" w="85" h="35" /> */}
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
                     </linear>
                 </linear>
@@ -1543,11 +1543,11 @@ function SettingsUI() {
                             DHKs.dismiss();
                             DHKss.dismiss();
                             if (context_DayOrNight == 0) {
-                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png","顶图","' + Pcopyright + '")';
+                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/夜间示例顶图.png","顶图","' + Pcopyright + '")';
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             } else if (context_DayOrNight == 1) {
-                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png","顶图","' + Pcopyright + '")';
+                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png","顶图","' + Pcopyright + '")';
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             }
@@ -1737,11 +1737,11 @@ function SettingsUI() {
                             DHKs.dismiss();
                             DHKss.dismiss();
                             if (context_DayOrNight == 0) {
-                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png","底图","' + Pcopyright + '")';
+                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/夜间示例底图.png","底图","' + Pcopyright + '")';
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             } else if (context_DayOrNight == 1) {
-                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png","底图","' + Pcopyright + '")';
+                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例底图.png","底图","' + Pcopyright + '")';
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             }
@@ -1884,13 +1884,13 @@ function SettingsUI() {
                 </vertical>, null, false);
             view.BeTopPic.click(() => {
                 DHK.dismiss();
-                files.ensureDir("/storage/emulated/0/OrangeJs/主界面示例图片");
+                files.ensureDir("/storage/emulated/0/RanyongJs/主界面示例图片");
                 if (context_DayOrNight == 0) {
-                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png","顶图","' + item.CopyrightOfPicture + '")';
+                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/夜间示例顶图.png","顶图","' + item.CopyrightOfPicture + '")';
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 } else if (context_DayOrNight == 1) {
-                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png","顶图","' + item.CopyrightOfPicture + '")';
+                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png","顶图","' + item.CopyrightOfPicture + '")';
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 }
@@ -1909,13 +1909,13 @@ function SettingsUI() {
             });
             view.BeBottomPic.click(() => {
                 DHK.dismiss();
-                files.ensureDir("/storage/emulated/0/OrangeJs/主界面示例图片");
+                files.ensureDir("/storage/emulated/0/RanyongJs/主界面示例图片");
                 if (context_DayOrNight == 0) {
-                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png","底图","' + item.CopyrightOfPicture + '")';
+                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/夜间示例底图.png","底图","' + item.CopyrightOfPicture + '")';
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 } else if (context_DayOrNight == 1) {
-                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png","底图","' + item.CopyrightOfPicture + '")';
+                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例底图.png","底图","' + item.CopyrightOfPicture + '")';
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 }
@@ -1954,14 +1954,14 @@ function SettingsUI() {
         if (c > d) {
             var NIGHT = "次日"
         }
-        ui.nighttip.attr("textSize", "10sp");
+        ui.nighttip.attr("textSize", "2sp");
         ui.nighttip.setText("浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时")
     }
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
-        ui.Gradient.setChecked(true)
+        ui.Gradient.setChecked(false)
     }
     if (getStorageData("uiProtectSetting", "UiProtect") != undefined) {
-        ui.uiProtect.setChecked(true)
+        ui.uiProtect.setChecked(false)
         ui.tips.setText("")
     }
     ui.DayNight.on("click", (checked) => {
@@ -2029,7 +2029,7 @@ function SettingsUI() {
                     if (c > d) {
                         var NIGHT = "次日";
                     }
-                    ui.nighttip.attr("textSize", "5sp");
+                    ui.nighttip.attr("textSize", "2sp");
                     ui.nighttip.setText("浅色：" + getStorageData("DayNightSetting", "DayTime") + "时-" + DAY + getStorageData("DayNightSetting", "NightTime") + "时  夜间：" + getStorageData("DayNightSetting", "NightTime") + "时-" + NIGHT + getStorageData("DayNightSetting", "DayTime") + "时");
                 }
             });
@@ -2134,7 +2134,7 @@ function SettingsUI() {
             view.Determine.click(() => {
                 let deleteWrong = [];
                 for (let i = 0; i < context_ListDeletejs.length; i++) {
-                    if (files.removeDir("/storage/emulated/0/OrangeJs/" + context_ListDeletejs[i]) == false) {
+                    if (files.removeDir("/storage/emulated/0/RanyongJs/" + context_ListDeletejs[i]) == false) {
                         deleteWrong.push(context_ListDeletejs[i]);
                     }
                 }
@@ -2173,11 +2173,11 @@ function SettingsUI() {
                 }
                 context_ListDeletejs = [];
                 var items = [];
-                for (let i = 0; i < files.listDir("/storage/emulated/0/OrangeJs").length; i++) {
-                    if (files.isDir("/storage/emulated/0/OrangeJs/" + files.listDir("/storage/emulated/0/OrangeJs")[i]) == true) {
+                for (let i = 0; i < files.listDir("/storage/emulated/0/RanyongJs").length; i++) {
+                    if (files.isDir("/storage/emulated/0/R an yong/" + files.listDir("/storage/emulated/0/RanyongJs")[i]) == true) {
                         items.push({
                             icon: "@drawable/ic_panorama_fish_eye_black_48dp",
-                            name: files.listDir("/storage/emulated/0/OrangeJs")[i]
+                            name: files.listDir("/storage/emulated/0/RanyongJs")[i]
                         });
                     }
                 }
@@ -2194,11 +2194,11 @@ function SettingsUI() {
         });
 
         var items = [];
-        for (let i = 0; i < files.listDir("/storage/emulated/0/OrangeJs").length; i++) {
-            if (files.isDir("/storage/emulated/0/OrangeJs/" + files.listDir("/storage/emulated/0/OrangeJs")[i]) == true) {
+        for (let i = 0; i < files.listDir("/storage/emulated/0/RanyongJs").length; i++) {
+            if (files.isDir("/storage/emulated/0/RanyongJs/" + files.listDir("/storage/emulated/0/RanyongJs")[i]) == true) {
                 items.push({
                     icon: "@drawable/ic_panorama_fish_eye_black_48dp",
-                    name: files.listDir("/storage/emulated/0/OrangeJs")[i]
+                    name: files.listDir("/storage/emulated/0/RanyongJs")[i]
                 });
             }
         }
@@ -2250,23 +2250,23 @@ function SettingsUI() {
                         </linear>
                     </vertical>, null, false);
                 view.deleteTitle.setText("您确定要删除“" + item.name + "”的脚本配置吗？");
-                if (files.isDir("/storage/emulated/0/OrangeJs/" + item.name) == true && files.isEmptyDir("/storage/emulated/0/OrangeJs/" + item.name) == true) {
+                if (files.isDir("/storage/emulated/0/RanyongJs/" + item.name) == true && files.isEmptyDir("/storage/emulated/0/RanyongJs/" + item.name) == true) {
                     view.deleteTips.setText("“" + item.name + "”是一个空文件夹，可以放心删除");
-                } else if (files.isDir("/storage/emulated/0/OrangeJs/" + item.name) == true) {
+                } else if (files.isDir("/storage/emulated/0/RanyongJs/" + item.name) == true) {
                     var listFile = null;
-                    for (let i = 0; i < files.listDir("/storage/emulated/0/OrangeJs/" + item.name).length; i++) {
+                    for (let i = 0; i < files.listDir("/storage/emulated/0/RanyongJs/" + item.name).length; i++) {
                         if (listFile == null) {
-                            var listFile = "“" + files.listDir("/storage/emulated/0/OrangeJs/" + item.name)[i] + "”";
+                            var listFile = "“" + files.listDir("/storage/emulated/0/RanyongJs/" + item.name)[i] + "”";
                         } else {
-                            var listFile = listFile + "，" + "“" + files.listDir("/storage/emulated/0/OrangeJs/" + item.name)[i] + "”";
+                            var listFile = listFile + "，" + "“" + files.listDir("/storage/emulated/0/RanyongJs/" + item.name)[i] + "”";
                         }
                     }
                     view.deleteTips.setText("“" + item.name + "”是一个非空文件夹，其中包括" + listFile + "文件，请谨慎删除");
-                } else if (files.isFile("/storage/emulated/0/OrangeJs/" + item.name) == true) {
-                    view.deleteTips.setText("“" + item.name + "”是一个" + files.getExtension("/storage/emulated/0/OrangeJs/" + item.name) + "文件，请谨慎删除");
+                } else if (files.isFile("/storage/emulated/0/RanyongJs/" + item.name) == true) {
+                    view.deleteTips.setText("“" + item.name + "”是一个" + files.getExtension("/storage/emulated/0/RanyongJs/" + item.name) + "文件，请谨慎删除");
                 }
                 view.Determine.click(() => {
-                    if (files.removeDir("/storage/emulated/0/OrangeJs/" + item.name) == true) {
+                    if (files.removeDir("/storage/emulated/0/RanyongJs/" + item.name) == true) {
                         items.splice(itemHolder.position, 1);
                         DHK.dismiss();
                         let views = ui.inflate(
@@ -2313,11 +2313,11 @@ function SettingsUI() {
                 context_CheckAlldelete = false;
                 Deletejsview.checkAll.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
                 var items = [];
-                for (let i = 0; i < files.listDir("/storage/emulated/0/OrangeJs").length; i++) {
-                    if (files.isDir("/storage/emulated/0/OrangeJs/" + files.listDir("/storage/emulated/0/OrangeJs")[i]) == true) {
+                for (let i = 0; i < files.listDir("/storage/emulated/0/RanyongJs").length; i++) {
+                    if (files.isDir("/storage/emulated/0/RanyongJs/" + files.listDir("/storage/emulated/0/RanyongJs")[i]) == true) {
                         items.push({
                             icon: "@drawable/ic_panorama_fish_eye_black_48dp",
-                            name: files.listDir("/storage/emulated/0/OrangeJs")[i]
+                            name: files.listDir("/storage/emulated/0/RanyongJs")[i]
                         });
                     }
                 }
@@ -2327,11 +2327,11 @@ function SettingsUI() {
                 context_CheckAlldelete = true;
                 Deletejsview.checkAll.setSource("@drawable/ic_check_circle_black_48dp");
                 var items = [];
-                for (let i = 0; i < files.listDir("/storage/emulated/0/OrangeJs").length; i++) {
-                    if (files.isDir("/storage/emulated/0/OrangeJs/" + files.listDir("/storage/emulated/0/OrangeJs")[i]) == true) {
+                for (let i = 0; i < files.listDir("/storage/emulated/0/RanyongJs").length; i++) {
+                    if (files.isDir("/storage/emulated/0/RanyongJs/" + files.listDir("/storage/emulated/0/RanyongJs")[i]) == true) {
                         items.push({
                             icon: "@drawable/ic_check_circle_black_48dp",
-                            name: files.listDir("/storage/emulated/0/OrangeJs")[i]
+                            name: files.listDir("/storage/emulated/0/RanyongJs")[i]
                         });
                     }
                 }
@@ -2407,6 +2407,7 @@ function SettingsUI() {
         }
     });
     ui.Appsettings.click(() => {
+        log("点击软件自带设置")
         app.startActivity({
             action: "android.intent.action.VIEW",
             packageName: "com.orange.orangejs",
@@ -2630,7 +2631,7 @@ function AboutApp() {
         </frame>
     );
     ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
-    ui.OpenSource.text("Github：https://github.com/Orange-shirt/OrangeJs" + "\nGitee：https://gitee.com/Orange_shirt/OrangeJs\nCoding：https://orange-shirt.coding.net/p/OrangeJs/git");
+    ui.OpenSource.text("Github：https://github.com/Orange-shirt/RanyongJs" + "\nGitee：https://gitee.com/Orange_shirt/RanyongJs\nCoding：https://orange-shirt.coding.net/p/RanyongJs/git");
     ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
     ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
     ui.Back.click(() => {
@@ -3018,7 +3019,7 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                 files.writeBytes(imgSavePath, res.body.bytes());
                 if (WhatIsThis == "底图") {
                     if (context_DayOrNight == 0) {
-                        setStorageData("NightUiPicture", "BottomPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png");
+                        setStorageData("NightUiPicture", "BottomPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/夜间示例底图.png");
                         if (PicCopyright != undefined) {
                             setStorageData("NightUiPicture", "BottomPicsCopyright", PicCopyright);
                             context_BottomPics_Copyright = PicCopyright;
@@ -3026,9 +3027,9 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                             delStorageData("DayUiPicture", "BottomPicsCopyright");
                             context_BottomPics_Copyright = "";
                         }
-                        context_BottomPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例底图.png"
+                        context_BottomPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/夜间示例底图.png"
                     } else if (context_DayOrNight == 1) {
-                        setStorageData("DayUiPicture", "BottomPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png");
+                        setStorageData("DayUiPicture", "BottomPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例底图.png");
                         if (PicCopyright != undefined) {
                             setStorageData("DayUiPicture", "BottomPicsCopyright", PicCopyright);
                             context_BottomPics_Copyright = PicCopyright;
@@ -3036,11 +3037,11 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                             delStorageData("DayUiPicture", "BottomPicsCopyright");
                             context_BottomPics_Copyright = "";
                         }
-                        context_BottomPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例底图.png";
+                        context_BottomPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例底图.png";
                     }
                 } else if (WhatIsThis == "顶图") {
                     if (context_DayOrNight == 0) {
-                        setStorageData("NightUiPicture", "TopPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png");
+                        setStorageData("NightUiPicture", "TopPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/夜间示例顶图.png");
                         if (PicCopyright != undefined) {
                             setStorageData("NightUiPicture", "TopPicsCopyright", PicCopyright);
                             context_TopPics_Copyright = PicCopyright;
@@ -3048,9 +3049,9 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                             setStorageData("NightUiPicture", "TopPicsCopyright", "");
                             context_TopPics_Copyright = "";
                         }
-                        context_TopPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/夜间示例顶图.png"
+                        context_TopPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/夜间示例顶图.png"
                     } else if (context_DayOrNight == 1) {
-                        setStorageData("DayUiPicture", "TopPics", "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png");
+                        setStorageData("DayUiPicture", "TopPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png");
                         if (PicCopyright != undefined) {
                             setStorageData("DayUiPicture", "TopPicsCopyright", PicCopyright);
                             context_TopPics_Copyright = PicCopyright;
@@ -3058,7 +3059,7 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                             setStorageData("DayUiPicture", "TopPicsCopyright", "");
                             context_TopPics_Copyright = "";
                         }
-                        context_TopPics = "file:///storage/emulated/0/OrangeJs/主界面示例图片/示例顶图.png";
+                        context_TopPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png";
                     }
                 }
                 context_imgDownloadDHK.dismiss();
@@ -3483,7 +3484,7 @@ function UiObjectSearch() {
             } else if (WhetherStart == "保存并分享") {
                 let a = WhetherStart;
                 if (files.listDir("/sdcard/").length != 0 && a == "保存并分享") {
-                    let filename = "/storage/emulated/0/OrangeJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".orangejsUOD");
+                    let filename = "/storage/emulated/0/RanyongJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".RanyongJsUOD");
                     files.createWithDirs(filename);
                     files.write(filename, context_Data);
                     window.startGetText.setText("已保存");
@@ -3557,7 +3558,7 @@ function UiObjectSearch() {
         window.saveOpen.click(() => {
             let a = window.saveOpenText.getText();
             if (files.listDir("/sdcard/").length != 0 && a == "保存并查看") {
-                let filename = "/storage/emulated/0/OrangeJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".orangejsUOD");
+                let filename = "/storage/emulated/0/RanyongJs/控件数据/[" + String(context_getDatamode) + "]" + String(context_Datafilename + ".RanyongJsUOD");
                 files.createWithDirs(filename);
                 files.write(filename, context_Data);
                 app.viewFile(filename);
