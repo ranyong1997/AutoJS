@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-19 22:22:42
+ * @LastEditTime: 2022-02-20 11:28:42
  */
 "ui";
 // 导包
@@ -28,7 +28,6 @@ function getStorageData(name, key) {
     if (storage.contains(key)) {
         return storage.get(key, "")
     }
-    log("name--->",name,"key--->",key)
 }
 
 // 检测无障碍权限是否开启
@@ -36,6 +35,7 @@ function enableAbs() {
     importClass(android.content.Context);
     importClass(android.provider.Settings);
     var packageName = context.getPackageName();
+    log("packageName:" + packageName);
     var absPermittedByshell = false;
     try {
         var enabledServices = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
@@ -89,13 +89,13 @@ function setDayMode() {
     context_QQbgColor = "2196F3" //QQ背景颜色
     context_JDbgColor = "F44336" //京东背景颜色
     context_WMbgColor = "FD7034" //完美校园背景颜色
-    context_JBScolor = "FAFAFA"
+    context_JBScolor = "FAFAFA" // 卡片渐变颜色
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
-    context_LogomarginTop = getStorageData("DayUi", "LogomarginTop");
-    context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️
+    context_LogomarginTop = getStorageData("DayUi", "LogomarginTop"); // Logo 顶图
+    context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️  日间模式
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
-    context_Logo = "https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/ranyongJS-logoBlack.png"; // 设置首页顶部LOGO 需要重新更改
-    context_TopPics = getStorageData("DayUiPicture", "TopPics");
+    context_Logo = "https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/ranyongJS-logoBlack.png"; // 设置首页顶部LOGO 需要重新更改色域
+    context_TopPics = getStorageData("DayUiPicture", "TopPics");    // 顶图轮播图
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
     context_BottomPics_Copyright = getStorageData("DayUiPicture", "BottomPicsCopyright");
@@ -196,16 +196,25 @@ if (WhatNowColor() != context_DayOrNight && getStorageData("DayNightSetting", "A
         context_DayOrNight = 1
         setDayMode()
     } else {
-        // context_DayOrNight = 0
+        context_DayOrNight = 0
         setDayMode()
     }
 }
 
-// 进行md5加密
+//删除本地数据
+function delStorageData(name, key) {
+    const storage = storages.create(name);
+    if (storage.contains(key)) {
+        storage.remove(key);
+    };
+};
+
+// 进行md5加密 用于首页验证码登录
 function md5(string) {
     return java.math.BigInteger(1, java.security.MessageDigest.getInstance("MD5")
         .digest(java.lang.String(string).getBytes())).toString(4 * 4);
 }
+// 在Sign页面返回弹出UI界面锁定
 ui.emitter.on("back_pressed", e => {
     try {
         clearInterval(contextJdtX)
@@ -231,7 +240,6 @@ ui.emitter.on("back_pressed", e => {
         e.consumed = true
     }
 })
-
 ui.emitter.on("resume", function () {
     if (WhatNowColor() == 1 && WhatNowColor() != context_DayOrNight) {
         context_DayOrNight = 1
@@ -244,23 +252,24 @@ ui.emitter.on("resume", function () {
     }
     function refreshUI() {
         if (context_NowUi == "mainUi") {
-            mainUi()
+            mainUi() // 主界面
         } else if (context_NowUi == "SettingsUI") {
-            SettingsUI()
+            SettingsUI()    // 设置界面
         } else if (context_NowUi == "AboutApp") {
-            AboutApp()
+            AboutApp()  // 关于界面
         } else if (context_NowUi == "SP") {
-            SP()
+            SP()    // 隐私条款
         } else if (context_NowUi == "TalkToDeveloper") {
-            TalkToDeveloper()
+            TalkToDeveloper()   // 反馈界面
         } else if (context_NowUi == "SignUp") {
-            SignUp()
+            SignUp()    // 登录界面
         }
     }
     try {
         ui.autoService.checked = auto.service != null
     } catch (e) { }
 })
+// 创建Sign界面验证码 采用 md5() 加密 
 if (getStorageData("SignUp", "SignKey") != undefined &&
     md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
     mainUi();
@@ -273,7 +282,7 @@ if (getStorageData("SignUp", "SignKey") != undefined &&
     SignUp()
 }
 
-// 写主ui界面
+// 主界面（脚本页面）
 function mainUi() {
     context_NowUi = "mainUi"
     if (WhatNowColor() != context_DayOrNight && getStorageData("DayNightSetting", "AutoDayNight") != undefined) {
@@ -338,6 +347,7 @@ function mainUi() {
                             </linear>
                         </HorizontalScrollView>
                     </linear>
+                    {/* 脚本列表 */}
                     <card h="1" margin="5 5" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" />
                     <linear orientation="horizontal" align="left" margin="0 5 0 0">
                         <card id="R_JD" layout_weight="50" h="120" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5" foreground="?selectableItemBackground">
@@ -395,8 +405,8 @@ function mainUi() {
                             </card>
                         </card>
                     </linear>
+                    {/* 底部选项 */}
                     <card h="1" margin="5 0" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" />
-
                     <linear orientation="horizontal" gravity="center" margin="5 15 5 15" >
                         <img src="{{context_SunMoon}}" id="changeColor" w="30" h="30" tint="{{context_textColor}}" layout_weight="20" gravity="center" foreground="?attr/selectableItemBackground" clickable="true" />
                         <text id="Privacy_Security" text="隐私与安全" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
@@ -411,6 +421,7 @@ function mainUi() {
             </frame>
         </scroll>
     );
+    {/* 首次进入主界面进行用户引导 */}
     if (getStorageData("mainUi", "NewWay") == undefined) {
         let view = ui.inflate(
             <vertical bg="{{context_framebg}}">
@@ -422,7 +433,7 @@ function mainUi() {
                     </linear>
                 </linear>
                 <linear gravity="center">
-                    <img src="https://gitee.com/Orange_shirt/RanyongJs/raw/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center" />
+                    <img src="https://raw.githubusercontent.com/Orange-shirt/OrangeJs/master/OtherRes/%E6%96%B0%E7%9A%84%E6%93%8D%E4%BD%9C%E6%96%B9%E5%BC%8F.jpg" scaleType="fitXY" w="300" h="200" gravity="center" />
                 </linear>
             </vertical>, null, false)
         view.ExitScript.click(() => {
@@ -436,18 +447,20 @@ function mainUi() {
         }).show()
         setStorageData("mainUi", "NewWay", "true")
     }
-    if (context_TopPics != "http://www.baidu.com" && context_TopPics_Copyright != undefined) {
+    if (context_TopPics != "http://www.google.com" && context_TopPics_Copyright != undefined) {
         ui.CopyRightTop.setText(context_TopPics_Copyright)
     }
-    if (context_BottomPics != "http://www.baidu.com" && context_BottomPics_Copyright != undefined) {
+    if (context_BottomPics != "http://www.google.com" && context_BottomPics_Copyright != undefined) {
         ui.CopyrightBottom.setText(context_BottomPics_Copyright)
     }
+    // 图标渐变色背景
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
         ui.Weibobg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_WBbgColor, "#" + context_WBbgColor, "#" + context_WBbgColor]);
         ui.Weixinbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_WXbgColor, "#" + context_WXbgColor, "#" + context_WXbgColor]);
         ui.QQbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_QQbgColor, "#" + context_QQbgColor, "#" + context_QQbgColor, "#" + context_QQbgColor]);
         ui.Jingdongbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_JDbgColor, "#" + context_JDbgColor, "#" + context_JDbgColor]);
     }
+    // 点击logo进行间距调整
     ui.UiLogo.click(() => {
         let view = ui.inflate(
             <vertical padding="25 0" bg="{{context_framebg}}">
@@ -523,6 +536,7 @@ function mainUi() {
                 });
             }
         }
+        // 关闭无障碍弹窗
         if (!checked && auto.service != null) {
             let view = ui.inflate(
                 <vertical padding="25 0" bg="{{context_framebg}}">
@@ -556,6 +570,7 @@ function mainUi() {
             }).show();
         }
     });
+    // 请求脚本
     function RunScript(ScriptUrl, ScriptName, AppPackageName) {
         log(ScriptUrl)
         if (app.getAppName(AppPackageName) != null && auto.service != null) {
@@ -626,7 +641,7 @@ function mainUi() {
                             </linear>
                             <text id="tip" textStyle="bold" textSize="15" margin="10 5 10 5" textColor="{{context_textColor}}" />
                             <text id="tips" textSize="10" margin="10 0 50 10" textColor="{{context_textColor}}" />
-                        </vertical>, null, false)
+                        </vertical>, null)
                     views.tip.setText("无法请求“" + ScriptName + "”");
                     views.tips.setText("请检查您当前的网络连接可用性，连接可用网络并授予本软件联网权限后再尝试重新运行。\n\n错误代码：" + e)
                     views.Statuscode.setText("无可用网络")
@@ -690,6 +705,7 @@ function mainUi() {
                 autoDismiss: false
             }).show()
         }
+        // 检测网络状态
         function MyNetworkInformation() {
             importClass(android.net.ConnectivityManager)
             mConnectivityManager = context.getSystemService(context.CONNECTIVITY_SERVICE)
@@ -2347,7 +2363,7 @@ function SettingsUI() {
     //     });
     // });
     var ZhuTiTu = [];
-    if (context_TopPics != undefined && context_TopPics != "http://www.baidu.com") {
+    if (context_TopPics != undefined && context_TopPics != "http://www.google.com") {
         ZhuTiTu.push({
             Picture: context_TopPics,
             TextofPic: '当前顶图'
