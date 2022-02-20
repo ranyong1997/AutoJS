@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 20:11:42
+ * @LastEditTime: 2022-02-20 20:33:42
  */
 "ui";
 // 导包
@@ -95,7 +95,7 @@ function setDayMode() {
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️  日间模式
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
     context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png"; // 设置首页顶部LOGO 需要重新更改色域
-    context_author_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/other/%E8%84%9A%E6%9C%AC%E4%BD%9C%E8%80%85.png"
+    context_author_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/other/%E8%84%9A%E6%9C%AC%E4%BD%9C%E8%80%85New.png"
     context_TopPics = getStorageData("DayUiPicture", "TopPics");    // 顶图轮播图
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -316,12 +316,12 @@ function mainUi() {
                         <img id="Pics" src="{{context_TopPics}}" scaleType="fitXY" />
                         <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0" />
                     </card>
-                    <img id="UiLogo" src="{{context_Logo}}" h="30" marginTop="{{context_LogomarginTop}}" marginBottom="10" />
+                    <img id="UiLogo" src="{{context_Logo}}" h="60" marginTop="50" marginBottom="10" />
                     <linear orientation="horizontal" align="left">
                         <HorizontalScrollView>
                             <linear orientation="horizontal" align="left" h="70" padding="0 10">
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
-                                    <card h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}">
+                                    <card h="40" w="*" margin="5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}">
                                         <Switch id="autoService" margin="7 0" text="无障碍服务" textColor="{{context_textColor}}" gravity="center" textStyle="bold" checked="{{auto.service != null}}" textSize="12sp" />
                                     </card>
                                 </card>
@@ -414,6 +414,14 @@ function mainUi() {
                         <text id="TalktoDeveloper" text="反馈问题" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
                         <text id="AboutApp" text="关于软件" color="#BDBDBD" textSize="13sp" layout_weight="20" gravity="center" bg="?attr/selectableItemBackground" clickable="true" />
                     </linear>
+                    <vertical >
+                        <View w="*" h="5" bg="#FC3032" />
+                        <View w="*" h="5" bg="#FE8E2D" />
+                        <View w="*" h="5" bg="#FCD830" />
+                        <View w="*" h="5" bg="#32F558" />
+                        <View w="*" h="5" bg="#4395FB" />
+                        <View w="*" h="5" bg="#832FFD" />
+                    </vertical>
                     <card w="{{context_BottomPics_width}}px" h="{{context_BottomPics_height}}px" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_SettingsCard}}">
                         <img src="{{context_BottomPics}}" scaleType="fitXY" />
                         <text id="CopyrightBottom" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 0 20" padding="0 0 0 0" />
@@ -2415,7 +2423,7 @@ function SettingsUI() {
             TextofPic: "示例底图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         });
-    } 
+    }
     // else if (context_DayOrNight == 0) {
     //     ZhuTiTu.push({
     //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
@@ -2537,7 +2545,7 @@ function AboutApp() {
                         <View bg="#FFEA3324" h="*" w="*" />
                     </card>
                     <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <img src="{{context_author_Logo}}" layout_gravity="center"  w="auto" h="40" />//作者名
+                    <img src="{{context_author_Logo}}" color="{{context_textColor}}" layout_gravity="center" w="auto" h="40" />
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
@@ -3059,7 +3067,7 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                     <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
                 </vertical>, null, false);
             views.tip.setText("当前网络错误，请检查后重试\n错误代码：" + e);
-            log("下载错误--->",e)
+            log("下载错误--->", e)
             dialogs.build({
                 customView: views,
                 wrapInScrollView: false,

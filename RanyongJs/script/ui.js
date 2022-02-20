@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 16:29:30
+ * @LastEditTime: 2022-02-20 20:34:18
  */
 "ui";
 // 导包
@@ -14,7 +14,7 @@ importClass(java.io.File)
 context_DayOrNight = 1
 // 透明导航栏
 activity.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-context_LogomarginTop = "10"
+context_LogomarginTop = "0"
 
 // 保存本地数据
 function setStorageData(name, key, value) {
@@ -82,14 +82,20 @@ function setDayMode() {
     context_textColor = "#000000" // 全局文字颜色
     context_texBg = "#FAFAFA" // 文本背景
     context_Fgx = "#EEEEEE" // 分割线颜色
+    context_TBbgColor = "FF5722" //淘宝背景颜色
+    context_PDDbgColor = "FF1744" //拼多多背景颜色
+    context_WBbgColor = "FF8F00" //微博背景颜色
     context_WXbgColor = "4CAF50" //微信背景颜色
     context_QQbgColor = "2196F3" //QQ背景颜色
+    context_JDbgColor = "F44336" //京东背景颜色
+    context_WMbgColor = "FD7034" //完美校园背景颜色
     context_JBScolor = "FAFAFA" // 卡片渐变颜色
     context_SettingsCard = "#F5F5F5" //设置卡片颜色
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop"); // Logo 顶图
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️  日间模式
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
     context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png"; // 设置首页顶部LOGO 需要重新更改色域
+    context_author_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/other/%E8%84%9A%E6%9C%AC%E4%BD%9C%E8%80%85New.png"
     context_TopPics = getStorageData("DayUiPicture", "TopPics");    // 顶图轮播图
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -128,9 +134,14 @@ function setNightMode() {
     context_textColor = "#FFFFFF" // 全局文字颜色
     context_texBg = "#000000" // 文本背景
     context_Fgx = "#50EEEEEE" // 分割线颜色
+    context_TBbgColor = "000000" //淘宝背景颜色
+    context_PDDbgColor = "000000" //拼多多背景颜色
+    context_WBbgColor = "000000" //微博背景颜色
     context_WXbgColor = "000000" //微信背景颜色
     context_QQbgColor = "000000" //QQ背景颜色
-    context_JBScolor = "000000" // 渐变色
+    context_JDbgColor = "000000" //京东背景颜色
+    context_WMbgColor = "000000" //完美校园背景颜色
+    context_JBScolor = "000000"
     context_SettingsCard = "#616161" //设置卡片颜色
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
@@ -204,7 +215,6 @@ function md5(string) {
     return java.math.BigInteger(1, java.security.MessageDigest.getInstance("MD5")
         .digest(java.lang.String(string).getBytes())).toString(4 * 4);
 }
-
 // 在Sign页面返回弹出UI界面锁定
 ui.emitter.on("back_pressed", e => {
     try {
@@ -260,7 +270,6 @@ ui.emitter.on("resume", function () {
         ui.autoService.checked = auto.service != null
     } catch (e) { }
 })
-
 // 创建Sign界面验证码 采用 md5() 加密 
 if (getStorageData("SignUp", "SignKey") != undefined &&
     md5(getStorageData("SignUp", "SignKey")) == "18acc87c4ffb6d96007f0dd907e6da52") {
@@ -307,12 +316,12 @@ function mainUi() {
                         <img id="Pics" src="{{context_TopPics}}" scaleType="fitXY" />
                         <text id="CopyrightTop" textColor="{{context_textColor}}" textSize="5" gravity="bottom|right" margin="2 0 5 2" padding="0 0 0 0" />
                     </card>
-                    <img id="UiLogo" src="{{context_Logo}}" h="60" marginTop="{{context_LogomarginTop}}" marginBottom="10" />
+                    <img id="UiLogo" src="{{context_Logo}}" h="60" marginTop="50" marginBottom="10" />
                     <linear orientation="horizontal" align="left">
                         <HorizontalScrollView>
                             <linear orientation="horizontal" align="left" h="70" padding="0 10">
                                 <card w="150dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_textColor}}" alpha="0.7">
-                                    <card h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}">
+                                    <card h="40" w="*" margin="5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="{{context_framebg}}">
                                         <Switch id="autoService" margin="7 0" text="无障碍服务" textColor="{{context_textColor}}" gravity="center" textStyle="bold" checked="{{auto.service != null}}" textSize="12sp" />
                                     </card>
                                 </card>
@@ -341,6 +350,34 @@ function mainUi() {
                     </linear>
                     {/* 脚本列表 */}
                     <card h="1" margin="5 5" cardCornerRadius="1dp" cardElevation="0dp" gravity="center_vertical" cardBackgroundColor="{{context_Fgx}}" />
+                    <linear orientation="horizontal" align="left" margin="0 5 0 0">
+                        <card id="R_JD" layout_weight="50" h="120" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5" foreground="?selectableItemBackground">
+                            <View id="Jingdongbg" bg="#{{context_JDbgColor}}" h="*" w="*" />
+                            <linear orientation="horizontal" align="left" margin="0">
+                                <img src="https://app.jd.com/uploads/client-1.png" w="30" h="26" margin="15 18 0 0" />
+                                <vertical padding="0 0" h="auto">
+                                    <text text="京东" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="0 23 0 0" />
+                                </vertical>
+                            </linear>
+                            <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
+                                <View bg="#90{{context_JDbgColor}}" />
+                                <spinner id="sp_Jd1" entries="种豆得豆自动脚本|自动宠汪汪" textColor="#FFFFFF" align="center" marginLeft="10" textSize="15" gravity="center" />
+                            </card>
+                        </card>
+                        <card h="120" layout_weight="50" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="5 0 3 5">
+                            <View id="Weibobg" bg="#{{context_WBbgColor}}" h="*" w="*" />
+                            <linear orientation="horizontal" align="left" margin="0">
+                                <img src="https://pp.myapp.com/ma_icon/0/icon_9926_1588143998/96" w="20" h="20" margin="20 23 0 0" />
+                                <vertical padding="0 0" h="auto">
+                                    <text text="微博" typeface="sans" textStyle="bold" color="#FFFFFF" gravity="center" size="15" margin="5 23 0 0" />
+                                </vertical>
+                            </linear>
+                            <card w="*" h="40" cardCornerRadius="5dp" cardElevation="0dp" margin="20 20 20 0" gravity="center" layout_gravity="center">
+                                <View w="*" h="*" bg="#90{{context_WBbgColor}}" />
+                                <text id="ScriptNine" text="微博任务自动脚本" typeface="sans" color="#FFFFFF" gravity="center" size="15" marginTop="0" bg="?attr/selectableItemBackground" clickable="true" />
+                            </card>
+                        </card>
+                    </linear>
                     <linear orientation="horizontal" align="left" margin="0">
                         <card h="120" layout_weight="50" cardCornerRadius="10dp" cardElevation="2dp" align="left" margin="3 0 5 5">
                             <View id="Weixinbg" bg="#{{context_WXbgColor}}" h="*" w="*" />
@@ -427,8 +464,10 @@ function mainUi() {
     }
     // 图标渐变色背景
     if (getStorageData("ColorSetting", "GradientColor") != undefined) {
+        ui.Weibobg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_WBbgColor, "#" + context_WBbgColor, "#" + context_WBbgColor]);
+        ui.Weixinbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_WXbgColor, "#" + context_WXbgColor, "#" + context_WXbgColor]);
         ui.QQbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_QQbgColor, "#" + context_QQbgColor, "#" + context_QQbgColor, "#" + context_QQbgColor]);
-        ui.WXbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_WXbgColor, "#" + context_WXbgColor, "#" + context_WXbgColor, "#" + context_WXbgColor, "#" + context_WXbgColor]);
+        ui.Jingdongbg.backgroundDrawable = GradientDrawable("TL_BR", ["#50" + context_JBScolor, "#" + context_JDbgColor, "#" + context_JDbgColor, "#" + context_JDbgColor]);
     }
     // 点击logo进行间距调整
     ui.UiLogo.click(() => {
@@ -706,7 +745,7 @@ function mainUi() {
         function RefreshMainUI() {
             app.startActivity({
                 action: "android.intent.action.VIEW",
-                packageName: "com.ranyong.RanyongJs", // 打包包名
+                packageName: "com.ranyong.ranyongjs", // 打包包名
                 className: "com.stardust.auojs.inrt.SplashActivity"
             })
         }
@@ -717,17 +756,39 @@ function mainUi() {
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     })
+    ui.R_JD.click(() => {
+        if (ui.sp_Jd1.getSelectedItemPosition() == 1) {
+            let Url = "https://gitee.com/Orange_shirt/OrangeJs/raw/master/OrangeJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA.js"
+            log("URL--->", Url)
+            let str = 'RunScript("' + Url + '","自动宠汪汪","com.jingdong.app.mall")';
+            let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
+            engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
+        } else if (ui.sp_Jd1.getSelectedItemPosition() == 0) {
+            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E7%A7%8D%E8%B1%86%E5%BE%97%E8%B1%86%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let str = 'RunScript("' + Url + '","种豆得豆自动脚本","com.jingdong.app.mall")';
+            let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
+            engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
+        }
+    });
+    ui.ScriptNine.click(() => {
+        let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E5%BE%AE%E5%8D%9A%E4%BB%BB%E5%8A%A1%E8%87%AA%E5%8A%A8%E8%84%9A%E6%9C%AC_%E5%BE%AE%E5%8D%9A%E8%84%9A%E6%9C%AC.js";
+        let str = 'RunScript("' + Url + '","微博任务自动脚本","com.sina.weibo")';
+        let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
+        engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
+    });
+
     ui.ScriptThi.click(() => {
         let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%8A%A8%E6%80%81%E7%82%B9%E8%B5%9E_QQ%E8%84%9A%E6%9C%AC.js";
         let str = 'RunScript("' + Url + '","自动动态点赞","com.tencent.mobileqq")';
         let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
         engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
     });
+
     ui.TalktoDeveloper.click(() => {
         TalkToDeveloper();
     });
 
-    // 点击停止所有脚本
+
     ui.StopAllScript.click(() => {
         controlScript();
         function controlScript() {
@@ -874,8 +935,8 @@ function mainUi() {
                             });
                         }
                     }
-                    // DHK.alljslist.setDataSource(items);
-                    // DHK.finaldel.attr("h", 0);
+                    DHK.alljslist.setDataSource(items);
+                    DHK.finaldel.attr("h", 0);
                     DHK.checkAllText.setText("全选");
                     DHK.checkAll.setSource("@drawable/ic_panorama_fish_eye_black_48dp");
                 });
@@ -1087,7 +1148,7 @@ function mainUi() {
     ui.ViewLog.click(() => {
         app.startActivity({
             action: "android.intent.action.VIEW",
-            packageName: "com.ranyong.RanyongJs",
+            packageName: "com.ranyong.orangejs",
             className: "com.stardust.auojs.inrt.LogActivity"
         });
     })
@@ -1152,20 +1213,21 @@ function mainUi() {
         SP();
     });
 }
-
-// 登录界面
 function SignUp() {
     context_NowUi = "SignUp";
     activity.window.addFlags(android.view.WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); //设置状态栏透明
     ui.layout(
         <scroll bg="#FFFFFF">
-            <vertical layout_gravity="center">
+            <vertical layout_gravity="center" marginBottom="0">
+                <linear orientation="horizontal" gravity="center">
+                    <img src="{{context_Logo}}" w="85" h="35" />
+                </linear>
                 <text text="欢迎使用" textSize="45sp" textColor="#000000" gravity="center" />
                 <text text="全新1.1.0主界面" marginTop="10" textSize="15sp" textColor="#000000" gravity="center" />
                 <linear orientation="horizontal" gravity="center" marginTop="150">
                     <card w="150dp" h="50" marginRight="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#2196F3" alpha="0.7">
                         <card id="SignUp" h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="#FFFFFF" foreground="?selectableItemBackground" clickable="true">
-                            <text text="密码：ranyong" textStyle="bold" color="#2196F3" gravity="center" size="12" />
+                            <text text="填写注册问卷" textStyle="bold" color="#2196F3" gravity="center" size="12" />
                         </card>
                     </card>
                     <card w="50dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#4CAF50" alpha="0.7">
@@ -1191,7 +1253,7 @@ function SignUp() {
                 </ScrollView>
             </vertical>
         )
-        view.webview.loadUrl("https://api.nmb.show/xiaojiejie2.php");  // 填写注册问卷
+        view.webview.loadUrl("https://www.wjx.top/jq/94788811.aspx");  // 填写注册问卷
         view.ExitScript.click(() => {
             android.webkit.WebStorage.getInstance().deleteAllData();
             DHK.dismiss()
@@ -1238,6 +1300,7 @@ function SignUp() {
                 }).show()
             } else {
                 view.password.setError("激活码输入错误")
+
             }
         });
         let DHK = dialogs.build({
@@ -1247,8 +1310,6 @@ function SignUp() {
         }).show()
     })
 }
-
-// 设置界面
 function SettingsUI() {
     context_NowUi = "SettingsUI";
     events.removeAllListeners();
@@ -1266,7 +1327,6 @@ function SettingsUI() {
                     <list id='ZhuTiTu' orientation="horizontal" layout_gravity="center_vertical" layout_weight="80">
                         <card w="180" h="180" cardCornerRadius="5dp" cardElevation="5dp" layout_gravity="center" cardBackgroundColor="{{context_Fgx}}" margin="5" foreground="?attr/selectableItemBackground" clickable="true">
                             {/* <img id="picView" src="{{this.Picture}}" scaleType="centerCrop" /> */}
-                            <img id="picView" src="{{this.Picture}}" />
                             <card h="20" cardCornerRadius="2dp" cardElevation="0dp" layout_gravity="bottom|center" cardBackgroundColor="{{context_framebg}}" margin="50 5" alpha="0.8">
                                 <text text="{{this.TextofPic}}" textSize="10" textColor="{{context_textColor}}" margin="0 0 0 0" gravity="center" />
                             </card>
@@ -1334,7 +1394,7 @@ function SettingsUI() {
                             <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
                         </linear>
                     </card>
-                    <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
+                    {/* <card id="Appsettings" h="50" cardCornerRadius="10dp" cardElevation="0dp" gravity="center_vertical" marginTop="10" cardBackgroundColor="{{context_SettingsCard}}" foreground="?attr/selectableItemBackground" clickable="true">
                         <linear orientation="horizontal" gravity="center||left">
                             <img src="@drawable/ic_open_in_new_black_48dp" w="30" h="30" circle="true" tint="{{context_textColor}}" marginLeft="10" />
                             <linear orientation="vertical" marginLeft="5" gravity="center">
@@ -1344,7 +1404,7 @@ function SettingsUI() {
                         <linear gravity="center||right" marginRight="10">
                             <img marginRight="25" src="@drawable/ic_keyboard_arrow_right_black_48dp" w="15" h="15" circle="true" tint="{{context_textColor}}" />
                         </linear>
-                    </card>
+                    </card> */}
                 </vertical>
             </scroll>
             <fab id="back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
@@ -1445,7 +1505,7 @@ function SettingsUI() {
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             } else if (context_DayOrNight == 1) {
-                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg.png","顶图","' + Pcopyright + '")';
+                                let str = 'imgDownLoad("' + Purl + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png","顶图","' + Pcopyright + '")';
                                 let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                                 engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                             }
@@ -1674,6 +1734,7 @@ function SettingsUI() {
                     autoDismiss: false
                 }).show();
             });
+
             view.BeTopPic.click(() => {
                 DHK.dismiss();
                 if (context_DayOrNight == 0) {
@@ -1787,7 +1848,7 @@ function SettingsUI() {
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 } else if (context_DayOrNight == 1) {
-                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg.png","顶图","' + item.CopyrightOfPicture + '")';
+                    let str = 'imgDownLoad("' + item.Picture + '","/storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png","顶图","' + item.CopyrightOfPicture + '")';
                     let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";';
                     engines.execScript("下载图片", "" + sharevalue + str + ";\n" + imgDownLoad.toString());
                 }
@@ -2303,14 +2364,14 @@ function SettingsUI() {
             engines.execScript("开关人员代码测试", "'ui';\nTESTCode();\n" + TESTCode.toString());
         }
     });
-    ui.Appsettings.click(() => {
-        log("点击软件自带设置")
-        app.startActivity({
-            action: "android.intent.action.VIEW",
-            packageName: "com.orange.orangejs",
-            className: "com.stardust.auojs.inrt.SettingsActivity"
-        });
-    });
+    // ui.Appsettings.click(() => {
+    //     log("点击软件自带设置")
+    //     app.startActivity({
+    //         action: "android.intent.action.VIEW",
+    //         packageName: "com.orange.orangejs",
+    //         className: "com.stardust.auojs.inrt.SettingsActivity"
+    //     });
+    // });
     var ZhuTiTu = [];
     if (context_TopPics != undefined && context_TopPics != "http://www.google.com") {
         ZhuTiTu.push({
@@ -2326,28 +2387,28 @@ function SettingsUI() {
     }
     if (context_DayOrNight == 1) {
         ZhuTiTu.push({
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+            TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
             Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
@@ -2363,69 +2424,69 @@ function SettingsUI() {
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         });
     }
-    else if (context_DayOrNight == 0) {
-        ZhuTiTu.push({
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©《星际穿越》(Interstellar)"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©《刺猬索尼克》(Sonic the Hedgehog)"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "示例底图",
-            CopyrightOfPicture: "©《为全人类》(For All Mankind)"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©索尼Sony"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©《哥斯拉》(Godzilla: King of the Monsters)"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©《蜘蛛侠》"
-        }, {
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            TextofPic: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            CopyrightOfPicture: "©《少年派的奇幻漂流》(Life of Pi)"
-        });
-    }
+    // else if (context_DayOrNight == 0) {
+    //     ZhuTiTu.push({
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《星际穿越》(Interstellar)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《刺猬索尼克》(Sonic the Hedgehog)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例底图",
+    //         CopyrightOfPicture: "©《为全人类》(For All Mankind)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©索尼Sony"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《哥斯拉》(Godzilla: King of the Monsters)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《蜘蛛侠》"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《少年派的奇幻漂流》(Life of Pi)"
+    //     });
+    // }
     ui.ZhuTiTu.setDataSource(ZhuTiTu);
+    // log("ZhuTiTu", ZhuTiTu);
+    log(getStorageData('APPbasic', 'URLprefix'))
 }
-
-// 反馈问题
 function TalkToDeveloper() {
     context_NowUi = "TalkToDeveloper";
     ui.layout(
@@ -2471,8 +2532,6 @@ function TalkToDeveloper() {
         }
     }, 100);
 }
-
-// 关于软件
 function AboutApp() {
     context_NowUi = "AboutApp";
     ui.layout(
@@ -2486,7 +2545,7 @@ function AboutApp() {
                         <View bg="#FFEA3324" h="*" w="*" />
                     </card>
                     <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <img src="{{context_Logo}}" layout_gravity="center" color="{{context_textColor}}" w="150" h="30" />//作者名
+                    <img src="{{context_author_Logo}}" color="{{context_textColor}}" layout_gravity="center" w="auto" h="40" />
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
@@ -2536,7 +2595,6 @@ function AboutApp() {
     });
 }
 
-// 隐私条款
 function SP() {
     context_NowUi = "SP";
     events.removeAllListeners();
@@ -2651,8 +2709,6 @@ function SP() {
         mainUi();
     });
 }
-
-// 代码调试
 function TESTCode() {
     context_framebg = importClass(android.view.WindowManager);
     ui.statusBarColor("#000000");
@@ -2736,8 +2792,6 @@ function TESTCode() {
     }).show();
     //感谢 @抠脚本人 对此处代码的优化 ：D
 }
-
-// 网络初始化
 var ResultIntent = {
     intentCallback: {},
     init: function () {
@@ -2765,11 +2819,9 @@ var ResultIntent = {
     }
 };
 ResultIntent.init();
-
-// 下载图片到指定路径
 function URIUtils_uriToFile(uri) { //Source : https://www.cnblogs.com/panhouye/archive/2017/04/23/6751710.html
     var r = null,
-        cursor, selection = null,
+        cursor, column_index, selection = null,
         selectionArgs = null,
         isKitKat = android.os.Build.VERSION.SDK_INT >= 19,
         docs;
@@ -2813,8 +2865,7 @@ function URIUtils_uriToFile(uri) { //Source : https://www.cnblogs.com/panhouye/a
     }
     return null;
 }
-// 
-function startChooseFile(mimeType, Type) {
+function startChooseFile(mimeType, callback, Type) {
     var i = new android.content.Intent(android.content.Intent.ACTION_GET_CONTENT);
     i.setType(mimeType);
     ResultIntent.startActivityForResult(i, function (resultCode, data) {
@@ -2869,7 +2920,6 @@ function startChooseFile(mimeType, Type) {
         }
     });
 }
-// 分享图片
 function shareFile(file, type) {
     importPackage(android.content);
     importClass(android.net.Uri);
@@ -2885,7 +2935,7 @@ function shareFile(file, type) {
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
     context.startActivity(intent);
 }
-// 下载图片
+
 function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
     let view = ui.inflate(
         <vertical padding="25 0" bg="{{context_framebg}}">
@@ -2958,15 +3008,15 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                         }
                         context_TopPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/夜间示例顶图.png"
                     } else if (context_DayOrNight == 1) {
-                        // setStorageData("DayUiPicture", "TopPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg.png");
+                        setStorageData("DayUiPicture", "TopPics", "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png");
                         if (PicCopyright != undefined) {
-                            // setStorageData("DayUiPicture", "TopPicsCopyright", PicCopyright);
+                            setStorageData("DayUiPicture", "TopPicsCopyright", PicCopyright);
                             context_TopPics_Copyright = PicCopyright;
                         } else {
-                            // setStorageData("DayUiPicture", "TopPicsCopyright", "");
+                            setStorageData("DayUiPicture", "TopPicsCopyright", "");
                             context_TopPics_Copyright = "";
                         }
-                        context_TopPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg.png";
+                        context_TopPics = "file:///storage/emulated/0/RanyongJs/主界面示例图片/示例顶图.png";
                     }
                 }
                 context_imgDownloadDHK.dismiss();
@@ -3049,13 +3099,13 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
     }, 20000);
 }
 
-// 判断脚本是否存在
 function haveScript(scriptName) {
     try {
         for (let i = 0; i < engines.all().length; i++) {
             if (scriptName + ".js" == engines.all()[i].getSource().toString().match(/([^/]+)$/)[1] ||
                 scriptName == engines.all()[i].getSource().toString().match(/([^/]+)$/)[1]) {
                 return true;
+                break;
             }
         }
     } catch (e) {
@@ -3063,7 +3113,6 @@ function haveScript(scriptName) {
     }
 }
 
-// APP控件获取
 function UiObjectSearch() {
     if (context_framebg == "#000000") {
         ui.statusBarColor(context_framebg);
