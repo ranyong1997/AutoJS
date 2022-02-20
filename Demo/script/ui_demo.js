@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 11:28:42
+ * @LastEditTime: 2022-02-20 14:34:10
  */
 "ui";
 // 导包
@@ -94,7 +94,7 @@ function setDayMode() {
     context_LogomarginTop = getStorageData("DayUi", "LogomarginTop"); // Logo 顶图
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️  日间模式
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
-    context_Logo = "https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/ranyongJS-logoBlack.png"; // 设置首页顶部LOGO 需要重新更改色域
+    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png"; // 设置首页顶部LOGO 需要重新更改色域
     context_TopPics = getStorageData("DayUiPicture", "TopPics");    // 顶图轮播图
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -145,7 +145,7 @@ function setNightMode() {
     context_LogomarginTop = getStorageData("NightUi", "LogomarginTop");
     context_SunMoon = "@drawable/ic_brightness_2_black_48dp"; //🌙
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png";
-    context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png"; // 设置首页顶部LOGO 勿动
+    context_Logo = "https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/ranyongJS-logoBlack.png"; // 设置首页顶部LOGO 勿动
     context_TopPics = getStorageData("NightUiPicture", "TopPics");
     context_TopPics_Copyright = getStorageData("NightUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("NightUiPicture", "BottomPics");
@@ -421,7 +421,7 @@ function mainUi() {
             </frame>
         </scroll>
     );
-    {/* 首次进入主界面进行用户引导 */}
+    {/* 首次进入主界面进行用户引导 */ }
     if (getStorageData("mainUi", "NewWay") == undefined) {
         let view = ui.inflate(
             <vertical bg="{{context_framebg}}">
@@ -749,7 +749,8 @@ function mainUi() {
     })
     ui.R_JD.click(() => {
         if (ui.sp_Jd1.getSelectedItemPosition() == 1) {
-            let Url = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA_%E4%BA%AC%E4%B8%9C%E8%84%9A%E6%9C%AC.js";
+            let Url = "https://gitee.com/Orange_shirt/OrangeJs/raw/master/OrangeJs_%E8%87%AA%E5%8A%A8%E5%AE%A0%E6%B1%AA%E6%B1%AA.js"
+            log("URL--->", Url)
             let str = 'RunScript("' + Url + '","自动宠汪汪","com.jingdong.app.mall")';
             let sharevalue = 'context_framebg="' + context_framebg + '";context_textColor="' + context_textColor + '";context_DayOrNight="' + context_DayOrNight + '";context_SettingsCard="' + context_SettingsCard + '";context_Logo="' + context_Logo + '";';
             engines.execScript("请求脚本", "" + sharevalue + str + ";\n" + RunScript.toString());
@@ -2377,103 +2378,105 @@ function SettingsUI() {
     }
     if (context_DayOrNight == 1) {
         ZhuTiTu.push({
-            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/blob/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
-            // https://gitee.com/mirrors_Orange-shirt/OrangeJs/blob/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg
+            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-08.00.59.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.06.03.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.06.39.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.07.53.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.03.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例顶图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-07.56.51.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例底图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_04-30-07.19.32.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例底图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.13.12.jpg",
+            Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
             TextofPic: "示例底图",
             CopyrightOfPicture: "©照明娱乐Illumination Entertainment"
         });
-    } else if (context_DayOrNight == 0) {
-        ZhuTiTu.push({
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE01.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE02.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE03.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE04.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE05.png",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©《星际穿越》(Interstellar)"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE07.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©《刺猬索尼克》(Sonic the Hedgehog)"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE08.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE09.jpg",
-            TextofPic: "示例底图",
-            CopyrightOfPicture: "©《为全人类》(For All Mankind)"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE10.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE11.png",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©索尼Sony"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE12.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©《哥斯拉》(Godzilla: King of the Monsters)"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE14.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©迪士尼Disney"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE15.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©《蜘蛛侠》"
-        }, {
-            Picture: getStorageData('APPbasic', 'URLprefix') + "/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/%E5%A4%9C%E9%97%B4%E7%A4%BA%E4%BE%8B%E5%9B%BE17.jpg",
-            TextofPic: "示例顶图",
-            CopyrightOfPicture: "©《少年派的奇幻漂流》(Life of Pi)"
-        });
-    }
+    } 
+    // else if (context_DayOrNight == 0) {
+    //     ZhuTiTu.push({
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《星际穿越》(Interstellar)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《刺猬索尼克》(Sonic the Hedgehog)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例底图",
+    //         CopyrightOfPicture: "©《为全人类》(For All Mankind)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©索尼Sony"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《哥斯拉》(Godzilla: King of the Monsters)"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©迪士尼Disney"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《蜘蛛侠》"
+    //     }, {
+    //         Picture: "https://gitee.com/mirrors_Orange-shirt/OrangeJs/raw/master/%E5%9B%BE%E7%89%87%E7%9B%B4%E9%93%BE/PicsArt_05-04-10.09.31.jpg",
+    //         TextofPic: "示例顶图",
+    //         CopyrightOfPicture: "©《少年派的奇幻漂流》(Life of Pi)"
+    //     });
+    // }
     ui.ZhuTiTu.setDataSource(ZhuTiTu);
+    // log("ZhuTiTu", ZhuTiTu);
+    log(getStorageData('APPbasic', 'URLprefix'))
 }
 function TalkToDeveloper() {
     context_NowUi = "TalkToDeveloper";
@@ -2526,15 +2529,14 @@ function AboutApp() {
         <frame w="*" h="*" background="{{context_framebg}}">
             <scroll bg="{{context_framebg}}">
                 <vertical align="left">
-                    <img src="{{context_Logo}}" w="auto" h="50" gravity="center" />
+                    <img src="{{context_Logo}}" w="auto" h="150" gravity="center" color="{{context_textColor}}" />
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
+                        <vertical padding="0 0" h="auto" />
                         <View bg="#FFEA3324" h="*" w="*" />
                     </card>
                     <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名
+                    <img src="{{context_Logo}}" layout_gravity="center" color="{{context_textColor}}" w="150" h="30" />//作者名
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
@@ -2551,24 +2553,20 @@ function AboutApp() {
                     </card>
                     <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
                     <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center" />
-
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
+                    <card h="5" marginTop="10" cardCornerRadius="0dp" cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
                         </vertical>
                         <View bg="#FF34A853" h="*" w="*" />
                     </card>
                     <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
                     <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
+                    <card h="5" marginTop="10" cardCornerRadius="0dp" cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
                         </vertical>
                         <View bg="#FF4285F4" h="*" w="*" />
                     </card>
                     <text id="Ttip" color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center" />
-                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
+                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp" cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
                         </vertical>
                         <View bg="#FF9D41F9" h="*" w="*" />
@@ -2582,75 +2580,7 @@ function AboutApp() {
     ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
     ui.OpenSource.text("Github：https://github.com/ranyong1997/AutoJS" + "\nGitee：https://gitee.com/ran_yong/auto.js");
     ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
-    ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
-    ui.Back.click(() => {
-        mainUi();
-    });
-}
-function AboutApp() {
-    context_NowUi = "AboutApp";
-    ui.layout(
-        <frame w="*" h="*" background="{{context_framebg}}">
-            <scroll bg="{{context_framebg}}">
-                <vertical align="left">
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/OrangeJs-Logo.png" marginTop="50" w="auto" h="50" gravity="center" />//应用logo */}
-                    <img src="{{context_Logo}}" w="auto" h="50" gravity="center" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFEA3324" h="*" w="*" />
-                    </card>
-                    <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    {/* <img src="{{getStorageData('APPbasic', 'URLprefix')}}/authorName.png" layout_gravity="center" w="150" tint="{{context_textColor}}" h="30" />//作者名 */}
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFFF711F" h="*" w="*" />
-                    </card>
-                    <text text="软件版本" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="AppVision" color="{{context_textColor}}" textSize="20" textStyle="normal" gravity="center" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FFFABB06" h="*" w="*" />
-                    </card>
-                    <text text="设备信息" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="DeviceInformation" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="center" />
-
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF34A853" h="*" w="*" />
-                    </card>
-                    <text text="项目开源地址" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <text id="OpenSource" autoLink="web" color="{{context_textColor}}" textSize="15" textStyle="normal" gravity="left" margin="10 0" />
-                    <card h="5" marginTop="10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF4285F4" h="*" w="*" />
-                    </card>
-                    <text id="Ttip" color="{{context_textColor}}" textSize="15" textStyle="normal" marginTop="5" gravity="center" />
-                    <card h="5" margin="0 10 0 10" cardCornerRadius="0dp"
-                        cardElevation="0dp" gravity="center_vertical">
-                        <vertical padding="0 0" h="auto">
-                        </vertical>
-                        <View bg="#FF9D41F9" h="*" w="*" />
-                    </card>
-                </vertical>
-            </scroll>
-            <fab id="Back" w="auto" h="auto" src="@drawable/ic_arrow_back_black_48dp"
-                margin="0 0 15 15" layout_gravity="bottom|right" tint="#ffffff" />
-        </frame>
-    );
-    ui.AppVision.text(app.versionName + "(" + app.versionCode + ")");
-    ui.OpenSource.text("Github：https://github.com/ranyong1997/AutoJS" + "\nGitee：https://gitee.com/ran_yong/auto.js");
-    ui.DeviceInformation.text("设备品牌/型号：" + device.brand + "(" + device.model + ")\n" + "安卓版本：" + device.release + device.baseOS + "\n修订版本号：" + device.buildId + "\n设备分辨率：" + device.height + "*" + device.width);
-    ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途");
+    ui.Ttip.text("此软件/脚本均为兴趣制作，仅供学习参考交流使用\n请勿将本软件/脚本用于任何商业用途\n如果软件对你有帮助，请Start🌟以资鼓励");
     ui.Back.click(() => {
         mainUi();
     });
@@ -2663,7 +2593,7 @@ function SP() {
         <frame background="{{context_framebg}}">
             <vertical align="left" margin="10 25 10 0">
                 <linear orientation="horizontal" gravity="left||center">
-                    {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
+                    <img src="{{context_Logo}}" w="85" h="35" color="{{context_textColor}}" />
                     <linear orientation="horizontal" w="match_parent" gravity="right||center">
                         <text text="隐私与安全" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
                     </linear>
@@ -3128,6 +3058,7 @@ function imgDownLoad(imgUrl, imgSavePath, WhatIsThis, PicCopyright) {
                     <text id="tip" textSize="10" margin="10 5 10 5" textColor="{{context_textColor}}" alpha="0.8" />
                 </vertical>, null, false);
             views.tip.setText("当前网络错误，请检查后重试\n错误代码：" + e);
+            log("下载错误--->",e)
             dialogs.build({
                 customView: views,
                 wrapInScrollView: false,
@@ -3192,7 +3123,6 @@ function UiObjectSearch() {
             <scroll>
                 <vertical>
                     <linear orientation="horizontal" gravity="left||center">
-                        {/* <img src="{{context_Logo}}" w="85" h="35" /> */}
                         <linear orientation="horizontal" w="match_parent" gravity="right||center">
                             <text text="APP控件数据获取" textStyle="bold" textSize="25" textColor="{{context_textColor}}" marginRight="5" />
                         </linear>
