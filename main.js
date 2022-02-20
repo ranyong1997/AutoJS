@@ -3,12 +3,12 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-16 18:13:34
+ * @LastEditTime: 2022-02-20 20:38:09
  * @description: 
  * @param: 
  * @return: 
  */
-var commonFun = require("./Demo/lib/common")
+var commonFun = require("./RanyongJs/lib/common")
 function init() {
     // 设置日志文件
     try {
@@ -49,4 +49,4 @@ function init() {
 
 }
 init()
-require("./Demo/script/demo.js");
+require("./RanyongJs/ui/ui.js");
