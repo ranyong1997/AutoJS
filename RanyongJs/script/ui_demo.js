@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 14:34:10
+ * @LastEditTime: 2022-02-20 20:11:42
  */
 "ui";
 // 导包
@@ -95,6 +95,7 @@ function setDayMode() {
     context_SunMoon = "@drawable/ic_wb_sunny_black_48dp"; //☀️  日间模式
     // context_Logo = getStorageData('APPbasic', 'URLprefix') + "/RanyongJs_logo.png"; // 设置首页顶部LOGO
     context_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite.png"; // 设置首页顶部LOGO 需要重新更改色域
+    context_author_Logo = "https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/other/%E8%84%9A%E6%9C%AC%E4%BD%9C%E8%80%85.png"
     context_TopPics = getStorageData("DayUiPicture", "TopPics");    // 顶图轮播图
     context_TopPics_Copyright = getStorageData("DayUiPicture", "TopPicsCopyright");
     context_BottomPics = getStorageData("DayUiPicture", "BottomPics");
@@ -2536,7 +2537,7 @@ function AboutApp() {
                         <View bg="#FFEA3324" h="*" w="*" />
                     </card>
                     <text text="软件及脚本开发者" color="{{context_textColor}}" textSize="10" textStyle="normal" marginLeft="5" />
-                    <img src="{{context_Logo}}" layout_gravity="center" color="{{context_textColor}}" w="150" h="30" />//作者名
+                    <img src="{{context_author_Logo}}" layout_gravity="center"  w="auto" h="40" />//作者名
                     <card h="5" marginTop="10" cardCornerRadius="0dp"
                         cardElevation="0dp" gravity="center_vertical">
                         <vertical padding="0 0" h="auto">
