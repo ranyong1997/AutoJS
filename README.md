@@ -145,7 +145,7 @@ Node.js 官方下载地址：https://nodejs.org/en/download/  根据你的电脑
 | RecyclerView   | 复用容器     |
 | ScrollView     | 滚动容器     |
 
-![image-20210306153008566](https://gitee.com/ran_yong/auto.js/raw/master/img/image-20210306153008566.png)
+![image-20210306153008566](https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210306153008566.png)
 
 ## API文档
 
