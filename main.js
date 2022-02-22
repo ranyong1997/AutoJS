@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-20 20:38:09
+ * @LastEditTime: 2022-02-22 23:59:58
  * @description: 
  * @param: 
  * @return: 
@@ -49,4 +49,4 @@ function init() {
 
 }
 init()
-require("./RanyongJs/ui/ui.js");
+require("./RanyongJs/ui/demo.js");
