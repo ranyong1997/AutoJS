@@ -180,6 +180,20 @@ commonFunc.uninstallApp = function (bid) {
     return !app.getAppName(bid) ? true : false
 }
 
+/**
+ * 获取版本号
+ * @param {*} package_name  包名
+ * @returns 
+ */
+function getVersion(package_name) {
+    let pkgs = context.getPackageManager().getInstalledPackages(0).toArray();
+    for (let i in pkgs) {
+        if (pkgs[i].packageName.toString() === package_name) {
+            return pkgs[i].versionName;
+        }
+    }
+}
+
 
 /*
     * Javascript md5() 函数 用于生成字符串对应的md5值
@@ -1598,10 +1612,9 @@ commonFunc.showLog = function (text, info, mode) {
             commonFunc.statusBox = floaty.rawWindow(
                 <card bg="#80000000">
                     <vertical align="center">
-                        <img src="https://gitee.com/ran_yong/auto.js/raw/master/Log/ranyongJS-logoWhite%202.png" h="50" margin="0 10 0 5" />
+                        <img src="https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/other/ranyongJS-logoWhite.png" h="50" margin="0 10 0 5" />
                         <text text="─ 当前脚本运行日志 ─" textSize="15" color="#FFFFFF" textStyle="bold" gravity="center" margin="0 0 0 5" />
                         <text id="text" text="" textSize="15" color="#FFFFFF" marginLeft="10" gravity="left" />
-                        {/* <text id="info" text="" textSize="15" color="#41de5b" marginLeft="10" gravity="left" /> */}
                     </vertical>
                 </card>
             );
@@ -1609,7 +1622,6 @@ commonFunc.showLog = function (text, info, mode) {
         ui.run(() => {
             var myDate = new Date();
             commonFunc.statusBox.text.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + "【" + log_text + "】" + "\n" + commonFunc.statusBox.text.getText());
-            // commonFunc.statusBox.info.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + "【" + info_text + "】" + "\n" + commonFunc.statusBox.info.getText());
             return true;
         });
         commonFunc.statusBox.setSize(device.width, 400);
@@ -1638,7 +1650,7 @@ commonFunc.StopAll = function () {
     var windowX, windowY;
     //记录按键被按下的时间以便判断长按等动作
     var downTime;
-    window.action.setOnTouchListener(function (getAction,event) {
+    window.action.setOnTouchListener(function (getAction, event) {
         switch (event.getAction()) {
             case event.ACTION_DOWN:
                 x = event.getRawX();

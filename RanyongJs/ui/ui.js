@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 20:34:18
+ * @LastEditTime: 2022-02-23 09:58:37
  */
 "ui";
 // 导包
@@ -1943,17 +1943,17 @@ function SettingsUI() {
                     </linear>
                 </vertical>, null, false);
             view.Determine.click(() => {
-                let day = String(view.Day.getText());
-                let night = String(view.Night.getText());
-                while (true) {
-                    if (day.search(" ") >= 0) {
-                        var day = day.replace(" ", "");
-                    } else if (night.search(" ") >= 0) {
-                        var night = night.replace(" ", "");
-                    } else {
-                        break;
-                    }
-                }
+                // let day = String(view.Day.getText());
+                // let night = String(view.Night.getText());
+                // while (true) {
+                //     if (day.search(" ") >= 0) {
+                //         var day = day.replace(" ", "");
+                //     } else if (night.search(" ") >= 0) {
+                //         var night = night.replace(" ", "");
+                //     } else {
+                //         break;
+                //     }
+                // }
                 if (day == "") {
                     view.Day.setError("您未输入任何内容");
                 } else if (night == "") {
