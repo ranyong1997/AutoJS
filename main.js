@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-22 23:59:58
+ * @LastEditTime: 2022-02-23 23:19:44
  * @description: 
  * @param: 
  * @return: 
@@ -46,7 +46,6 @@ function init() {
     } catch (error) {
         throw error
     }
-
 }
 init()
 require("./RanyongJs/ui/demo.js");
