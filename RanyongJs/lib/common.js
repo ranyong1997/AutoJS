@@ -1567,7 +1567,7 @@ commonFunc.randomNums = function (n, min, max) {
 
 
 /**
- * 悬浮窗日志 有bug 不会追加写入
+ * 悬浮窗日志 有bug 不会追加写入(废除)
  * @param {*} message 日志信息
  */
 commonFunc.logs = function (message, mode) {
@@ -1582,9 +1582,9 @@ commonFunc.logs = function (message, mode) {
             </card>
         );
         setInterval(() => { }, 1000);
-        w.setSize(device.width, 800);   // 显示大小
+        w.setSize(device.width, 400);   // 显示大小
         w.setTouchable(false);   // 是否可触碰
-        w.setPosition(0, device.height - 800);   // 设置控制台的位置
+        w.setPosition(0, device.height - 400);   // 设置控制台的位置
         var myDate = new Date();
         ui.run(() => {
             w.WZ.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + log_text + "\n" + w.WZ.getText());
@@ -1624,9 +1624,9 @@ commonFunc.showLog = function (text, info, mode) {
             commonFunc.statusBox.text.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + "【" + log_text + "】" + "\n" + commonFunc.statusBox.text.getText());
             return true;
         });
-        commonFunc.statusBox.setSize(device.width, 400);
+        commonFunc.statusBox.setSize(device.width, 800);
         commonFunc.statusBox.setTouchable(false);
-        commonFunc.statusBox.setPosition(0, device.height - 400);
+        commonFunc.statusBox.setPosition(0, device.height - 500);
         setInterval(() => { }, 1000);
         return true
     } catch (error) { log(error) }
