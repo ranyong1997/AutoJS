@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-02-18 16:28:03
- * @LastEditTime: 2022-02-20 20:33:42
+ * @LastEditTime: 2022-02-24 17:12:16
  */
 "ui";
 // 导包
@@ -1227,7 +1227,7 @@ function SignUp() {
                 <linear orientation="horizontal" gravity="center" marginTop="150">
                     <card w="150dp" h="50" marginRight="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#2196F3" alpha="0.7">
                         <card id="SignUp" h="40" w="*" margin="5 0 5 0" cardCornerRadius="20dp" cardElevation="0dp" align="center" cardBackgroundColor="#FFFFFF" foreground="?selectableItemBackground" clickable="true">
-                            <text text="填写注册问卷" textStyle="bold" color="#2196F3" gravity="center" size="12" />
+                            <text text="密码：ranyong" textStyle="bold" color="#2196F3" gravity="center" size="12" />
                         </card>
                     </card>
                     <card w="50dp" h="50" marginLeft="2" cardCornerRadius="25dp" cardElevation="0dp" gravity="center" cardBackgroundColor="#4CAF50" alpha="0.7">
@@ -1253,7 +1253,7 @@ function SignUp() {
                 </ScrollView>
             </vertical>
         )
-        view.webview.loadUrl("https://www.wjx.top/jq/94788811.aspx");  // 填写注册问卷
+        view.webview.loadUrl("https://tenapi.cn/acg");  // 填写注册问卷
         view.ExitScript.click(() => {
             android.webkit.WebStorage.getInstance().deleteAllData();
             DHK.dismiss()

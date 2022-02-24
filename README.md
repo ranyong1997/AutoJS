@@ -25,23 +25,23 @@
 
 ①下载Auto.js或者AutoPro.js软件
 
-![img](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308130921041.png)
+![img](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308130921041.png)
 
 ②开启无障碍服务
 
-![img](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131054481.png)
+![img](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131054481.png)
 
 无障碍服务每个品牌手机不一样，大家根据品牌手机开启即可
 
-![img](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131151595.png)
+![img](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131151595.png)
 
-![image-20210308131235144](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131235144.png)
+![image-20210308131235144](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131235144.png)
 
 # 
 
 悬浮窗有4个控件：
 
-![image-20210308131348210](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131348210.png)
+![image-20210308131348210](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131348210.png)
 
 - 1）脚本列表
 - 2）自动录制
@@ -88,7 +88,7 @@ Node.js 官方下载地址：https://nodejs.org/en/download/  根据你的电脑
 
 点击 `扩展` 搜索 `Auto.js` 或 `hyb1996` 即可找到Auto.JS插件。
 
-![image-20210308131809570](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131809570.png)
+![image-20210308131809570](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131809570.png)
 
 #### 使用AutoJS插件开发
 
@@ -96,17 +96,17 @@ Node.js 官方下载地址：https://nodejs.org/en/download/  根据你的电脑
 
 按 Ctrl+Shift+P 或点击"查看"->"命令面板"可调出命令面板，输入 Auto.js 可以看到几个命令，移动光标到命令Auto.js: Start Server，按回车键执行该命令。
 
-![image-20210308131854965](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131854965.png)
+![image-20210308131854965](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131854965.png)
 
 此时VS Code会在右上角显示"Auto.js server running"，即开启服务成功。
 
-![image-20210308131933190](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308131933190.png)
+![image-20210308131933190](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308131933190.png)
 
 **`2.连接手机终端`**
 
 将手机连接到电脑启用的Wifi或者同一局域网中。通过命令行ipconfig(或者其他操作系统的相同功能命令)查看电脑的IP地址。在Auto.js的侧拉菜单中启用调试服务，并输入IP地址，等待连接成功。
 
-![image-20210308132019642](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308132019642.png)
+![image-20210308132019642](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308132019642.png)
 
 
 
@@ -114,7 +114,7 @@ Node.js 官方下载地址：https://nodejs.org/en/download/  根据你的电脑
 
 手机终端运行结果：
 
-![image-20210308132212171](https://gitee.com/ran_yong/mark-down-table-upload/raw/master/img/image-20210308132212171.png)
+![image-20210308132212171](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210308132212171.png)
 
 #### AutoJS插件常用命令
 
@@ -145,7 +145,7 @@ Node.js 官方下载地址：https://nodejs.org/en/download/  根据你的电脑
 | RecyclerView   | 复用容器     |
 | ScrollView     | 滚动容器     |
 
-![image-20210306153008566](https://gitee.com/ran_yong/auto.js/raw/master/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210306153008566.png)
+![image-20210306153008566](https://raw.githubusercontent.com/ranyong1997/AutoJS/main/%E4%B9%B1%E4%B8%83%E5%85%AB%E7%B3%9F/img/image-20210306153008566.png)
 
 ## API文档
 

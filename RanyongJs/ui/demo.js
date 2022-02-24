@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-20 20:30:35
- * @LastEditTime: 2022-02-24 00:17:31
+ * @LastEditTime: 2022-02-24 17:36:02
  * @description: 
  * @param: 
  * @return: 
@@ -14,32 +14,31 @@ var commonFun = require("../lib/common")
 var FIND_WIDGET_TIMEOUT = 1000
 apk_name = "最右"
 
-const taskDemo = {}
-taskDemo.init = function () {
-    commonFun.showLog("init tit_register_v22_4_5")
-    commonFun.showLog("当前设备分辨率：" + device.width + "x" + device.height)
-    commonFun.showLog("唤醒屏幕:On", device.wakeUp())
-}
-taskDemo.init()
+// const taskDemo = {}
+// taskDemo.init = function () {
+//     commonFun.showLog("init tit_register_v22_4_5")
+//     commonFun.showLog("当前设备分辨率：" + device.width + "x" + device.height)
+//     commonFun.showLog("唤醒屏幕:On", device.wakeUp())
+// }
+// taskDemo.init()
 
-new function () {
-    let timestamp = new Date().getTime()
-    try {
-        commonFun.showLog("当前网络状态为:" + MyNetworkInformation())
-    } catch (e) {
-        throw "请检查您当前的网络连接可用性，连接可用网络并授予本软件联网权限后再尝试重新运行。" + (e)
-    }
-    launchApp(apk_name)
-    // 开启多线程监测弹窗,需要安卓7以上
-    threads.start(function () {
-        TC();
-    });
-    requestScreenCapture();
-}
-
-
+// new function () {
+//     let timestamp = new Date().getTime()
+//     try {
+//         commonFun.showLog("当前网络状态为:" + MyNetworkInformation())
+//     } catch (e) {
+//         throw "请检查您当前的网络连接可用性，连接可用网络并授予本软件联网权限后再尝试重新运行。" + (e)
+//     }
+//     launchApp(apk_name)
+//     // 开启多线程监测弹窗,需要安卓7以上
+//     threads.start(function () {
+//         TC();
+//     });
+//     requestScreenCapture();
+// }
 
 
+console.log(commonFun.randomStrInStr(1,10));
 
 
 
@@ -70,7 +69,7 @@ function TC() {
         beginBtn.click();
     }
     var i_know = id("tvConfirmWithBg").text("我知道了").findOne(FIND_WIDGET_TIMEOUT)
-    if(i_know != null){
+    if (i_know != null) {
         commonFun.showLog("检测到弹窗")
         commonFun.clickWidget(i_know)
     }
@@ -89,4 +88,4 @@ function TC() {
 //             log("点击Confirm")
 //             commonFun.clickWidget(click_confirm)
 //             sleep(10
-            
+
