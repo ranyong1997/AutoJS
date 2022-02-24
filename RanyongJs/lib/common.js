@@ -185,13 +185,32 @@ commonFunc.uninstallApp = function (bid) {
  * @param {*} package_name  包名
  * @returns 
  */
-function getVersion(package_name) {
+commonFunc.getVersion = function (package_name) {
     let pkgs = context.getPackageManager().getInstalledPackages(0).toArray();
     for (let i in pkgs) {
         if (pkgs[i].packageName.toString() === package_name) {
             return pkgs[i].versionName;
         }
     }
+}
+
+/**
+ * 获取所有app名字
+ * @returns 
+ */
+commonFunc.GetAllpkg = function () {
+    var allPkg = []
+    var pm = context.getPackageManager()
+    let list = pm.getInstalledApplications(0)
+    for (let i = 0; i < list.size(); i++) {
+        let p = list.get(i)
+        var app = {
+            appName: p.loadLabel(pm),
+            packageName: p.packageName
+        }
+        allPkg.push(app.appName)
+    }
+    return allPkg
 }
 
 
@@ -1700,6 +1719,263 @@ commonFunc.volume_Stop = function () {
     });
 }
 
+/**
+ * 截图
+ * @param {*} path 保存路径
+ * @returns 
+ */
+commonFunc.screenshot = function (path) {
+    var path = path || '/sdcard/DCIM/1temp.png'
+    var dd = shell("screencap -p " + path, true)
+    var img
+    if (dd.code == 0) {
+        img = images.read(path)
+    } else {
+        log("错误信息:", dd.error)
+    }
+    return img
+}
+
+/**
+ * 获取时间
+ * @param {*} time 
+ * @returns 
+ */
+commonFunc.gettime = function (time) {
+    if (time) {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(time));
+    } else {
+        return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+    }
+}
+
+/**
+ * 获取ip地理位置
+ * @returns 
+ */
+commonFunc.获取手机ip地理位置 = function () {
+    var ip地理位置 = false
+    var ip地理位置正则 = /本机IP:&nbsp;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}<\/span>([\s\S]*?)<\/td/
+    var ipUrl = "http://www.baidu.com/s?ie=UTF-8&wd=ip%E5%BD%92%E5%B1%9E%E5%9C%B0%E6%9F%A5%E8%AF%A2"
+    var r = http.get(ipUrl);
+    log("code = " + r.statusCode);
+    var htmlResult = r.body.string()
+    ip地理位置 = ip地理位置正则.exec(htmlResult)
+    if (ip地理位置) {
+        ip地理位置 = ip地理位置正则.exec(ip地理位置)
+        ip地理位置 = ip地理位置[1]
+        toastLog(ip地理位置)
+        return ip地理位置
+    } else {
+        log('没有查询到Ip地理位置,脚本停止')
+        return false
+    }
+}
+
+commonFunc.悬浮控制 = function (window, windowid, ar) {
+    this.Orientation = context.resources.configuration.orientation;
+    this.Width = this.Orientation == 1 ? device.width : device.height;
+    this.Height = this.Orientation == 2 ? device.width : device.height;
+    this.Click = function () { };
+    this.Move = function () { };
+    this.LongClick = function () { };
+    this.setClick = (fun) => {
+        fun = fun || function () { };
+        this.Click = fun;
+    };
+    this.setMove = (fun) => {
+        fun = fun || function () { };
+        this.Move = fun;
+    };
+    this.setLongClick = (fun, ji) => {
+        fun = fun || function () { };
+        this.LongClick = fun;
+        if (parseInt(ji)) {
+            this.Tjitime = parseInt(ji) / 50;
+        };
+    };
+    setInterval(() => {
+        if (context.resources.configuration.orientation != this.Orientation) {
+            this.Orientation = context.resources.configuration.orientation;
+            this.Width = this.Orientation == 1 ? device.width : device.height;
+            this.Height = this.Orientation == 2 ? device.width : device.height;
+            var xy = this.windowGXY(window.getX(), window.getY(), this.G(window));
+            this.windowyidong([
+                [window.getX(), window.getY()],
+                [xy.x, xy.y]
+            ]);
+        };
+    }, 100);
+    this.TX = 0;
+    this.TY = 0;
+    this.Tx = 0;
+    this.Ty = 0;
+    this.Tyidong = false;
+    this.Tkeep = false;
+    this.Tjitime = 12;
+    this.Ttime = 0;
+    setInterval(() => {
+        if (this.Tkeep) {
+            this.Ttime++;
+            if (!this.Tyidong && this.Ttime > this.Tjitime) {
+                //非移动且按下时长超过1秒判断为长按
+                this.Tkeep = false;
+                this.Ttime = 0;
+                this.LongClick();
+            };
+        };
+    }, 50);
+    if (windowid) {
+        windowid.setOnTouchListener(new android.view.View.OnTouchListener((view, event) => {
+            this.Move(view, event);
+            switch (event.getAction()) {
+                case event.ACTION_DOWN:
+                    this.Tx = event.getRawX();
+                    this.Ty = event.getRawY();
+                    this.TX = window.getX();
+                    this.TY = window.getY();
+                    this.Tkeep = true; //按下,开启计时
+                    break;
+                case event.ACTION_MOVE:
+                    var sx = event.getRawX() - this.Tx;
+                    var sy = event.getRawY() - this.Ty;
+                    if (!this.Tyidong && this.Tkeep && this.weiyi(sx, sy) >= 10) {
+                        this.Tyidong = true;
+                    };
+                    if (this.Tyidong && this.Tkeep) {
+                        window.setPosition(this.TX + sx, this.TY + sy);
+                    };
+                    break;
+                case event.ACTION_UP:
+                    if (!this.Tyidong && this.Tkeep && this.Ttime < 7) {
+                        this.Click();
+                    };
+                    this.Tkeep = false;
+                    this.Ttime = 0;
+                    if (this.Tyidong) {
+                        var A = this.windowGXY(window.getX(), window.getY(), this.G(window));
+                        threads.start(new java.lang.Runnable(() => {
+                            this.windowyidong([
+                                [window.getX(), window.getY()],
+                                [A.x, A.y]
+                            ]);
+                        }));
+                        this.Tyidong = false;
+                    };
+                    break;
+            };
+            return true;
+        }));
+    };
+    this.G = (win) => {
+        var K = 35, //悬浮窗的隐形边矩
+            H = 66; //手机通知栏的高度
+        if (!ar) {
+            return [
+                [-K, -K],
+                [this.Width - win.getWidth() + K, this.Height - win.getHeight() - H + K]
+            ];
+        } else {
+            return [
+                [0, H],
+                [this.Width - win.getWidth(), this.Height - win.getHeight()]
+            ];
+        };
+    };
+    this.weiyi = function () { //平方和开方
+        var num = 0;
+        for (var i = 0; i < arguments.length; i++) {
+            num += arguments[i] * arguments[i];
+        };
+        return Math.round(Math.sqrt(num) * 1000) / 1000
+    };
+    this.windowGXY = function (x, y, k) {
+        x = (k[0][0] < x && x < k[1][0]) ? x : (k[0][0] < x ? k[1][0] : k[0][0]);
+        y = (k[0][1] < y && y < k[1][1]) ? y : (k[0][1] < y ? k[1][1] : k[0][1]);
+        return {
+            x: x,
+            y: y
+        };
+    };
+    this.windowyidong = (A, s, w) => {
+        w = w || window;
+        s = s || 10;
+        var sx = A[1][0] - A[0][0],
+            sy = A[1][1] - A[0][1];
+        var sd = this.weiyi(sx, sy) / s;
+        var X = sx / sd,
+            Y = sy / sd;
+        var x = 0,
+            y = 0;
+        for (var i = 0; i < sd; i++) {
+            x += X;
+            y += Y;
+            sleep(1);
+            w.setPosition(A[0][0] + x, A[0][1] + y);
+        };
+        w.setPosition(A[1][0], A[1][1]);
+    };
+    this.OutScreen = () => {
+        var F = this.G(window);
+        var x = window.getX(),
+            y = window.getY();
+        var sx = window.getX() + window.getWidth() / 2,
+            sy = window.getY() + window.getHeight() / 2 + 66;
+        var cx = Math.abs(sx < (this.Width - sx) ? sx : (this.Width - sx)) < Math.abs(sy < (this.Height - sy) ? sy : (this.Height - sy)) ? (sx < this.Width / 2 ? (F[0][0] - window.getWidth()) : (F[1][0] + window.getWidth())) : x,
+            cy = Math.abs(sx < (this.Width - sx) ? sx : (this.Width - sx)) < Math.abs(sy < (this.Height - sy) ? sy : (this.Height - sy)) ? y : (sy < this.Height / 2 ? (F[0][1] - window.getHeight()) : (F[1][1] + window.getHeight()));
+        return [
+            [x, y],
+            [cx, cy]
+        ];
+    };
+    this.toScreenEdge = (d) => {
+        d = d || 0;
+        var F = this.G(window);
+        var x = window.getX(),
+            y = window.getY();
+        var sw = window.getWidth() * d;
+        var sx = window.getX() + window.getWidth() / 2,
+            sy = window.getY() + window.getHeight() / 2 + 66;
+        var cx = sx < (this.Width - sx) ? -sw : (this.Width + sw - window.getWidth());
+        return [
+            [x, y],
+            [cx, y]
+        ];
+    };
+    this.centerXY = (F) => {
+        var w = window.getWidth();
+        var h = window.getHeight();
+        return [
+            [F[0] + w / 2, F[1] + h / 2],
+            [F[0] - w / 2, F[1] - h / 2]
+        ];
+    };
+    this.autoIntScreen = () => {
+        var A = this.windowGXY(window.getX(), window.getY(), this.G(window));
+        threads.start(new java.lang.Runnable(() => {
+            this.windowyidong([
+                [window.getX(), window.getY()],
+                [A.x, A.y]
+            ]);
+        }));
+    };
+    this.autoIntScreen();
+}
+
+commonFunc.气泡 = function (msg, x, y) {
+    function toastAt0(msg, x, y) {
+        importClass(android.widget.Toast);
+        importClass(android.view.Gravity);
+        var toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP | Gravity.LEFT, x, y);
+        toast.show();
+    }
+    var x = x || device.width / 3
+    var y = y || device.height / 5 * 4
+    var msg = msg.toString()
+    ui.run(() => toastAt0(msg, x, y));
+    sleep(2000)
+}
 
 /**
  * 解除autojs pro 运行限制
