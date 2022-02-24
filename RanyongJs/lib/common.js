@@ -495,91 +495,42 @@ commonFunc.randomStrWithTemplates = function (_temp_list, len) {
 }
 
 
-// /**
-//  * @param {*} text 显示内容
-//  * @param {String} mode 显示模式 w:覆盖; a:追加;
-//  * @param {Number} x 显示坐标 x 
-//  * @param {Number} y 显示坐标 y
-//  * @returns {Boolean} boolean
-//  */
-// commonFunc.showLog = function (text, mode, x, y) {
-//     try {
-//         let log_text = commonFunc.objectToString(text)
-//         mode != null && log(log_text)
-//         x = x ? x : 0
-//         y = y ? y : 60
-//         if (!commonFunc.statusBox) {
-//             commonFunc.statusBox = floaty.rawWindow(
-//                 <frame gravity="center" bg="#660000FF">
-//                     <text id="text" color="#ffffff"></text>
-//                 </frame>
-//             );
-//             commonFunc.statusBox.setSize(-1, -200);
-//             commonFunc.statusBox.setTouchable(false);
-//         }
-//         ui.run(function () {
-//             try { log_text = (mode == "a" || mode == "A") ? (commonFunc.statusBox.text.getText() + "\n" + log_text) : log_text } catch (error) { }
-//             commonFunc.statusBox.text.setText(log_text)
-//         });
-//         commonFunc.statusBox.setPosition(x, y);
-//         return true
-//     } catch (error) { log(error) }
-//     return false
-// }
-
-
 /**
- * 获取语言-国家
- * 例如：zh-CN (中文简体)
+ * @param {*} text 显示内容
+ * @param {String} mode 显示模式 w:覆盖; a:追加;
+ * @param {Number} x 显示坐标 x 
+ * @param {Number} y 显示坐标 y
+ * @returns {Boolean} boolean
  */
-commonFunc.systemLanguageGet = function () {
-    return Locale.getDefault().getLanguage() + "-" + Locale.getDefault().getCountry()
-}
-
-
-/**
- * 设置语言
- * 时区格式: en-US
- * language-country 语言-国家
- * zh-CN 中文简体
- * zh-TW 中文繁体
- * en-GB 英语-英国
- * en-US 英语-美国
- * en-CA 英语-加拿大
- * fr-CA 法语-加拿大
- * fr-FR 法语-法国
- * de-DE 德语-德国
- * it-IT 意大利语-意大利
- * ja-JP 日语-日本
- * ko-KR 韩语-韩国
- */
-commonFunc.systemLanguageSet = function (languageCode) {
+commonFunc.showLog1 = function (text, mode, x, y) {
     try {
-        let _str = languageCode.split("-")
-        if (_str.length < 2) { throw languageCode }
-        let language = _str[0]
-        let country = _str[1]
-        var iam = ActivityManager.getService();
-        let mLocale = Locale(language, country);
-        let config = iam.getConfiguration();
-        config.locale = mLocale;
-        config.userSetLocale = true;
-        log("设置语言: " + language, country + " - " + iam.updateConfiguration(config))
-        BackupManager.dataChanged("com.android.providers.settings");
+        let log_text = commonFunc.objectToString(text)
+        mode != null && log(log_text)
+        x = x ? x : 0
+        y = y ? y : 60
+        if (!commonFunc.statusBox) {
+            commonFunc.statusBox = floaty.rawWindow(
+                <frame gravity="center" bg="#660000FF">
+                    <text id="text" color="#ffffff"></text>
+                </frame>
+            );
+            commonFunc.statusBox.setSize(-1, -200);
+            commonFunc.statusBox.setTouchable(false);
+        }
+        ui.run(function () {
+            try { log_text = (mode == "a" || mode == "A") ? (commonFunc.statusBox.text.getText() + "\n" + log_text) : log_text } catch (error) { }
+            commonFunc.statusBox.text.setText(log_text)
+        });
+        commonFunc.statusBox.setPosition(x, y);
         return true
-    } catch (error) {
-        throw error
-    }
+    } catch (error) { log(error) }
+    return false
 }
-
 
 /*
 * Javascript swipeWithBezier() 函数 按贝塞尔曲线轨迹滑动
 */
 commonFunc.swipeWithBezier = function (x1, y1, x2, y2, step) {
-    let w = device.width
-    let h = device.height
-
     function bezier_curves(cp, t) {
         cx = 3.0 * (cp[1].x - cp[0].x);
         bx = 3.0 * (cp[2].x - cp[1].x) - cx;
@@ -743,7 +694,7 @@ commonFunc.startApp = function (package) {
 
 /**
  * 获取应用名对应的包名
- * @param {*}} appName 
+ * @param {*} appName 
  */
 commonFunc.getPackageName = function (appName) {
     var name = getPackageName(appName);
@@ -955,203 +906,6 @@ commonFunc.getmd5 = function (content) {
     } catch (error) { log("获取 MD5 出错：" + JSON.stringify(error)) }
     return null
 }
-/**
- * getDialCode 根据国家代码获取拨号代码
- * @param {String} countryCode 国家代码, 如 CN-中国; US-美国
- * @returns {String} dialCode 返回拨号代码, 如 86-中国; 1-美国
- */
-commonFunc.getDialCode = function (country_code) {
-    try {
-        let _code = {
-            "AO": "244",
-            "AF": "93",
-            "AL": "355",
-            "DZ": "213",
-            "AD": "376",
-            "AI": "1264",
-            "AG": "1268",
-            "AR": "54",
-            "AM": "374",
-            "AU": "61",
-            "AT": "43",
-            "AZ": "994",
-            "BS": "1242",
-            "BH": "973",
-            "BD": "880",
-            "BB": "1246",
-            "BY": "375",
-            "BE": "32",
-            "BZ": "501",
-            "BJ": "229",
-            "BM": "1441",
-            "BO": "591",
-            "BW": "267",
-            "BR": "55",
-            "BN": "673",
-            "BG": "359",
-            "BF": "226",
-            "MM": "95",
-            "BI": "257",
-            "CM": "237",
-            "CA": "1",
-            "CF": "236",
-            "TD": "235",
-            "CL": "56",
-            "CN": "86",
-            "CO": "57",
-            "CG": "242",
-            "CK": "682",
-            "CR": "506",
-            "CU": "53",
-            "CY": "357",
-            "CZ": "420",
-            "DK": "45",
-            "DJ": "253",
-            "DO": "1890",
-            "EC": "593",
-            "EG": "20",
-            "SV": "503",
-            "EE": "372",
-            "ET": "251",
-            "FJ": "679",
-            "FI": "358",
-            "FR": "33",
-            "GF": "594",
-            "GA": "241",
-            "GM": "220",
-            "GE": "995",
-            "DE": "49",
-            "GH": "233",
-            "GI": "350",
-            "GR": "30",
-            "GD": "1809",
-            "GU": "1671",
-            "GT": "502",
-            "GN": "224",
-            "GY": "592",
-            "HT": "509",
-            "HN": "504",
-            "HK": "852",
-            "HU": "36",
-            "IS": "354",
-            "IN": "91",
-            "ID": "62",
-            "IR": "98",
-            "IQ": "964",
-            "IE": "353",
-            "IL": "972",
-            "IT": "39",
-            "JM": "1876",
-            "JP": "81",
-            "JO": "962",
-            "KH": "855",
-            "KZ": "327",
-            "KE": "254",
-            "KR": "82",
-            "KW": "965",
-            "KG": "331",
-            "LA": "856",
-            "LV": "371",
-            "LB": "961",
-            "LS": "266",
-            "LR": "231",
-            "LY": "218",
-            "LI": "423",
-            "LT": "370",
-            "LU": "352",
-            "MO": "853",
-            "MG": "261",
-            "MW": "265",
-            "MY": "60",
-            "MV": "960",
-            "ML": "223",
-            "MT": "356",
-            "MU": "230",
-            "MX": "52",
-            "MD": "373",
-            "MC": "377",
-            "MN": "976",
-            "MS": "1664",
-            "MA": "212",
-            "MZ": "258",
-            "NA": "264",
-            "NR": "674",
-            "NP": "977",
-            "NL": "31",
-            "NZ": "64",
-            "NI": "505",
-            "NE": "227",
-            "NG": "234",
-            "KP": "850",
-            "NO": "47",
-            "OM": "968",
-            "PK": "92",
-            "PA": "507",
-            "PG": "675",
-            "PY": "595",
-            "PE": "51",
-            "PH": "63",
-            "PL": "48",
-            "PF": "689",
-            "PT": "351",
-            "PR": "1787",
-            "QA": "974",
-            "RO": "40",
-            "RU": "7",
-            "LC": "1758",
-            "VC": "1784",
-            "SM": "378",
-            "ST": "239",
-            "SA": "966",
-            "SN": "221",
-            "SC": "248",
-            "SL": "232",
-            "SG": "65",
-            "SK": "421",
-            "SI": "386",
-            "SB": "677",
-            "SO": "252",
-            "ZA": "27",
-            "ES": "34",
-            "LK": "94",
-            "LC": "1758",
-            "VC": "1784",
-            "SD": "249",
-            "SR": "597",
-            "SZ": "268",
-            "SE": "46",
-            "CH": "41",
-            "SY": "963",
-            "TW": "886",
-            "TJ": "992",
-            "TZ": "255",
-            "TH": "66",
-            "TG": "228",
-            "TO": "676",
-            "TT": "1809",
-            "TN": "216",
-            "TR": "90",
-            "TM": "993",
-            "UG": "256",
-            "UA": "380",
-            "AE": "971",
-            "GB": "44",
-            "US": "1",
-            "UY": "598",
-            "UZ": "233",
-            "VE": "58",
-            "VN": "84",
-            "YE": "967",
-            "YU": "381",
-            "ZW": "263",
-            "ZR": "243",
-            "ZM": "260",
-        }
-        return _code[country_code]
-    } catch (error) { log("获取 拨号代码 出错：" + JSON.stringify(error)) }
-    return null
-}
-
 
 /**
  * getRandomUA 获取一个随机浏览器 User-Agen
@@ -1286,34 +1040,6 @@ commonFunc.scrollLongDown = function () {
     sleep(time_random);
 }
 
-/**
- * 获取时区
- * 例如：America/Los_Angeles
- */
-commonFunc.systemTimezoneGet = function () {
-    log("当前时区:" + TimeZone.getDefault().getID())
-    return TimeZone.getDefault().getID()
-}
-
-
-/**
- * 设置时区
- * 时区格式: America/Los_Angeles
- */
-commonFunc.systemTimezoneSet_New = function (timeZone) {
-    try {
-        log("设置时区");
-        var systemTimezoneSet = JSON.parse(SLChanges.updateTimeZone(timeZone));
-        if (systemTimezoneSet.code < 200) {
-            throw "设置时区" + timeZone + "失败:" + systemTimezoneSet.msg
-        }
-        log("设置时区成功");
-        return true
-    } catch (error) {
-        throw "设置时区异常: " + commonFunc.objectToString(error)
-    }
-}
-
 
 /**
  * 脚本获取序列号
@@ -1417,7 +1143,7 @@ commonFunc.clickAlreadyFindWidget = function (widget) {
 
 
 /**
- * 清理后台程序
+ * 清理后台程序 需重构
  * @param {*} _appName 包名
  */
 commonFunc.cleanBakegroundApplication = function (_appName) {
@@ -1545,57 +1271,6 @@ commonFunc.inputEditText = function (index, textValue) {
     }
 }
 
-
-/**
- * 随机数字
- * @param {*} n 数量
- * @param {*} min 最小值
- * @param {*} max 最大值
- * @returns 
- */
-commonFunc.randomNums = function (n, min, max) {
-    var arr = [];
-    for (i = 0; i < n; i++) {
-        var ran = Math.ceil(Math.random() * (max - min) + min);
-        while (isExist(arr, ran)) {
-            ran = Math.ceil(Math.random() * (max - min) + min);
-        }
-        arr[i] = ran;
-    }
-    return arr;
-}
-
-
-/**
- * 悬浮窗日志 有bug 不会追加写入(废除)
- * @param {*} message 日志信息
- */
-commonFunc.logs = function (message, mode) {
-    try {
-        let log_text = commonFunc.objectToString(message)
-        var w = floaty.rawWindow(
-            <card bg="#80000000">
-                <vertical align="center">
-                    <text text="─ 当前脚本运行日志 ─" textSize="15" color="#FFFFFF" textStyle="bold" gravity="center" margin="0 0 0 5" />
-                    <text id="WZ" text="" textSize="15" color="#FFFFFF" marginLeft="10" gravity="left" />
-                </vertical>
-            </card>
-        );
-        setInterval(() => { }, 1000);
-        w.setSize(device.width, 400);   // 显示大小
-        w.setTouchable(false);   // 是否可触碰
-        w.setPosition(0, device.height - 400);   // 设置控制台的位置
-        var myDate = new Date();
-        ui.run(() => {
-            w.WZ.setText(myDate.getHours() + "时" + myDate.getMinutes() + "分" + myDate.getSeconds() + "秒：" + log_text + "\n" + w.WZ.getText());
-            return true;
-        });
-        return true
-    } catch (error) {
-        log(error)
-    }
-    return false
-}
 
 /**
  * @param {*} text 显示内容
