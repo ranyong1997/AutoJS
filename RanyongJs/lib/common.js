@@ -46,6 +46,12 @@ commonFunc.checkDevice = function () {
     nowHeight = device.height
     nowWidth = device.width
 }
+
+/**
+ * 清楚数据 需要适配
+ * @param {*} 包名
+ * @returns 
+ */
 commonFunc.clearData = function (bid) {
     try {
         log("清除数据: " + bid)
@@ -195,7 +201,7 @@ commonFunc.getVersion = function (package_name) {
 }
 
 /**
- * 获取所有app名字
+ * 获取所有app包名
  * @returns 
  */
 commonFunc.GetAllpkg = function () {
@@ -513,38 +519,6 @@ commonFunc.randomStrWithTemplates = function (_temp_list, len) {
     return res
 }
 
-
-/**
- * @param {*} text 显示内容
- * @param {String} mode 显示模式 w:覆盖; a:追加;
- * @param {Number} x 显示坐标 x 
- * @param {Number} y 显示坐标 y
- * @returns {Boolean} boolean
- */
-commonFunc.showLog1 = function (text, mode, x, y) {
-    try {
-        let log_text = commonFunc.objectToString(text)
-        mode != null && log(log_text)
-        x = x ? x : 0
-        y = y ? y : 60
-        if (!commonFunc.statusBox) {
-            commonFunc.statusBox = floaty.rawWindow(
-                <frame gravity="center" bg="#660000FF">
-                    <text id="text" color="#ffffff"></text>
-                </frame>
-            );
-            commonFunc.statusBox.setSize(-1, -200);
-            commonFunc.statusBox.setTouchable(false);
-        }
-        ui.run(function () {
-            try { log_text = (mode == "a" || mode == "A") ? (commonFunc.statusBox.text.getText() + "\n" + log_text) : log_text } catch (error) { }
-            commonFunc.statusBox.text.setText(log_text)
-        });
-        commonFunc.statusBox.setPosition(x, y);
-        return true
-    } catch (error) { log(error) }
-    return false
-}
 
 /*
 * Javascript swipeWithBezier() 函数 按贝塞尔曲线轨迹滑动
@@ -1400,7 +1374,7 @@ commonFunc.volume_Stop = function () {
  * @returns 
  */
 commonFunc.screenshot = function (path) {
-    var path = path || '/sdcard/DCIM/1temp.png'
+    var path = path || '/sdcard/DCIM/temp.png'
     var dd = shell("screencap -p " + path, true)
     var img
     if (dd.code == 0) {
@@ -1447,196 +1421,12 @@ commonFunc.获取手机ip地理位置 = function () {
     }
 }
 
-commonFunc.悬浮控制 = function (window, windowid, ar) {
-    this.Orientation = context.resources.configuration.orientation;
-    this.Width = this.Orientation == 1 ? device.width : device.height;
-    this.Height = this.Orientation == 2 ? device.width : device.height;
-    this.Click = function () { };
-    this.Move = function () { };
-    this.LongClick = function () { };
-    this.setClick = (fun) => {
-        fun = fun || function () { };
-        this.Click = fun;
-    };
-    this.setMove = (fun) => {
-        fun = fun || function () { };
-        this.Move = fun;
-    };
-    this.setLongClick = (fun, ji) => {
-        fun = fun || function () { };
-        this.LongClick = fun;
-        if (parseInt(ji)) {
-            this.Tjitime = parseInt(ji) / 50;
-        };
-    };
-    setInterval(() => {
-        if (context.resources.configuration.orientation != this.Orientation) {
-            this.Orientation = context.resources.configuration.orientation;
-            this.Width = this.Orientation == 1 ? device.width : device.height;
-            this.Height = this.Orientation == 2 ? device.width : device.height;
-            var xy = this.windowGXY(window.getX(), window.getY(), this.G(window));
-            this.windowyidong([
-                [window.getX(), window.getY()],
-                [xy.x, xy.y]
-            ]);
-        };
-    }, 100);
-    this.TX = 0;
-    this.TY = 0;
-    this.Tx = 0;
-    this.Ty = 0;
-    this.Tyidong = false;
-    this.Tkeep = false;
-    this.Tjitime = 12;
-    this.Ttime = 0;
-    setInterval(() => {
-        if (this.Tkeep) {
-            this.Ttime++;
-            if (!this.Tyidong && this.Ttime > this.Tjitime) {
-                //非移动且按下时长超过1秒判断为长按
-                this.Tkeep = false;
-                this.Ttime = 0;
-                this.LongClick();
-            };
-        };
-    }, 50);
-    if (windowid) {
-        windowid.setOnTouchListener(new android.view.View.OnTouchListener((view, event) => {
-            this.Move(view, event);
-            switch (event.getAction()) {
-                case event.ACTION_DOWN:
-                    this.Tx = event.getRawX();
-                    this.Ty = event.getRawY();
-                    this.TX = window.getX();
-                    this.TY = window.getY();
-                    this.Tkeep = true; //按下,开启计时
-                    break;
-                case event.ACTION_MOVE:
-                    var sx = event.getRawX() - this.Tx;
-                    var sy = event.getRawY() - this.Ty;
-                    if (!this.Tyidong && this.Tkeep && this.weiyi(sx, sy) >= 10) {
-                        this.Tyidong = true;
-                    };
-                    if (this.Tyidong && this.Tkeep) {
-                        window.setPosition(this.TX + sx, this.TY + sy);
-                    };
-                    break;
-                case event.ACTION_UP:
-                    if (!this.Tyidong && this.Tkeep && this.Ttime < 7) {
-                        this.Click();
-                    };
-                    this.Tkeep = false;
-                    this.Ttime = 0;
-                    if (this.Tyidong) {
-                        var A = this.windowGXY(window.getX(), window.getY(), this.G(window));
-                        threads.start(new java.lang.Runnable(() => {
-                            this.windowyidong([
-                                [window.getX(), window.getY()],
-                                [A.x, A.y]
-                            ]);
-                        }));
-                        this.Tyidong = false;
-                    };
-                    break;
-            };
-            return true;
-        }));
-    };
-    this.G = (win) => {
-        var K = 35, //悬浮窗的隐形边矩
-            H = 66; //手机通知栏的高度
-        if (!ar) {
-            return [
-                [-K, -K],
-                [this.Width - win.getWidth() + K, this.Height - win.getHeight() - H + K]
-            ];
-        } else {
-            return [
-                [0, H],
-                [this.Width - win.getWidth(), this.Height - win.getHeight()]
-            ];
-        };
-    };
-    this.weiyi = function () { //平方和开方
-        var num = 0;
-        for (var i = 0; i < arguments.length; i++) {
-            num += arguments[i] * arguments[i];
-        };
-        return Math.round(Math.sqrt(num) * 1000) / 1000
-    };
-    this.windowGXY = function (x, y, k) {
-        x = (k[0][0] < x && x < k[1][0]) ? x : (k[0][0] < x ? k[1][0] : k[0][0]);
-        y = (k[0][1] < y && y < k[1][1]) ? y : (k[0][1] < y ? k[1][1] : k[0][1]);
-        return {
-            x: x,
-            y: y
-        };
-    };
-    this.windowyidong = (A, s, w) => {
-        w = w || window;
-        s = s || 10;
-        var sx = A[1][0] - A[0][0],
-            sy = A[1][1] - A[0][1];
-        var sd = this.weiyi(sx, sy) / s;
-        var X = sx / sd,
-            Y = sy / sd;
-        var x = 0,
-            y = 0;
-        for (var i = 0; i < sd; i++) {
-            x += X;
-            y += Y;
-            sleep(1);
-            w.setPosition(A[0][0] + x, A[0][1] + y);
-        };
-        w.setPosition(A[1][0], A[1][1]);
-    };
-    this.OutScreen = () => {
-        var F = this.G(window);
-        var x = window.getX(),
-            y = window.getY();
-        var sx = window.getX() + window.getWidth() / 2,
-            sy = window.getY() + window.getHeight() / 2 + 66;
-        var cx = Math.abs(sx < (this.Width - sx) ? sx : (this.Width - sx)) < Math.abs(sy < (this.Height - sy) ? sy : (this.Height - sy)) ? (sx < this.Width / 2 ? (F[0][0] - window.getWidth()) : (F[1][0] + window.getWidth())) : x,
-            cy = Math.abs(sx < (this.Width - sx) ? sx : (this.Width - sx)) < Math.abs(sy < (this.Height - sy) ? sy : (this.Height - sy)) ? y : (sy < this.Height / 2 ? (F[0][1] - window.getHeight()) : (F[1][1] + window.getHeight()));
-        return [
-            [x, y],
-            [cx, cy]
-        ];
-    };
-    this.toScreenEdge = (d) => {
-        d = d || 0;
-        var F = this.G(window);
-        var x = window.getX(),
-            y = window.getY();
-        var sw = window.getWidth() * d;
-        var sx = window.getX() + window.getWidth() / 2,
-            sy = window.getY() + window.getHeight() / 2 + 66;
-        var cx = sx < (this.Width - sx) ? -sw : (this.Width + sw - window.getWidth());
-        return [
-            [x, y],
-            [cx, y]
-        ];
-    };
-    this.centerXY = (F) => {
-        var w = window.getWidth();
-        var h = window.getHeight();
-        return [
-            [F[0] + w / 2, F[1] + h / 2],
-            [F[0] - w / 2, F[1] - h / 2]
-        ];
-    };
-    this.autoIntScreen = () => {
-        var A = this.windowGXY(window.getX(), window.getY(), this.G(window));
-        threads.start(new java.lang.Runnable(() => {
-            this.windowyidong([
-                [window.getX(), window.getY()],
-                [A.x, A.y]
-            ]);
-        }));
-    };
-    this.autoIntScreen();
-}
-
+/**
+ * toast提示
+ * @param {*} msg 文本内容
+ * @param {*} x 显示在x点
+ * @param {*} y 显示在y点
+ */
 commonFunc.气泡 = function (msg, x, y) {
     function toastAt0(msg, x, y) {
         importClass(android.widget.Toast);

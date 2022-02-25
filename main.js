@@ -3,7 +3,7 @@
  * @version: 
  * @Author: 冉勇
  * @Date: 2022-01-21 20:22:07
- * @LastEditTime: 2022-02-23 23:19:44
+ * @LastEditTime: 2022-02-24 23:49:31
  * @description: 
  * @param: 
  * @return: 
@@ -39,7 +39,6 @@ function init() {
     }
     try {
         log("当前设备分辨率：" + device.width + "x" + device.height)
-        log("唤醒屏幕:On", device.wakeUp())
         commonFun.volume_Stop()
         commonFun.StopAll()
         commonFun.limit()
